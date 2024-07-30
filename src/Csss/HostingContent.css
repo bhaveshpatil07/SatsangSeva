@@ -1,0 +1,195 @@
+/* styles.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    justify-content: start;
+    gap: 98px;
+    width: 100%;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    color: #6b7280;
+  }
+  
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 40px;
+    width: 100%;
+  }
+  
+  .header-title {
+    margin: 0;
+    font-size: 45px;
+    font-weight: 600;
+  }
+  
+  .header-subtitle {
+    margin: 0;
+    flex: 1;
+    font-size: 20px;
+    color: #000;
+  }
+  
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1238px; /* Ensures max width of grid */
+  }
+  
+  .card {
+    height: 368px;
+    width: 269px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 8px;
+    width: 269px;
+    height: 345px;
+    object-fit: cover;
+  }
+  
+  .card-button-container {
+    position: absolute;
+    top: 320px;
+    left: 40px;
+    border-radius: 31px;
+    background-color: white;
+    width: 188px;
+    display: flex;
+    justify-content: start;
+    padding: 5px 1px;
+    box-sizing: border-box;
+    z-index: 1;
+  }
+  .card-button-container button
+  {
+    width: 100%;
+
+  }
+  
+  .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 53px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .footer-divider {
+    height: 1px;
+    width: 100%;
+    border-top: 1px solid #dcdcdc;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 40px;
+    width: 100%;
+  }
+  
+  .footer-title {
+    margin: 0;
+    font-size: 45px;
+    font-weight: 600;
+  }
+  
+  .footer-subtitle {
+    margin: 0;
+    flex: 1;
+    font-size: 20px;
+    color: #000;
+  }
+  
+
+  @media(max-width: 1040px)
+  {
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+      }
+      
+  }
+  @media(max-width: 846px)
+  {
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+      }
+      
+  }
+  @media (max-width: 578px) {
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 30px;
+      justify-items: center; /* Center the items horizontally */
+      align-items: center;
+    }
+  }
+  
+
+
+
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .header-content {
+    max-width: 600px; /* Adjust as necessary */
+  }
+  
+  .header-title h1 {
+    margin: 0;
+    font-size: 2.5rem; /* Adjust as necessary */
+  }
+  
+  .header-subtitle h2 {
+    margin: 0;
+    font-size: 1.5rem; /* Adjust as necessary */
+    color: #555; /* Adjust as necessary */
+  }
+  
+  .footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  
+  
+  .footer-content {
+    max-width: 600px; /* Adjust as necessary */
+  }
+
+  

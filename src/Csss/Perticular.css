@@ -1,0 +1,104 @@
+/* src/EventBooking.css */
+
+.event-booking {
+    display: flex;
+    justify-content: center;
+    
+  }
+  
+  .event-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 400px;
+    margin-right: 20px;
+  }
+  
+  .event-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .event-details {
+    padding: 20px;
+  }
+  
+  .event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ff6600;
+    font-weight: bold;
+  }
+  
+  .event-month {
+    font-size: 18px;
+  }
+  
+  .event-day {
+    font-size: 36px;
+  }
+  
+  .event-info {
+    margin-top: 10px;
+  }
+  
+  .event-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .event-location,
+  .event-time {
+    margin: 5px 0;
+  }
+  
+  .booking-form {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+  }
+  
+  .form-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ff6600;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .payment-methods {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  
+  .payment-methods img {
+    width: 100%;
+
+    height: auto;
+  }
+  
+  .pay-now-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+
+.event-booking
+{
+    padding: 5%;
+}

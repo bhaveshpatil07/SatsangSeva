@@ -1,0 +1,126 @@
+.header-container {
+  display: flex;
+  /* flex-direction: row; */
+  align-items: center;
+  justify-content: center;
+  /* padding-top: 10px;
+  padding-left: 99px;
+  padding-right: 99px; */
+  padding: 0 6rem;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  width: 100%;
+  height: 71px;
+  background-color: transparent;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  @media (max-width: 767.98px) {
+    padding: 0 1rem;
+    .header-nav{
+      display: none;
+    }
+  }
+}
+
+.header-container.scrolled {
+  background-color: #F58021;
+}
+
+.header-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+  box-shadow: 0px 8px 20px rgba(209, 209, 209, 0.19);
+  z-index: 2;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  z-index: 4;
+}
+
+.logo-image {
+  height: 33.9px;
+  width: 50px;
+}
+
+.logo-text {
+  text-decoration: none;
+  height: 37.8px;
+  flex: 1;
+  color: white; /* Ensure the text color is white */
+  display: inline-block;
+  white-space: nowrap;
+  position: relative;
+  top: -5px;
+}
+
+.header-middle {
+  display: flex;
+  align-items: center;
+  /* gap: 20px; */
+  margin-left: auto;
+}
+
+.location-icon {
+  width: 18px;
+  height: 20px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  font-size: 1.2rem;
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  z-index: 3;
+  width: 100%;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-weight: medium;
+  color: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.login-button,
+.user-button {
+  height: 41px;
+  width: 123.5px;
+  z-index: 3;
+  margin-left: 40px;
+  text-transform: none;
+  color: white;
+  font-size: 16px;
+  border-color: white;
+  border-radius: 50px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.login-button:hover,
+.user-button:hover {
+  border-color: white;
+}
+
+.user-name {
+  margin: 0.5em;
+}

@@ -1,0 +1,5 @@
+/* App.css */
+.slick-prev:before, .slick-next:before {
+    color: black;
+  }
+  
