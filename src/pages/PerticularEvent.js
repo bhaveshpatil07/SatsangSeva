@@ -4,14 +4,15 @@ import FrameComponent11 from "../components/FrameComponent11";
 import FrameComponent3 from "../components/FrameComponent3";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import FirstFold1 from "../components/FirstFold1";
 const PerticularEvent = () => {
   const navigate = useNavigate();
   const handleBookNowClick = () => {
     navigate("/perticular");
   };
   return (
-    <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[41px] leading-[normal] tracking-[normal] mq750:gap-[20px]">
-      <FirstFold3
+    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[41px] leading-[normal] tracking-[normal] mq750:gap-[20px]">
+      <FirstFold1
         group="/group7.svg"
         firstFoldMenu="/first-fold-menu@2x.png"
         rectangle10="/rectangle-1011.svg"

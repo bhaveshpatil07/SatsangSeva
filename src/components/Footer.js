@@ -5,32 +5,26 @@ const Footer = ({ className = "" }) => {
   return (
     <footer
       className={`self-stretch bg-darkorange-100 flex flex-col items-center justify-start pt-7 px-5 pb-[50px] box-border relative gap-[69px] max-w-full shrink-0 text-left text-lg text-white font-dm-sans mq750:gap-[34px] mq450:gap-[17px] mq450:pt-[7px] mq450:pb-5 mq450:box-border ${className}`}
-      style={{ marginTop: "-20px" }} // Adjust this value if needed
+      
     >
       <div className="w-[1440px] h-[430px] relative bg-darkorange-100 hidden max-w-full z-[0]" />
-      <div className="w-[1240px] flex flex-row items-start justify-between max-w-full gap-[20px] lg:flex-wrap lg:justify-center">
+      <div className="w-[1240px] flex flex-row items-center justify-between max-w-full gap-[20px] lg:flex-wrap lg:justify-center">
         <div className="w-[362px] flex flex-col items-start justify-start py-0 pr-[35px] pl-0 box-border gap-[32px] max-w-full text-14xl-6 font-sacramento mq450:gap-[16px]">
           <div className="self-stretch flex flex-col items-start justify-start gap-[4.6px] max-w-full">
-            <div className="w-[228.9px] flex flex-row items-start justify-start gap-[23.6px]">
-              <div className="w-[34.4px] flex flex-col items-start justify-start pt-3 px-0 pb-0 box-border">
-                <div className="self-stretch h-[34.4px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[15px] pb-0 pr-0 pl-7 box-border gap-[4px] z-[1]">
-                  <img
-                    className="h-[39px] w-[50px] relative shrink-0"
-                    loading="lazy"
-                    alt=""
-                    src="/group1.svg"
-                  />
-                  <div className="h-[19.4px] w-[170.9px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border shrink-0">
-                    <div className="self-stretch h-[43.5px] relative inline-block shrink-0 mq1050:text-8xl mq450:text-xl">
-                      SatsangSeva
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex-1 relative leading-[43.5px] z-[1] mq1050:text-8xl mq450:text-xl">
-                SatsangSeva
-              </div>
+          <div className="flex pt-3 flex-row items-center gap-4">
+            <div className="flex-shrink-0 flex items-center justify-center">
+              <img
+                className="h-10 w-12"
+                loading="lazy"
+                alt="Logo"
+                src="/group1.svg"
+              />
             </div>
+            <div className="flex-1 text-9xl font-semibold leading-tight text-center lg:text-left">
+              SatsangSeva
+            </div>
+          </div>
+
             <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 pl-1 box-border max-w-full text-sm text-whitesmoke-200 font-montserrat">
               <div className="flex-1 relative leading-[160%] inline-block max-w-full z-[1]">
                 Eventick is a global self-service ticketing platform for live
@@ -102,10 +96,10 @@ const Footer = ({ className = "" }) => {
               Join our mailing list to stay in the loop with our newest for
               Event and concert
             </div>
-            <div className="self-stretch rounded-[45.59px] bg-white box-border flex flex-row items-start justify-start pt-[5px] pb-1 pr-[3px] pl-[72px] max-w-full [row-gap:20px] z-[1] text-smi-2 text-darkgray-300 border-[2px] border-solid border-whitesmoke-300 mq450:flex-wrap mq450:pl-5 mq450:box-border">
+            <div className="self-stretch rounded-[45.59px] bg-white box-border flex flex-row items-center justify-center max-w-full [row-gap:20px] z-[1] text-smi-2 text-darkgray-300 border-[2px] border-solid border-whitesmoke-300 mq450:flex-wrap mq450:box-border">
               <div className="h-[60.8px] w-[364px] relative rounded-[45.59px] bg-white box-border hidden max-w-full border-[2px] border-solid border-whitesmoke-300" />
-              <div className="flex-1 flex flex-col items-start justify-start pt-[8.4px] px-0 pb-0 box-border min-w-[93px]">
-                <div className="self-stretch relative z-[1]">
+              <div className="flex-1 flex flex-col items-start justify-start  px-0 pb-0 box-border min-w-[93px]">
+                <div className="p-3 pt-0 pb-0 self-stretch relative z-[1]">
                   Get all Notification to your Whatsapp..
                 </div>
               </div>
@@ -131,21 +125,16 @@ const Footer = ({ className = "" }) => {
           </div>
         </div>
       </div>
-      <img
-        className="w-[50px] h-[39px] absolute !m-[0] top-[23px] left-[104px] z-[2]"
-        alt=""
-        src="/group1.svg"
-      />
-      <div className="w-[1240px] flex flex-row items-start justify-start py-0 px-5 box-border max-w-full text-sm text-gray-100 font-montserrat">
-        <div className="flex-1 flex flex-col items-start justify-start gap-[17px] max-w-full">
-          <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-darkslateblue" />
-          <div className="self-stretch flex flex-row items-start justify-center py-0 pr-5 pl-[21px]">
-            <div className="relative leading-[23px] whitespace-pre-wrap z-[1]">
-              Copyright © 2024 Campaigning Source
-            </div>
-          </div>
+
+      <div className="w-full max-w-[1240px]   text-sm text-gray-100 font-montserrat">
+        <hr className="border-t border-darkslateblue mb-3" />
+        <div className="text-center">
+          <p className="leading-[23px]">
+            Copyright © 2024 Campaigning Source
+          </p>
         </div>
       </div>
+
     </footer>
   );
 };

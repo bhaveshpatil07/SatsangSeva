@@ -1,4 +1,4 @@
-import Footer from "./Footer1";
+import Footer from "./Footer";
 import PropTypes from "prop-types";
 
 const EventListHeader = ({ className = "" }) => {

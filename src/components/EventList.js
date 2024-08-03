@@ -9,7 +9,7 @@ const EventList = ({ className = "", data }) => {
     >
       <div className="w-[1275px] flex flex-col items-start justify-start max-w-full">
         <div className="flex flex-row items-start justify-start pt-0 px-[18px] pb-10 box-border max-w-full">
-          <h1 className="m-0 relative text-inherit leading-[48px] font-bold font-inherit mq450:text-5xl mq450:leading-[29px] mq1050:text-13xl mq1050:leading-[38px]">
+          <h1 className="m-0 pl-3 relative text-inherit leading-[48px] font-bold font-inherit mq450:text-5xl mq450:leading-[29px] mq1050:text-13xl mq1050:leading-[38px]">
             <span>Events</span>
             <span className="text-tomato">{` `}</span>
             <span>for you</span>

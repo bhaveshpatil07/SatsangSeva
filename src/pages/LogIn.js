@@ -9,11 +9,13 @@ import {
 } from "@mui/material";
 import FirstFold from "../components/FirstFold4";
 import { useNavigate } from "react-router-dom";
+import Loader from '../components/Loader';
 
 const LogIn = () => {
   const url = process.env.REACT_APP_BACKEND;
   const navigate = useNavigate();
   const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,7 +23,7 @@ const LogIn = () => {
 
   useEffect(() => {
     if (userId) {
-      navigate('/');
+      navigate('/profile-page');
     }
   }, []);
   
@@ -41,6 +43,7 @@ const LogIn = () => {
 
   const handleLogin = async()=>{
     if(formData.email && formData.password){
+      setLoading(true);
       await axios.post(url + "/user/login", formData).then((resp)=>{
         const token = resp.data.token;
         const userId = resp.data.id;
@@ -51,6 +54,8 @@ const LogIn = () => {
         window.location.reload();
       }).catch((e)=>{
         alert("Error in LoginIn: " + e.response);
+      }).finally(()=>{
+        setLoading(false);
       });
     }else{
       alert("Please Enter email & password!");
@@ -58,10 +63,11 @@ const LogIn = () => {
   };
 
   return (
-    <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[55px] leading-[normal] tracking-[normal] mq750:gap-[27px]">
-      <section className="self-stretch flex flex-col items-start justify-start pt-0 px-0 box-border max-w-full text-left text-[21px] text-black font-poppins mq1050:pb-16 mq1050:box-border mq450:pb-[42px] mq450:box-border">
+    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-center justify-center gap-[55px] leading-[normal] tracking-[normal] mq750:gap-[27px]">
+      <section className="self-stretch flex flex-col items-start justify-center pt-0 px-0 box-border max-w-full text-left text-[21px] text-black font-poppins">
+        {loading && <Loader />}
         <FirstFold iconsxCircle="/iconsxcircle1.svg"  />
-        <div style={{width: "100vw"}} className="flex flex-row items-start justify-center p-0 box-border max-w-full mt-[-655px]">
+        <div style={{width: "100vw"}} className="absolute flex flex-row items-center justify-center p-0 box-border max-w-full">
           <div className="w-[539px] shadow-[0px_4px_35px_rgba(0,_0,_0,_0.08)] rounded-xl bg-white flex flex-col items-start justify-start pt-[34px] pb-[52px] pr-[43px] pl-11 box-border gap-[38px] max-w-full z-[6] mq750:gap-[19px] mq750:pb-[34px] mq750:pr-[21px] mq750:pl-[22px] mq750:box-border">
             <div className="w-[539px] h-[634px] relative shadow-[0px_4px_35px_rgba(0,_0,_0,_0.08)] rounded-xl bg-white hidden max-w-full" />
             <div className="self-stretch flex flex-col items-start justify-start gap-[22px]">
@@ -84,43 +90,6 @@ const LogIn = () => {
                       <p className="m-0">No Account ?</p>
                       <p className="m-0 text-cornflowerblue">Sign up</p>
                     </div>
-                  </div>
-                </div>
-                <div className="self-stretch flex flex-row flex-wrap items-end justify-start gap-[20px]">
-                  <Button
-                    className="h-[55px] flex-1 min-w-[194px] z-[7]"
-                    startIcon={
-                      <img width="26px" height="26px" src="/google.svg" />
-                    }
-                    disableElevation
-                    variant="contained"
-                    sx={{
-                      textTransform: "none",
-                      color: "#4285f4",
-                      fontSize: "16",
-                      background: "#e9f1ff",
-                      borderRadius: "9px",
-                      "&:hover": { background: "#e9f1ff" },
-                      height: 55,
-                    }}
-                  >
-                    Sign in with Google
-                  </Button>
-                  <div className="flex flex-row items-start justify-start gap-[13px]">
-                    <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
-                      <img
-                        className="w-[60px] h-[55px] relative z-[7]"
-                        loading="lazy"
-                        alt=""
-                        src="/group-521.svg"
-                      />
-                    </div>
-                    <img
-                      className="h-[55px] w-[60px] relative min-h-[55px] z-[7]"
-                      loading="lazy"
-                      alt=""
-                      src="/group-511.svg"
-                    />
                   </div>
                 </div>
               </div>
@@ -166,6 +135,7 @@ const LogIn = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Your Password"
+                  type="password"
                 />
               </div>
               <div className="self-stretch flex flex-row items-start justify-end text-smi text-cornflowerblue">
@@ -191,6 +161,10 @@ const LogIn = () => {
             >
               Log in
             </Button>
+            <div onClick={()=>{navigate('/sign-in')}} className="flex cursor-pointer">
+              <p className="m-0">No Account ? </p>
+              <p className="m-0 text-cornflowerblue"> Sign up</p>
+            </div>
           </div>
         </div>
       </section>

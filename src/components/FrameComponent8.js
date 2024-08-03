@@ -3,6 +3,7 @@ import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
+import Loader from "./Loader";
 
 const FrameComponent8 = ({ className = "" }) => {
   const url = process.env.REACT_APP_BACKEND;
@@ -64,8 +65,9 @@ const FrameComponent8 = ({ className = "" }) => {
 
   return (
     <div style={{width: "100vw"}}
-      className={`flex flex-row items-start justify-center py-0 px-5 box-border max-w-full mt-[-689px] mq750:mt-[-1000px] text-left text-base text-black font-poppins ${className}`}
+      className={`flex absolute flex-row items-start justify-center py-0 box-border max-w-full text-left text-base text-black font-poppins ${className}`}
     >
+      {loading && <Loader />}
       <div className="w-[512px] shadow-[0px_4px_35px_rgba(0,_0,_0,_0.08)] rounded-xl bg-white flex flex-col items-start justify-start pt-[24.3px] pb-[46.1px] pr-5 pl-5 align-items-center box-border gap-[44.8px] max-w-full z-[6] mq750:gap-[22px] mq1050:pb-[30px] mq1050:box-border mq450:pb-5 mq450:box-border">
         <div className="self-stretch flex flex-row items-start justify-start py-0 pr-px pl-[7px] box-border max-w-full">
           <div className="flex-1 flex flex-col items-start justify-start gap-[13.9px] max-w-full">
@@ -79,44 +81,9 @@ const FrameComponent8 = ({ className = "" }) => {
                   Host Sign up
                 </h1>
               </div>
-              <div className="h-[36.9px] w-[152.6px] relative text-smi inline-block shrink-0 z-[7] text-gray-200">
+              <div onClick={() => navigate("/login")} className="h-[36.9px] w-[152.6px] cursor-pointer relative text-smi inline-block shrink-0 z-[7] text-gray-200">
                 <p className="m-0">Already have an account?</p>
-                <p className="m-0 text-cornflowerblue" onClick={() => navigate("/login")}>Log In</p>
-              </div>
-            </div>
-            <div className="w-[414.6px] flex flex-row flex-wrap items-end justify-start gap-[18.3px] max-w-full">
-              <Button
-                className="h-[50.7px] flex-1 min-w-[178px] z-[7]"
-                startIcon={
-                  <img width="23.9px" height="24px" src="/google.svg" />
-                }
-                disableElevation
-                variant="contained"
-                sx={{
-                  textTransform: "none",
-                  color: "#4285f4",
-                  fontSize: "14",
-                  background: "#e9f1ff",
-                  borderRadius: "9px",
-                  "&:hover": { background: "#e9f1ff" },
-                  height: 50.7,
-                }}
-              >
-                Sign in with Google
-              </Button>
-              <div className="flex flex-row items-start justify-start gap-[11.9px]">
-                <img
-                  className="h-[50.7px] w-[55.2px] relative min-h-[51px] z-[7]"
-                  loading="lazy"
-                  alt=""
-                  src="/group-52.svg"
-                />
-                <img
-                  className="h-[50.7px] w-[55.2px] relative min-h-[51px] z-[7]"
-                  loading="lazy"
-                  alt=""
-                  src="/group-51.svg"
-                />
+                <p className="m-0 text-cornflowerblue">Log In</p>
               </div>
             </div>
           </div>
@@ -165,7 +132,7 @@ const FrameComponent8 = ({ className = "" }) => {
               required
               variant="outlined"
               size="small"
-              placeholder="Email"
+              type="password"
             />
             <TextField
               label="Re-enter your password"
@@ -176,7 +143,7 @@ const FrameComponent8 = ({ className = "" }) => {
               required
               variant="outlined"
               size="small"
-              placeholder="Email"
+              type="password"
             />
             <Button
               className="w-[414.7px] h-[49.8px] shadow-[0px_4px_19px_rgba(119,_147,_65,_0.3)] max-w-full cursor-pointer z-[7] mq450:pl-5 mq450:pr-5 mq450:box-border"
@@ -197,6 +164,10 @@ const FrameComponent8 = ({ className = "" }) => {
               Sign up
             </Button>
             {error && <div className="text-red-500">{error}</div>}
+            <div onClick={()=>{navigate('/login')}} className="flex cursor-pointer">
+              <p className="m-0">Already have an Account ? </p>
+              <p className="m-0 text-cornflowerblue"> Log In</p>
+            </div>
           </div>
         </form>
       </div>

@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center; /* Center items horizontally */
     justify-content: start;
-    gap: 98px;
+    gap: 3rem;
     width: 100%;
     text-align: left;
     font-family: 'Poppins', sans-serif;
@@ -49,6 +49,7 @@
     width: 269px;
     position: relative;
     cursor: pointer;
+    border: none;
   }
   
   .card img {
@@ -70,7 +71,7 @@
     width: 188px;
     display: flex;
     justify-content: start;
-    padding: 5px 1px;
+    /* padding: 5px 1px; */
     box-sizing: border-box;
     z-index: 1;
   }

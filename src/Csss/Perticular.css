@@ -3,14 +3,20 @@
 .event-booking {
     display: flex;
     justify-content: center;
-    
+    @media (max-width: 769px) {
+      flex-direction: column;
+      .booking-form{
+        width: 100%;
+      }
+    }
   }
   
   .event-card {
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
-    width: 400px;
+    max-width: 500px;
+    width: 100%;
     margin-right: 20px;
   }
   
@@ -57,7 +63,8 @@
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
-    width: 300px;
+    width: 30%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .form-title {

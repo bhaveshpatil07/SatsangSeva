@@ -30,7 +30,7 @@ const SearchBox = ({ className = "" }) => {
         <div className="self-stretch flex flex-col items-start justify-start gap-[6px]">
           <input
             className="w-[150px] [border:none] [outline:none] inline-block font-dm-sans text-4xl bg-[transparent] h-[36px] relative font-bold text-white text-left p-0 z-[1] mq450:text-xl"
-            placeholder="Konser Jazz"
+            placeholder="Event Name"
             type="text"
           />
           <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
@@ -41,8 +41,8 @@ const SearchBox = ({ className = "" }) => {
           Place
         </div>
         <div className="self-stretch flex flex-col items-start justify-start gap-[6px] text-4xl">
-          <b className="relative inline-block min-w-[120px] z-[1] mq450:text-xl">
-            India
+          <b className="relative text-secondary inline-block min-w-[120px] z-[1] mq450:text-xl">
+            Event Address
           </b>
           <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
         </div>
@@ -52,7 +52,8 @@ const SearchBox = ({ className = "" }) => {
           Time
         </div>
         <div className="self-stretch flex flex-col items-start justify-start gap-[6px]">
-          <FormControl
+          <input className="form-control text-secondary text-xl p-0 bg-transparent border-none" type="datetime-local" name="" id="" />
+          {/* <FormControl
             className="self-stretch h-[36px] font-dm-sans font-bold text-4xl text-white w-auto"
             variant="standard"
             sx={{
@@ -114,7 +115,7 @@ const SearchBox = ({ className = "" }) => {
               <MenuItem>Any date</MenuItem>
             </Select>
             <FormHelperText />
-          </FormControl>
+          </FormControl> */}
           <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
         </div>
       </div>

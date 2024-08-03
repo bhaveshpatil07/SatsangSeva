@@ -30,7 +30,7 @@ const FirstFold = ({
 
   return (
     <div
-      className={`self-stretch flex flex-col items-start justify-start pt-0 px-0 box-border relative gap-[23.7px] max-w-full text-left text-14xl-6 text-white font-sacramento mq750:pb-[46px] mq750:box-border ${className}`}
+      className={`self-stretch flex flex-col items-center justify-center pt-0 px-0 box-border relative gap-[23.7px] max-w-full text-left text-14xl-6 text-white font-sacramento mq750:pb-[46px] mq750:box-border ${className}`}
       style={{
         ...firstFold1Style,
         minHeight: '100vh', // Ensure the container fills the viewport height
@@ -47,7 +47,7 @@ const FirstFold = ({
           src="/rectangle-12@2x.png"
         />
         <img
-          className="absolute h-full w-full top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full mix-blend-normal z-[2]"
+          className="absolute h-full w-full top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full object-cover mix-blend-normal z-[2]"
           alt=""
           src="/rectangle-10.svg"
         />

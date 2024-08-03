@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import FrameComponent from '../components/FrameComponent';
 import FirstFold1 from '../components/FirstFold1';
-import Footer from '../components/Footer1';
+import Footer from '../components/Footer';
 import WatchLiveWrapper from '../components/WatchLiveWrapper';
 import FrameComponent2 from '../components/FrameComponent2';
 import FrameComponent4 from '../components/FrameComponent4';
@@ -35,11 +35,10 @@ const LiveEvent = () => {
   }, [event]);
   
   return (
-    <div>
-      <FrameComponent />
+    <div style={{marginTop: "-5rem"}}>
       <FirstFold1 />
       <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[25px] leading-[normal] tracking-[normal]">
-        <FrameComponent4 ytLink={yt} imgLink={event.eventPoster?`${url}/${event.eventPoster}`:"/rectangle-12-1@2x.png"} />
+        <FrameComponent4 ytLink={yt} imgLink={event.eventPoster?`${event.eventPoster}`:"/rectangle-12-1@2x.png"} />
         <FrameComponent11 event={event}/>
         <FrameComponent3
             group227="List Your Own Event"

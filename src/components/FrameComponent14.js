@@ -23,10 +23,11 @@ const FrameComponent14 = ({ className = "", item }) => {
     >
       <div className="max-content flex flex-row items-center justify-center gap-[49px] max-w-full mq750:flex-wrap mq750:gap-[24px]">
         <img
+        style={{borderRadius: "1rem"}}
           className="h-[133px] w-[133px] relative object-cover"
           loading="lazy"
           alt=""
-          src={item.eventPoster?`${url}/${item.eventPoster}`:"/rectangle-12-1@2x.png"}
+          src={item.eventPoster?`${item.eventPoster}`:"/rectangle-12-1@2x.png"}
         />
         <div className="flex-1 flex flex-row items-start justify-start gap-[12px] min-w-[259px] max-w-full mq450:flex-wrap">
           <div className="flex-1 flex flex-col items-start justify-start pt-0 px-0 pb-2 box-border gap-[4px] min-w-[211px] max-w-full">

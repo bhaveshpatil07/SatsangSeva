@@ -2,11 +2,13 @@ import { Button } from "@mui/material";
 import FirstFold2 from "../components/FirstFold2";
 import GroupComponent2 from "../components/GroupComponent2";
 import GroupComponent1 from "../components/GroupComponent1";
-import Footer from "../components/Footer1";
+import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LiveEvent from "../components/LiveEvent";
 import { useNavigate } from "react-router-dom";
+import FirstFold1 from "../components/FirstFold1";
+import '../Csss/ProfilePage.css';
 
 const ProfilePage = () => {
   const url = process.env.REACT_APP_BACKEND;
@@ -53,48 +55,24 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[82px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
-      <header style={{ width: "100vw" }} className="flex-1 flex flex-col items-start justify-start pt-0 px-0 pb-[56.8px] box-border relative gap-[50px] max-w-full text-left text-14xl-6 text-white font-sacramento mq450:pb-[37px] mq450:box-border">
-        <div className="">
-          <img
-            className="absolute top-[0px] w-full h-full object-cover"
-            alt=""
-            src="/rectangle-121@2x.png"
-          />
-          <img
-            className="absolute top-[0px] w-full h-full object-cover mix-blend-normal z-[1]"
-            alt=""
-            src="/rectangle-1011.svg"
-          />
-        </div>
-        <div className="self-stretch h-[5.4px] relative shadow-[0px_8px_20px_rgba(209,_209,_209,_0.19)] z-[2]" />
-        <div className="w-[1392.5px] flex flex-row items-start justify-start py-0 px-[75px] box-border max-w-full shrink-0 lg:pl-[37px] lg:pr-[37px] lg:box-border">
-          <div className="flex-1 flex flex-col items-start justify-start gap-[54.5px] max-w-full mq750:gap-[27px]">
-            <LiveEvent />
-          </div>
-        </div>
-      </header>
+    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
+      <FirstFold1 />
       <main style={{ width: "100vw" }} className="flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <section className="w-[1256px] flex flex-col items-start justify-start max-w-full text-left text-21xl text-black font-poppins mq750:gap-[18px]">
           <div className="w-[1229px] flex flex-row items-start justify-start py-0 px-3.5 box-border max-w-full text-xs">
             <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
               <div className="w-[685px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border max-w-full">
-                <div className="self-stretch flex flex-row items-start align-items-center justify-between max-w-full gap-[20px] mq750:flex-wrap">
-                  <img
-                    className="h-[200px] w-[200px] relative rounded-[106px] object-cover mq750:flex-1"
-                    loading="lazy"
-                    alt=""
-                    src="https://cdn-icons-png.freepik.com/512/11214/11214277.png?ga=GA1.1.45572294.1722267908"
-                  />
+                <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-[20px] mq750:flex-wrap">
+                <div className="profile-icon">{userData ? userData.name.charAt(0).toUpperCase() :"..."}</div>
                   <div className="w-[403px] flex flex-col items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
                     <div className="flex flex-col items-start justify-start text-lg">
-                      <b style={{ fontSize: "2rem" }} className="relative">{userData && userData.name ? userData.name : "Narendra Chopra"}</b>
+                      <b style={{ fontSize: "2rem" }} className="relative">{userData && userData.name ? userData.name : "Loading..."}</b>
                       <div style={{ fontSize: "1rem" }} className="relative text-sm z-[1]">
-                        Email: {userData && userData.email ? userData.email : "abc@gmail.com"}
+                        Email: {userData && userData.email ? userData.email : "Loading..."}
                       </div>
                     </div>
                     <div style={{ fontSize: "1rem" }} className="relative inline-block min-w-[121px]">
-                      Contact: {userData && userData.phoneNumber ? "+91-" + userData.phoneNumber : "+91-1111111111"}
+                      Contact: {userData && userData.phoneNumber ? "+91-" + userData.phoneNumber : "+91-Loading..."}
                     </div>
                     {/* <div className="self-stretch relative">
                       In publishing and graphic design, Lorem ipsum is a
@@ -175,7 +153,7 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
-          <div style={{ width: "100vw" }} className=" flex flex-col items-end justify-center pt-0 px-0 pb-[103px] box-border gap-[81.5px] max-w-full lg:gap-[41px] lg:pb-[67px] lg:box-border mq750:gap-[20px] mq750:pb-11 mq750:box-border">
+          <div style={{ width: "100vw" }} className=" flex flex-col items-end justify-center pt-0 px-0 box-border gap-[81.5px] max-w-full lg:gap-[41px] lg:pb-[67px] lg:box-border mq750:gap-[20px] mq750:pb-11 mq750:box-border">
             <div className="self-stretch flex flex-row items-start justify-center max-w-full text-center">
               <div className="w-[854px] flex flex-col items-end justify-start gap-[24px] max-w-full">
                 <div className="self-stretch flex flex-row items-start justify-center max-w-full">
@@ -247,9 +225,9 @@ const ProfilePage = () => {
                       <>
                         <div className="w-full flex flex-wrap justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
                           <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
-                            {userBookings.map((item) => (
-                              <GroupComponent2 key={item.event._id}
-                                eventCardImage={item.event.eventPoster ? `${url}/${item.event.eventPoster}` : "/rectangle-12-1@2x.png"}
+                            {userBookings.map((item, index) => (
+                              <GroupComponent2 key={item.event._id+index}
+                                eventCardImage={item.event.eventPoster ? `${item.event.eventPoster}` : "/rectangle-12-1@2x.png"}
                                 event={item.event}
                                 title={item.event.eventName}
                                 date={item.event.startDate}
@@ -258,7 +236,7 @@ const ProfilePage = () => {
                                 className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                               />
                             ))}
-                            <div onClick={()=>{navigate("/search-bar")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-start justify-start pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
+                            <div onClick={()=>{navigate("/search-bar")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
                               <div className="flex flex-row items-start justify-start py-0 px-3">
                                 <img
                                   className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"
@@ -287,9 +265,9 @@ const ProfilePage = () => {
               <>
                 <div className="w-full flex flex-wrap justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
                   <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
-                    {userEvents.map((e) => (
-                      <GroupComponent2 key={e._id}
-                        eventCardImage={e.eventPoster ? `${url}/${e.eventPoster}` : "/rectangle-12-1@2x.png"}
+                    {userEvents.map((e, index) => (
+                      <GroupComponent2 key={e._id+index}
+                        eventCardImage={e.eventPoster ? `${e.eventPoster}` : "/rectangle-12-1@2x.png"}
                         event={e}
                         title={e.eventName}
                         date={e.startDate}
@@ -298,7 +276,7 @@ const ProfilePage = () => {
                         className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                       />
                     ))}
-                    <div onClick={()=>{navigate("/event-listing")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-start justify-start pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
+                    <div onClick={()=>{navigate("/event-listing")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
                       <div className="flex flex-row items-start justify-start py-0 px-3">
                         <img
                           className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"

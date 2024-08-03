@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 const FinalDesign = () => {
   return (
-    <div className="w-full relative bg-white overflow-x-hidden flex flex-col items-end justify-start pt-0 px-0 box-border gap-[74px] leading-[normal] tracking-[normal] mq750:gap-[37px] mq1050:h-auto mq450:gap-[18px]">
+    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-x-hidden flex flex-col items-end justify-start pt-0 px-0 box-border gap-[74px] leading-[normal] tracking-[normal] mq750:gap-[37px] mq1050:h-auto mq450:gap-[18px]">
       <LandingPage />
       <EventListing />
       <EventCreation />

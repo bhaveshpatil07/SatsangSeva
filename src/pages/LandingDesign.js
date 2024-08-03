@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 
 const LandingDesign = () => {
   return (
-    <div className="w-full h-[3463px] relative bg-white overflow-hidden flex flex-col items-end justify-start pt-0 px-0 pb-[513px] box-border gap-[85px] leading-[normal] tracking-[normal] mq750:gap-[42px] mq1050:h-auto mq450:gap-[21px]">
+    <div style={{marginTop: "-5rem"}} className="w-full h-[3463px] relative bg-white overflow-hidden flex flex-col items-end justify-start pt-0 px-0 pb-[513px] box-border gap-[85px] leading-[normal] tracking-[normal] mq750:gap-[42px] mq1050:h-auto mq450:gap-[21px]">
       <Main />
       <FrameComponent1 />
       <section className="w-[1418px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full shrink-0 text-left text-21xl text-darkorange-200 font-montserrat">

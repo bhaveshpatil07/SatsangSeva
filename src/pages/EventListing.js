@@ -96,36 +96,21 @@ const EventListing1 = () => {
     if (formValues.pinCode.length !== 6) {
       return alert("Enter valid PINCODE!");
     }
-    // const newData = {
-    //   eventName: formValues.eventName,
-    //   eventCategory: formValues.eventCategory,
-    //   eventLang: formValues.eventLanguage,
-    //   noOfAttendees: formValues.expectedAttendees,
-    //   performerName: formValues.eventPerformerName,
-    //   hostName: formValues.hostName,
-    //   hostWhatsapp: formValues.hostContactNumber,
-    //   sponserName: formValues.sponsorName,
-    //   eventLink: formValues.eventLinks,
-    //   location: formValues.location,
-    //   eventAddress: formValues.addressLine1 + ", " + formValues.addressLine2 + ", " + formValues.city + ", " + formValues.state + ", PIN: " + formValues.pinCode,
-    //   startDate: formValues.startDate,
-    //   endDate: formValues.endDate
-    // };
-    const newData = { 
-      eventName: "Krishna Bhajan",
-      eventCategory: "Bhakti",
-      eventLang: "Hindi",
-      noOfAttendees: "12050",
-      performerName: "Narendra Chopra",
-      hostName: "Dummy",
-      hostWhatsapp: "1234567890",
-      sponserName: "Sponser Dummy",
-      eventLink: "https://www.youtube.com/watch?v=04x7qW_DS2Y",
-      location: "https://maps.app.goo.gl/nZ3FRXhztZvTM2Uh9",
-      eventAddress: "ABC Ganpati Temple, Banaglore highway, Mumbai, Maharashtra, 456798",
-      startDate: "2024-11-22 10:35",
-      endDate: "2024-12-02 17:55"
-  };
+    const newData = {
+      eventName: formValues.eventName,
+      eventCategory: formValues.eventCategory,
+      eventLang: formValues.eventLanguage,
+      noOfAttendees: formValues.expectedAttendees,
+      performerName: formValues.eventPerformerName,
+      hostName: formValues.hostName,
+      hostWhatsapp: formValues.hostContactNumber,
+      sponserName: formValues.sponsorName,
+      eventLink: formValues.eventLinks,
+      location: formValues.location,
+      eventAddress: formValues.addressLine1 + ", " + formValues.addressLine2 + ", " + formValues.city + ", " + formValues.state + ", PIN: " + formValues.pinCode,
+      startDate: formValues.startDate,
+      endDate: formValues.endDate
+    };
     const error = validateEventInputs(newData);
     if (!error) {
       const headers = {
@@ -227,12 +212,12 @@ const EventListing1 = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[25px]">
+      <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-center justify-center gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[25px]">
         <FirstFold1 />
         <section className="self-stretch flex flex-row items-start justify-center py-0 pr-5 pl-[21px] box-border max-w-full text-center text-base text-black font-poppins">
           <div className="w-[1239px] flex flex-col items-end justify-start gap-[34px] max-w-full mq750:gap-[17px]">
             <div className="self-stretch flex flex-row items-start justify-center pt-0 pr-5 pl-[23px] box-border max-w-full text-21xl">
-              <div className="flex flex-col items-start justify-start gap-[24px] max-w-full">
+              <div className="flex flex-col items-center justify-center max-w-full">
                 <div className="flex flex-row items-start justify-start py-0 px-16 mq450:pl-5 mq450:pr-5 mq450:box-border">
                   <h1 className="m-0 relative text-inherit leading-[48px] font-bold font-inherit mq450:text-5xl mq450:leading-[29px] mq1050:text-13xl mq1050:leading-[38px]">
                     <span>{`List Your `}</span>
@@ -247,7 +232,7 @@ const EventListing1 = () => {
 
 
             {/* Image upload start */}
-            <div className="w-full flex justify-center items-center p-5">
+            <div className="w-full flex justify-center items-center p-3">
               <div
                 {...getRootProps()}
                 className="w-full h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl bg-gray-300 cursor-pointer relative overflow-hidden"
@@ -277,44 +262,56 @@ const EventListing1 = () => {
             {/* Image upload end*/}
 
             {/* form start */}
-            <div className="self-stretch flex flex-row items-start justify-end pt-0 px-[54px] pb-5 box-border max-w-full text-left text-sm font-roboto lg:pl-[27px] lg:pr-[27px] lg:box-border">
+            <div className="self-stretch flex flex-row items-start justify-end pt-0 pb-5 box-border max-w-full text-left text-sm font-roboto">
               <div className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full">
-                <div className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
-                  <div className="w-[474px] flex flex-col items-start justify-start gap-[4px] max-w-full">
-                    <div className="self-stretch relative leading-[20px] font-medium">
-                      <span>{`Event Name `}</span>
-                      <span className="text-red">*</span>
+                <div className="self-stretch flex flex-row flex-wrap items-start justify-start max-w-full lg:gap-[91px] mq450:gap-[23px] mq750:gap-[45px]">
+                  <div style={{padding: "0 0 1rem 0"}} className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
+                    <div className="w-[584px] mr-3 self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
+                      <div className="self-stretch relative leading-[20px] font-medium">
+                        <span>{`Event Name `}</span>
+                        <span className="text-red">*</span>
+                      </div>
+                      <input className="form-control" type="text" name="eventName" value={formValues.eventName} onChange={handleInputChange} placeholder="enter name" />
                     </div>
-                    <input className="form-control" type="text" name="eventName" value={formValues.eventName} onChange={handleInputChange} placeholder="enter name" />
-                  </div>
-                  <div className="w-[474px] flex flex-col items-start justify-start gap-[4px] max-w-full">
-                    <div className="self-stretch relative leading-[20px] font-medium">
-                      <span>{`Event Links `}</span>
-                      <span className="text-red">*</span>
-                    </div>
+                    <div className="w-[584px] self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
+                      <div className="self-stretch relative leading-[20px] font-medium">
+                        <span>{`Event Links `}</span>
+                        <span className="text-red">*</span>
+                      </div>
 
-                    {/* <input type="text" name="eventLinksDisabled" value={formValues.eventLinksDisabled} disabled placeholder="enter-links" /> */}
-                    <input className="form-control" type="text" name="eventLinks" value={formValues.eventLinks} onChange={handleInputChange} placeholder="enter-links" />
+                      {/* <input type="text" name="eventLinksDisabled" value={formValues.eventLinksDisabled} disabled placeholder="enter-links" /> */}
+                      <input className="form-control" type="text" name="eventLinks" value={formValues.eventLinks} onChange={handleInputChange} placeholder="enter-links" />
+                    </div>
                   </div>
-                </div>
-                <div className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[182px] max-w-full lg:gap-[91px] mq450:gap-[23px] mq750:gap-[45px]">
-                  <div className="flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
+                  <div style={{padding: "0 2rem 0 0"}} className="flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span className="whitespace-pre-wrap">{`Event Category  `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="eventCategory" value={formValues.eventCategory} onChange={handleInputChange} placeholder="enter category" />
+                      <select className="form-control" name="eventCategory" value={formValues.eventCategory} onChange={handleInputChange}>
+                        <option value="">Select Category</option>
+                        <option value="Satsang">Satsang</option>
+                        <option value="Bhajan">Bhajan</option>
+                        <option value="Samaroh">Samaroh</option>
+                        <option value="Langar">Langar</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch flex flex-row items-start justify-start max-w-full">
-                        <div className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full">
-                          <div className="w-[215px] h-[60px] flex flex-col items-start justify-start gap-[4px]">
+                        <div style={{minWidth: "50%"}} className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full">
+                          <div className="self-stretch pr-3 flex flex-col items-start justify-start gap-[4px]">
                             <div className="self-stretch relative leading-[20px] font-medium">
                               <span>{`Event Language `}</span>
                               <span className="text-red">*</span>
                             </div>
-                            <input className="form-control" type="text" name="eventLanguage" value={formValues.eventLanguage} onChange={handleInputChange} placeholder="enter language" />
+                            <select className="form-control" name="eventLanguage" value={formValues.eventLanguage} onChange={handleInputChange}>
+                              <option value="">Select Language</option>
+                              <option value="Hindi">Hindi</option>
+                              <option value="English">English</option>
+                              <option value="Hindi & English">Both</option>
+                            </select>
 
                           </div>
                           <div className="self-stretch relative leading-[20px] font-medium">
@@ -322,7 +319,7 @@ const EventListing1 = () => {
                             <span className="text-red">*</span>
                           </div>
                         </div>
-                        <div className="w-[215px] flex flex-col items-start justify-start gap-[4px] ml-[-215.5px]">
+                        <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                           <div className="self-stretch relative leading-[20px] font-medium">
                             <span>{`Expected Attendees`}</span>
                             <span className="text-red">*</span>
@@ -333,7 +330,7 @@ const EventListing1 = () => {
                           </div>
                         </div>
                       </div>
-                      <input className="form-control" type="text" name="eventPerformerName" value={formValues.eventPerformerName} onChange={handleInputChange} autoComplete="given-name" placeholder="Performer Name" required />
+                      <input className="form-control" type="text" name="eventPerformerName" value={formValues.eventPerformerName} onChange={handleInputChange} autoComplete="given-name" placeholder="Performer Name1, Name2, ..." required />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
@@ -365,7 +362,7 @@ const EventListing1 = () => {
                         <span>{`Sponsor Name `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="sponsorName" value={formValues.sponsorName} onChange={handleInputChange} placeholder="Enter sponsor name" />
+                      <input className="form-control" type="text" name="sponsorName" value={formValues.sponsorName} onChange={handleInputChange} placeholder="Sponsor Name1, Name2, ..." />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
@@ -379,7 +376,7 @@ const EventListing1 = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
+                  <div style={{padding: "0 2rem 0 0"}} className="flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Location (Google Map URL) `}</span>

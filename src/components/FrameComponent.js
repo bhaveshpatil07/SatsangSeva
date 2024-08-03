@@ -1,33 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button } from "@mui/material";
-import User from "@mui/icons-material/AccountCircleTwoTone";
-import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import axios from "axios";
-import "../Csss/FrameComponent.css";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import '../Csss/FrameComponent.css';
+import ProfileIcon from '@mui/icons-material/AccountCircleTwoTone';
+import axios from 'axios';
 
-const FrameComponent = ({
-  className = "",
-  onCategoriesTextClick,
-  onListYourEventClick,
-}) => {
-  const url = process.env.REACT_APP_BACKEND;
-  const [userId, setUserId] = useState(localStorage.getItem("userId"));
-  const [name, setName] = useState("");
-  const navigate = useNavigate();
+const FrameComponent = () => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  const [name, setName] = useState('');
   const [scrolled, setScrolled] = useState(false);
-
-  const handleScroll = () => {
-    setScrolled(window.scrollY > 50);
-  };
+  const navigate = useNavigate();
+  const url = process.env.REACT_APP_BACKEND;
 
   useEffect(() => {
     if (userId) {
       verifyUser(userId);
     }
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [userId]);
+
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 50);
+  };
 
   const verifyUser = async (userId) => {
     try {
@@ -38,103 +33,62 @@ const FrameComponent = ({
       }
     } catch (e) {
       setUserId(null);
-      localStorage.removeItem("userId");
-      localStorage.removeItem("token");
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
       console.log(e);
     }
   };
 
   function trimFirstName(fullName) {
-    // Split the full name into individual names
     let names = fullName.split(' ');
-
-    // Extract the first name
     let firstName = names[0];
-
-    // Check if the first name is longer than 7 characters
-    if (firstName.length > 7) {
-      // Trim the first name to 7 characters and append an ellipsis
-      return firstName.substring(0, 7) + '...';
-    } else {
-      // Return the original first name
-      return firstName;
-    }
+    return firstName.length > 7 ? firstName.substring(0, 7) + '...' : firstName;
   }
 
-  const onGroupContainerClick = useCallback(() => {
-    navigate("/landing-design-a-2");
-  }, [navigate]);
-
-  const onUpcomingEventsTextClick = useCallback(() => {
-    const anchor = document.querySelector(
-      "[data-scroll-to='upcomingEventsContainer']"
-    );
-    if (anchor) {
-      anchor.scrollIntoView({ block: "start", behavior: "smooth" });
-    }
-  }, []);
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
 
   const handleLoginRedirect = useCallback(() => {
-    navigate("/login");
+    navigate('/login');
   }, [navigate]);
 
   return (
-    <header className={`header-container ${scrolled ? "scrolled" : ""} ${className}`}>
-      <nav className="navbar header-nav navbar-expand-lg bg-body-transparent">
-        <div className="container-fluid">
-          <a style={{fontSize: "2rem", color: "white"}} className="navbar-brand" href="/">
-            <img src="./group.svg" alt="Logo" width="50" height="40" className="d-inline-block align-text-top mr-3" />
-            Satsang Seva
-          </a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="header-middle navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav gap-2 ms-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link" aria-current="page" href="/">Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/#upcomingEvents">Upcoming Events</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/event-listing">List Your Event</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/categories-page">Categories</a>
-              </li>
-            </ul>
-            {!userId ? (
-              <Button
-                className="login-button"
-                disableElevation
-                variant="outlined"
-                onClick={handleLoginRedirect}
-              >
-                Login
-              </Button>
-            ) : (
-              <Button
-                className="user-button"
-                disableElevation
-                variant="outlined"
-                onClick={()=>{navigate("/profile-page")}}
-              >
-                <h6 className="user-name">{name}</h6>
-                <User fontSize="large" />
-              </Button>
-            )}
-          </div>
-        </div>
-      </nav>
-    </header>
-  );
-};
+    <div className={`nav-main ${scrolled ? 'scrolled' : ''}`}>
+      <div className='left-nav'>
+        <img src="/group-1.svg" alt="SatsangSeva" />
+        <h1>Satsang Seva</h1>
+      </div>
+      <div className='hamburger-menu' onClick={toggleMenu}>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div className={`right-nav ${isMenuOpen ? 'active' : ''}`}>
+        <ul>
+          <li className='io' onClick={toggleMenu}><Link to="/">Home</Link></li>
+          <li className='io' onClick={toggleMenu}><Link to="/#upcomingEvents">Upcoming Events</Link></li>
+          <li className='io' onClick={toggleMenu}><Link to="/event-listing">List Your Events</Link></li>
+          <li className='io' onClick={toggleMenu}><Link to="/categories-page">Categories</Link></li>
+          {!userId ? (
+            <li className='log py-1 px-4 text-xl' onClick={toggleMenu}><Link to="/login">Login</Link></li>
+          ) : (
+            <li className='log py-1' onClick={toggleMenu}>
+              <Link to='/profile-page'>
+                <div className="info flex items-center justify-center">
+                  <span className='user-name pr-2'>{name}</span>
+                  <span className="profile-icon small">
+                    {name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
 
-FrameComponent.propTypes = {
-  className: PropTypes.string,
-  onCategoriesTextClick: PropTypes.func,
-  onListYourEventClick: PropTypes.func,
+              </Link>
+            </li>
+          )}
+        </ul>
+      </div>
+    </div>
+  );
 };
 
 export default FrameComponent;

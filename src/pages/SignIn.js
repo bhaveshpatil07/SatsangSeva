@@ -10,8 +10,8 @@ import Footer from "../components/Footer1";
 
 const SignIn = () => {
   return (
-    <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[22px] leading-[normal] tracking-[normal]">
-      <section className="self-stretch flex flex-col items-start justify-start max-w-full">
+    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-center justify-center gap-[22px] leading-[normal] tracking-[normal]">
+      <section className="self-stretch flex flex-col items-center justify-center max-w-full">
         <FirstFold
           iconsxCircle="/iconsxcircle.svg"
           rectangleIconAlignSelf="stretch"

@@ -57,7 +57,7 @@ const GroupComponent2 = ({
       onClick={handleClick}
     >
       <img
-        className="self-stretch flex-1 relative rounded-t-[18.95px] rounded-b-none max-w-full overflow-hidden max-h-full object-cover"
+        className="self-stretch bg-orange flex-1 relative rounded-t-[18.95px] rounded-b-none max-w-full overflow-hidden max-h-full object-cover"
         loading="lazy"
         alt=""
         src={eventCardImage}

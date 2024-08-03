@@ -1,15 +1,57 @@
 import { Button } from "@mui/material";
 import PropTypes from "prop-types";
 import FrameComponent from "./FrameComponent"; // Import FrameComponent
+import { useEffect, useState } from "react";
+import '../Csss/ProfilePage.css';
 
 const FirstFold1 = ({ className = "" }) => {
+  const getTargetDate = () => {
+    const now = new Date();
+    const targetDate = new Date();
+    targetDate.setDate(now.getDate() + 1); 
+    targetDate.setHours(16, 0, 0, 0); 
+    return targetDate;
+  };
+
+  const calculateTimeLeft = () => {
+    const now = new Date();
+    const targetDate = getTargetDate();
+    const difference = targetDate - now;
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((difference % (1000 * 60)) / 1000),
+      };
+    } else {
+      // Handle the case when the timer has finished
+      timeLeft = { hours: 0, minutes: 0, seconds: 0 };
+    }
+
+    return timeLeft;
+  };
+
+  // State to store the time left
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft);
+
+  // Update the timer every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <header
       className={`self-stretch flex flex-col items-start justify-start pt-0 px-0 pb-[56.8px] box-border relative gap-[27px] max-w-full text-left text-14xl-6 text-white font-sacramento mq450:pb-[37px] mq450:box-border ${className}`}
     >
       {/* FrameComponent in place of navbar */}
-      
-                {/* top-image start */}
+
+      {/* top-image start */}
 
       <div className="w-full h-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px]">
         <img
@@ -24,17 +66,28 @@ const FirstFold1 = ({ className = "" }) => {
         />
       </div>
       <div className="self-stretch h-[5.4px] relative shadow-[0px_8px_20px_rgba(209,_209,_209,_0.19)] z-[2]" />
-      <div className="flex flex-row items-start justify-center py-0 px-[75px] box-border w-full lg:pl-[37px] lg:pr-[37px] lg:box-border">
+      <div style={{ padding: "4rem 0" }} className="flex flex-row items-start justify-center px-[75px] box-border w-full lg:pl-[37px] lg:pr-[37px] lg:box-border">
         <div className="flex flex-col items-start justify-start gap-[11.7px] max-w-full">
-          <div className="flex flex-row items-start justify-start gap-[42px] max-w-full mq750:gap-[21px]">
+          <div className="flex flex-row items-start justify-start gap-[42px] max-w-full mq750:flex-col">
             <div className="w-[501px] flex flex-col items-start justify-start py-0 pr-[37px] pl-0 box-border gap-[44.7px] max-w-full mq750:gap-[22px]">
               <div className="w-[264.9px] flex flex-row items-start justify-start gap-[4.7px]">
                 {/* Additional content or components can go here */}
               </div>
-              <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 pl-[21px] box-border max-w-full text-21xl font-montserrat">
+              <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 box-border max-w-full text-21xl font-montserrat">
                 <b className="flex-1 relative inline-block max-w-full z-[2]">
                   <p className="m-0">Live Event Starts In</p>
-                  <p className="m-0 text-45xl">00:00:00 hrs</p>
+                  <p className="m-0 text-45xl time">
+                    <span>
+                    {String(timeLeft.hours).padStart(2, '0')}:
+                    </span>
+                    <span>
+                    {String(timeLeft.minutes).padStart(2, '0')}:
+                    </span>
+                    <span>
+                    {String(timeLeft.seconds).padStart(2, '0')}
+                    </span>
+                    <span className="pl-2">hrs</span>
+                  </p>
                 </b>
               </div>
             </div>

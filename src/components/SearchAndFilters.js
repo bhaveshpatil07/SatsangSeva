@@ -10,9 +10,11 @@ import {
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import Loader from "./Loader";
 
 const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
   const url = process.env.REACT_APP_BACKEND;
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     eventName: "",
     address: "",
@@ -24,6 +26,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
 
   const handleSearch = async()=>{
     if(formData.address || formData.eventName || formData.startTime){
+      setLoading(true);
       await axios.get(url + "/event/search?name="+encodeURIComponent(formData.eventName)+"&add="+encodeURIComponent(formData.address)+"&date="+encodeURIComponent(formData.startTime)).then((resp)=>{
         handleSearchDataChange(resp.data.events);
         const windowHeight = window.innerHeight;
@@ -33,6 +36,8 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
         window.scrollTo({ top: newScrollPosition, behavior: 'smooth' });
       }).catch((e)=>{
         alert("Error: " + e);
+      }).finally(()=>{
+        setLoading(false);
       });
     }else{
       alert("Please Enter atleast one field.");
@@ -41,8 +46,9 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
   
   return (
     <section style={{width: "100vw"}}
-      className={`flex flex-row items-start justify-center pt-0 px-5 pb-2.5 box-border max-w-full ${className}`}
+      className={`flex flex-row items-start justify-center pt-3 px-5 pb-2.5 box-border max-w-full ${className}`}
     >
+      {loading && <Loader />}
       <form className="m-0 w-[1221px] flex flex-col items-start justify-start gap-[37px] max-w-full mq750:gap-[18px]">
         <div className="w-[1198px] flex flex-row items-start justify-start py-0 px-0 box-border max-w-full lg:pl-7 lg:pr-7 lg:box-border">
           <div className="flex-1 align-items-center shadow-[0px_10px_50px_rgba(61,_55,_241,_0.25)] rounded-xl bg-darkorange-200 flex flex-row flex-wrap items-start justify-start py-[30px] px-12 box-border gap-[60px] min-h-[140px] max-w-full lg:gap-[30px] lg:pl-6 lg:pr-6 lg:box-border mq750:gap-[15px]">
@@ -117,7 +123,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
               </Button>
           </div>
         </div>
-        <div className="self-stretch flex flex-row items-end justify-between max-w-full gap-[20px]">
+        {/* <div className="self-stretch flex flex-row items-end justify-between max-w-full gap-[20px]">
           <div className="w-[255px] flex flex-col items-start justify-end pt-0 px-0 pb-1.5 box-border mq1050:w-0">
             <div className="self-stretch flex flex-row items-start justify-start gap-[23px] mq1050:hidden">
               <Button
@@ -196,7 +202,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </form>
     </section>
   );

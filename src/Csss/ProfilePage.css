@@ -1,0 +1,38 @@
+.profile-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1rem double #fff;
+  background-color: #f58021e2;
+  color: #fff;
+  font-size: 7rem;
+  font-weight: bold;
+  text-align: center;
+  width: 30%;
+  aspect-ratio: 1;
+  @media (max-width: 769px) {
+    width: 80%;
+  }
+}
+.small{
+  border: 1px double #000;
+  background-color: #fff;
+  color: #f58021e2;
+  font-size: 24px;
+  width: 35px;
+  aspect-ratio: 1;
+  @media (max-width: 769px) {
+    width: 35px;
+  }
+}
+.time{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.time span{
+  display: inline-block;
+  text-align: center;
+  min-width:90px;
+}

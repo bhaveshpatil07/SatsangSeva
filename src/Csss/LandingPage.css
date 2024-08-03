@@ -1,0 +1,17 @@
+.fade-in{
+    transform: scale(0.3);
+    opacity: 0;
+    transition: transform 1s ease-out, opacity 1.3s ease-in-out;
+}
+
+.active{
+    transform: scale(1);
+    opacity: 1;
+}
+
+.img-resp{
+    aspect-ratio: 1;
+    @media (max-width: 769px) {
+        height: 50% !important;
+    }
+}

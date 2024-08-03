@@ -36,7 +36,7 @@
     width: 60%;
     font-size: 1.3rem;
     padding: 0.7rem 1rem;
-    box-shadow: 1px 3px 10px 1px #333;
+    box-shadow: 1px 3px 10px 1px #b0b0b0;
   }
   
   .create-events-button:hover {

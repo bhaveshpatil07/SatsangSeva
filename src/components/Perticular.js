@@ -10,12 +10,14 @@ import paymnet from '../img/payment.png'
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Loader from "./Loader";
 const Perticular = () => {
   const url = process.env.REACT_APP_BACKEND;
   const location = useLocation();
   const navigate = useNavigate();
   const event = location.state?.event;
   const [phoneNumber, setPhoneNumber] = useState(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (!event) {
       return navigate('/');
@@ -39,6 +41,7 @@ const Perticular = () => {
     }else if((!phoneNumberRegex.test(phoneNumber))){
       return alert("Invalid Contact Number!");
     }
+    setLoading(true);
     await axios.post(url + "/booking",
       {
         event: eventId,
@@ -49,16 +52,19 @@ const Perticular = () => {
         navigate("/profile-page");
       }).catch((e)=>{
         alert("Error in booking: " + e);
+      }).finally(()=>{
+        setLoading(false);
       });
   };
 
   return (
-    <div>
+    <div style={{marginTop: "-9rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
+      {loading && <Loader />}
       <FirstFold1 />
-      <div className="event-booking">
+      <div className="event-booking gap-3">
         <div className="event-card">
           <img
-            src={event.eventPoster ? `${url}/${event.eventPoster}` : "/rectangle-12-1@2x.png"}
+            src={event.eventPoster ? `${event.eventPoster}` : "/rectangle-12-1@2x.png"}
             alt="Event"
             className="event-image"
           />

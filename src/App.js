@@ -117,6 +117,7 @@ function App() {
         <Route path="/perticular" element={<Perticular />} />
         {/* <Route path="/upcard" element={<Upcard />} /> */}
         {/* <Route path="/live" element={<LiveEvent />} /> */}
+        <Route path="*" element={<LogIn />} />
       </Routes>
 
     </>
