@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import PropTypes from "prop-types";
 import SearchBox from "./SearchBox";
 import '../Csss/LandingPage.css'
+import { HashLink } from "react-router-hash-link";
 
 const contentArray = [
   {
@@ -31,14 +32,14 @@ const LandingPage = ({ className = "" }) => {
   // Set up an interval to automatically change the content every 10 seconds
   useEffect(() => {
     const intervalId = setInterval(goToNextContent, 10000); // 10 seconds
-    
+
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
   }, [goToNextContent]);
 
   return (
     <section
-      className={`self-stretch flex flex-col items-start justify-start pt-0 px-0 pb-[180px] box-border max-w-full shrink-0 text-left text-21xl text-white font-montserrat ${className}`}
+      className={`self-stretch flex flex-col items-start justify-start pt-0 px-0 box-border max-w-full shrink-0 text-left text-21xl text-white font-montserrat ${className}`}
     >
       <div className="self-stretch flex flex-col items-start justify-start pt-0 px-0 box-border relative gap-[69px] max-w-full mq750:gap-[34px] mq750:box-border mq450:gap-[17px]">
         <div className="w-full h-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px]">
@@ -54,12 +55,15 @@ const LandingPage = ({ className = "" }) => {
           />
         </div>
 
-        <div style={{ width: "100vw", padding: "24rem 0", zIndex: '2' }} className="flex flex-row items-center justify-center box-border max-w-full lg:pl-[38px] lg:pr-[38px] lg:box-border">
+        <div style={{ width: "100vw", padding: "21rem 0", zIndex: '2' }} className="flex flex-row items-center justify-center box-border max-w-full lg:pl-[38px] lg:pr-[38px] lg:box-border">
           {contentArray.map((item, index) => (
-            <div key={index} className={`fade-in ${currentIndex === item.index? "active " : ""}absolute`}>
-              <div style={{ minWidth: "70%" }} className="flex flex-row items-center justify-start max-w-full mq1050:flex-wrap">
+            <div key={index} className={`fade-in ${currentIndex === item.index ? "active " : ""}absolute`}>
+              <div style={{ maxWidth: "90%" }} className="flex flex-row items-center justify-start max-w-full mq1050:flex-wrap">
                 <div className="relative flex item-center justify-center min-w-[504px] max-w-full mq750:min-w-full">
                   <img
+                    style={{
+                      filter: 'drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.6))',
+                    }}
                     className="img-resp w-1/2 mq750:w-5/6 object-contain z-[4]"
                     loading="lazy"
                     alt=""
@@ -94,7 +98,9 @@ const LandingPage = ({ className = "" }) => {
                           height: 60.2,
                         }}
                       >
-                        Book Now
+                        <HashLink className="no-underline text-white" to="/#upcomingEvents">
+                          Book Now
+                        </HashLink>
                       </Button>
                       <Button
                         className="h-[60.2px] flex-1 min-w-[118px] z-[10]"
@@ -109,7 +115,9 @@ const LandingPage = ({ className = "" }) => {
                           height: 60.2,
                         }}
                       >
-                        Learn More
+                        <HashLink className="no-underline text-white" to="/#upcomingEvents">
+                          Learn More
+                        </HashLink>
                       </Button>
                     </div>
                   </div>

@@ -26,6 +26,9 @@
 .left-nav h1 {
   padding-left: 1rem;
   margin: 0;
+  @media (max-width: 769px) {
+    font-size: 2.1rem;
+  }
 }
 
 .right-nav {

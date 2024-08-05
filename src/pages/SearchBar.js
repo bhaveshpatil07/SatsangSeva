@@ -5,11 +5,36 @@ import EventListHeader from "../components/EventListHeader";
 import { useEffect, useState } from "react";
 import FirstFold1 from "../components/FirstFold1";
 import Footer from "../components/Footer";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const SearchBar = () => {
+  const url = process.env.REACT_APP_BACKEND;
+
   const [data, setData] = useState(null);
   const handleSearchDataChange = (newData) => {
     setData(newData);
+  };
+
+  const location = useLocation();
+  
+  useEffect(() => {
+    fetchEvents();
+    setTimeout(() => {
+      const windowHeight = window.innerHeight;
+      const scrollPosition = windowHeight * 0.55;
+      window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+    }, 100);
+  }, [location]);
+
+  const fetchEvents = async () => {
+    await axios.get(url + "/events").then((resp) => {
+      // console.log(resp.data.events);
+      setData(resp.data.events);
+      // setFilteredEvents(resp.data.events);
+    }).catch((e) => {
+      console.log("Error in fetching Events: " + e);
+    })
   };
   
   return (

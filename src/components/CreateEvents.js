@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from "react";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { HashLink as Link } from 'react-router-hash-link';
 import PropTypes from "prop-types";
 import '../Csss/CreateEvents.css'; // Import the external CSS file
 
@@ -17,11 +17,6 @@ const CreateEvents = ({
     };
   }, [propFlex, propAlignSelf]);
 
-  const navigate = useNavigate();
-
-  const onGroupContainerClick = useCallback(() => {
-    navigate("/event-listing");
-  }, [navigate]);
 
   return (
     <div
@@ -34,7 +29,7 @@ const CreateEvents = ({
         alt=""
         src="/untitled-design-3-1@2x.png"
       />
-      <div className="create-events-content" onClick={onGroupContainerClick}>
+      <div className="create-events-content">
         <h1 className="create-events-heading">
           {listYourOwnEvent}
         </h1>
@@ -45,7 +40,7 @@ const CreateEvents = ({
           className="create-events-button"
           variant="contained"
         >
-          Create Events
+          <Link className="text-white no-underline" to="/event-listing#form">Create Events</Link>
         </Button>
       </div>
     </div>

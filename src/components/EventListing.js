@@ -14,6 +14,8 @@ const EventListing = ({ className = "" }) => {
   const searchTopOpen = Boolean(searchTopAnchorEl);
   const [events, setEvents] = useState(null);
   const [filteredEvents, setFilteredEvents] = useState(null);
+  const [visibleEvents, setVisibleEvents] = useState(9);
+  const [hasMoreEvents, setHasMoreEvents] = useState(true);
 
   const handleSearchTopClick = (event) => {
     setSearchTopAnchorEl(event.currentTarget);
@@ -41,26 +43,33 @@ const EventListing = ({ className = "" }) => {
 
   const handleCategoryChange = (event) => {
     const selectedCategory = event.target.value;
-    if(!selectedCategory.length>0){
+    if (!selectedCategory.length > 0) {
       setEvents(filteredEvents);
-    }else{
+      setVisibleEvents(9);
+      setHasMoreEvents(filteredEvents.length>9);
+    } else {
       const result = filteredEvents.filter((event) => event.eventCategory === selectedCategory);
       setEvents(result);
+      setVisibleEvents(9);
+      setHasMoreEvents(result.length>9);
     }
-    
+  };
+
+  const handleLoadMore = () => {
+    const newVisibleEvents = visibleEvents + 9;
+    setVisibleEvents(newVisibleEvents);
+    setHasMoreEvents(events.length > newVisibleEvents);
   };
 
   return (
     <section
       id="upcomingEvents"
       className={`w-full flex flex-col items-center py-0 px-5 box-border max-w-full shrink-0 text-left text-21xl text-goldenrod font-montserrat ${className}`}
-      style={{
-        marginTop: "-200px" // Slightly less negative value to move the section down a bit
-      }}
     >
       <div
-        className="w-full max-w-[1086px] flex flex-col items-center justify-start"
+        className="w-full max-w-[1086px] flex flex-col items-center justify-between mq750:!pt-5"
         data-scroll-to="upcomingEventsContainer"
+        style={{ minHeight: "25rem", paddingTop: "4.5rem" }}
       >
         <div className="w-full pb-5 flex flex-row items-center justify-between max-w-full gap-[10px] mq1050:flex-wrap">
           <h1 className="m-0 relative text-inherit font-bold font-inherit inline-block text-center max-w-full mq1050:text-13xl mq450:text-5xl">
@@ -150,7 +159,7 @@ const EventListing = ({ className = "" }) => {
           <>
             <div className="w-full flex flex-wrap justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
               <div className="flex pb-5 flex-wrap w-full gap-[28.5px] justify-center">
-                {events.map((e) => (
+                {events.slice(0, visibleEvents).map((e) => (
                   <GroupComponent2 key={e._id}
                     eventCardImage={e.eventPoster ? `${e.eventPoster}` : "/rectangle-12-1@2x.png"}
                     event={e}
@@ -160,31 +169,23 @@ const EventListing = ({ className = "" }) => {
                     address={e.eventAddress}
                     className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                   />
-                  // <div key={e._id} className="col-md-4 mb-4">
-                  //   <div className="bg-white rounded-xlg shadow-lg">
-                  //     <img src="./rectangle-12-1@2x.png" alt={e.eventName} className="img-fluid w-100" />
-                  //     <div className="content p-2">
-                  //       <h2 className="text-lg font-bold">{e.eventName}</h2>
-                  //       <p className="text-sm">{e.eventAddress}</p>
-                  //       <p className="text-sm">{e.startDate}</p>
-                  //     </div>
-                  //   </div>
-                  // </div>
                 ))}
               </div>
             </div>
           </>}
         <div className="w-full flex flex-col items-center justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
+          {hasMoreEvents && (
+            <div className="w-[1038px] h-[60px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
+              <Button
+                className="self-stretch w-[182px] border-[#ff5f17] text-[#ff5f17] rounded-full text-lg transition-all duration-200 ease-in-out hover:border-[#ff5f17] hover:shadow-md active:shadow-sm active:scale-95"
+                variant="outlined"
+                onClick={handleLoadMore} 
+              >
+                Load More
+              </Button>
+            </div>
+          )}
 
-          <div className="w-[1038px] h-[60px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
-            <Button
-              className="self-stretch w-[182px] border-[#ff5f17] text-[#ff5f17] rounded-full text-lg transition-all duration-200 ease-in-out hover:border-[#ff5f17] hover:shadow-md active:shadow-sm active:scale-95"
-              variant="outlined"
-            >
-              Load More
-            </Button>
-          </div>
-          {/* button for load more end */}
         </div>
       </div>
     </section>

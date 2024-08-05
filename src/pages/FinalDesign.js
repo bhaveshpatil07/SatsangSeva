@@ -7,11 +7,11 @@ import Footer from "../components/Footer";
 
 const FinalDesign = () => {
   return (
-    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-x-hidden flex flex-col items-end justify-start pt-0 px-0 box-border gap-[74px] leading-[normal] tracking-[normal] mq750:gap-[37px] mq1050:h-auto mq450:gap-[18px]">
+    <div id="home" style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-x-hidden flex flex-col items-end justify-start pt-0 px-0 box-border leading-[normal] tracking-[normal] mq750:gap-[37px] mq1050:h-auto mq450:gap-[18px]">
       <LandingPage />
       <EventListing />
       <EventCreation />
-      <section style={{width: "100vw"}} className="flex flex-row items-start justify-center pt-0 px-5 pb-[11px] box-border max-w-full shrink-0 text-left text-21xl text-darkorange-200 font-montserrat">
+      <section style={{width: "100vw"}} className="flex flex-row items-start justify-center pt-5 px-5 pb-5 box-border max-w-full shrink-0 text-left text-21xl text-darkorange-200 font-montserrat mq750:!pt-3">
         <div className="w-[1086px] flex flex-col items-end justify-start gap-[48.5px] max-w-full mq750:gap-[24px]">
           <div className="self-stretch flex flex-row items-start justify-center py-0 pr-5 pl-[22px] box-border max-w-full">
             <div className="w-[464px] flex flex-col items-start justify-start gap-[20px] max-w-full">

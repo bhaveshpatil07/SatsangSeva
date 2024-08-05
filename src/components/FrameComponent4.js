@@ -10,7 +10,7 @@ const FrameComponent4 = ({ className = "", ytLink, imgLink }) => {
         <div className="w-[255px] flex flex-row items-start justify-start gap-[23px]">
 
         </div>
-        <div className="self-stretch flex flex-row items-start justify-start relative max-w-full">
+        <div className="self-stretch rounded-xl bg-orange flex flex-row items-start justify-start relative max-w-full">
           {ytLink !== "404" ?
             <iframe className="h-[460px] flex-1 relative rounded-xl max-w-full overflow-hidden object-cover" src={"https://www.youtube.com/embed/" + ytLink} title="Live Satsang Event" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
             :

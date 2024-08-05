@@ -26,7 +26,7 @@ const SpeakersPage = () => {
         <div className="self-stretch h-[5.4px] relative shadow-[0px_8px_20px_rgba(209,_209,_209,_0.19)] z-[2]" />
         <LiveEvent />
       </section>
-      <section className="pt-2 self-stretch flex flex-row items-start justify-center box-border max-w-full">
+      <section id="main" className="pt-5 self-stretch flex flex-row items-start justify-center box-border max-w-full">
         <HostingContent />
       </section>
       <Footer

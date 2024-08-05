@@ -30,9 +30,32 @@
   display: flex;
   justify-content: start;
   align-items: center;
+  @media (max-width: 769px) {
+    font-size: 1.2em !important;
+    span{
+      min-width: 5.5rem !important;
+    }
+  }
 }
 .time span{
   display: inline-block;
   text-align: center;
-  min-width:90px;
+  min-width:7rem;
+}
+
+.time-category{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  @media (max-width: 769px) {
+    font-size: 2.3em !important;
+    span{
+      min-width: 5rem !important;
+    }
+  }
+}
+.time-category span{
+  display: inline-block;
+  text-align: center;
+  min-width:7rem;
 }

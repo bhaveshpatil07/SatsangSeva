@@ -7,8 +7,8 @@ import "../Csss/HostingContent.css";
 const HostingContent = ({ className = "" }) => {
   const navigate = useNavigate();
 
-  const onGroupContainerClick = useCallback(() => {
-    navigate("/search-bar");
+  const onGroupContainerClick = useCallback((category) => {
+    navigate("/search-bar?q="+category);
   }, [navigate]);
 
   const cardsData = [
@@ -17,9 +17,9 @@ const HostingContent = ({ className = "" }) => {
     { src: "/rectangle-1361-2@2x.png", label: "Samaroh" },
     { src: "/rectangle-1361-3@2x.png", label: "Langar" },
     
-    { src: "/rectangle-13611@2x.png", label: "Langar" },
-    { src: "/rectangle-1361-1@2x.png", label: "Langar" },
-    { src: "/rectangle-1361-2@2x.png", label: "Langar" },
+    { src: "/rectangle-13611@2x.png", label: "Satsang" },
+    { src: "/rectangle-1361-1@2x.png", label: "Bhajan" },
+    { src: "/rectangle-1361-2@2x.png", label: "Samaroh" },
     { src: "/rectangle-1361-3@2x.png", label: "Langar" },
     // Add more cards as needed
   ];
@@ -27,8 +27,8 @@ const HostingContent = ({ className = "" }) => {
   return (
     <div className={`container ${className}`}>
       <div className="header">
-        <div className="header-title">
-          <h1>What You Can Host ?</h1>
+        <div className="header-title ">
+          <h1><b>What You Can Host ?</b></h1>
         </div>
         <div className="header-subtitle">
           <h2>
@@ -44,7 +44,7 @@ const HostingContent = ({ className = "" }) => {
           <div
             key={index}
             className="card"
-            onClick={onGroupContainerClick}
+            onClick={()=>{onGroupContainerClick(card.label);}}
           >
             <img
               loading="lazy"

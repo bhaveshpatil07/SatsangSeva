@@ -33,17 +33,26 @@ const LiveEvent = () => {
       setYt(getYoutubeVideoId(event.eventLink));
     }
   }, [event]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const windowHeight = window.innerHeight;
+      const scrollPosition = windowHeight * 0.58;
+      window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+    }, 100);
+  }, [location]);
+  
   
   return (
-    <div style={{marginTop: "-5rem"}}>
+    <div className='relative overflow-hidden' style={{marginTop: "-5rem"}}>
       <FirstFold1 />
       <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[25px] leading-[normal] tracking-[normal]">
         <FrameComponent4 ytLink={yt} imgLink={event.eventPoster?`${event.eventPoster}`:"/rectangle-12-1@2x.png"} />
         <FrameComponent11 event={event}/>
-        <FrameComponent3
-            group227="List Your Own Event"
-            listYourEventInJustOneCli="Host your Satsang Events in just one minute!"
-            onBookNowClick={()=>{navigate('/listing-event')}} 
+        <FrameComponent3 event={event}
+            group227="Book Now!"
+            listYourEventInJustOneCli="Book your slot in just one click!"
+            // onBookNowClick={()=>{navigate('/listing-event')}} 
           />
         <Footer
           group="/group1.svg"

@@ -20,19 +20,16 @@ const SearchBox = ({ className = "" }) => {
     <div
       className={`w-[1200px] shadow-[0px_12px_60px_rgba(61,_55,_241,_0.25)] rounded-xl bg-darkorange-200 flex flex-row flex-wrap items-start justify-start py-[40px] px-14 box-border gap-[80px] min-h-[160px] max-w-full cursor-pointer z-[4] text-left text-base text-white font-dm-sans lg:gap-[40px] lg:pl-8 lg:pr-8 lg:box-border mq750:gap-[20px] ${className}`}
       onClick={onSearchBoxContainerClick}
-      style={{ marginTop: '-50px' }} // Adjusted to move it slightly lower
     >
       <div className="h-[160px] w-[1200px] relative shadow-[0px_12px_60px_rgba(61,_55,_241,_0.25)] rounded-xl bg-darkorange-200 hidden max-w-full" />
       <div className="flex-1 flex flex-col items-start justify-start gap-[14px] min-w-[250px]">
         <div className="relative inline-block min-w-[110px] z-[1] text-xl">
           Search Event
         </div>
-        <div className="self-stretch flex flex-col items-start justify-start gap-[6px]">
-          <input
-            className="w-[150px] [border:none] [outline:none] inline-block font-dm-sans text-4xl bg-[transparent] h-[36px] relative font-bold text-white text-left p-0 z-[1] mq450:text-xl"
-            placeholder="Event Name"
-            type="text"
-          />
+        <div className="self-stretch flex flex-col items-start justify-start gap-[6px] text-4xl">
+          <b className="relative inline-block min-w-[120px] z-[1] mq450:text-xl">
+            Event Name
+          </b>
           <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
         </div>
       </div>
@@ -41,7 +38,7 @@ const SearchBox = ({ className = "" }) => {
           Place
         </div>
         <div className="self-stretch flex flex-col items-start justify-start gap-[6px] text-4xl">
-          <b className="relative text-secondary inline-block min-w-[120px] z-[1] mq450:text-xl">
+          <b className="relative inline-block min-w-[120px] z-[1] mq450:text-xl">
             Event Address
           </b>
           <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
@@ -51,8 +48,14 @@ const SearchBox = ({ className = "" }) => {
         <div className="relative inline-block min-w-[50px] z-[1] text-xl">
           Time
         </div>
-        <div className="self-stretch flex flex-col items-start justify-start gap-[6px]">
-          <input className="form-control text-secondary text-xl p-0 bg-transparent border-none" type="datetime-local" name="" id="" />
+        <div className="self-stretch flex flex-col items-start justify-start gap-[6px] text-4xl">
+          <b className="relative inline-block min-w-[120px] z-[1] mq450:text-xl">
+            Any Date
+          </b>
+          <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
+        </div>
+        {/* <div className="self-stretch flex flex-col items-start justify-start gap-[6px]"> */}
+          {/* <input className="form-control text-secondary text-xl p-0 bg-transparent border-none" type="datetime-local" name="" id="" /> */}
           {/* <FormControl
             className="self-stretch h-[36px] font-dm-sans font-bold text-4xl text-white w-auto"
             variant="standard"
@@ -116,8 +119,8 @@ const SearchBox = ({ className = "" }) => {
             </Select>
             <FormHelperText />
           </FormControl> */}
-          <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
-        </div>
+          {/* <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" /> */}
+        {/* </div> */}
       </div>
     </div>
   );

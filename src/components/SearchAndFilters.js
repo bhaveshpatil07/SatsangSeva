@@ -60,7 +60,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
               <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                 <input
                   id="eventName"
-                  className="w-full [border:none] [outline:none] inline-block font-dm-sans text-3xl bg-[transparent] h-[29px] relative font-bold text-white text-left p-0 z-[1] mq450:text-lg"
+                  className="w-full placeholder-white [border:none] [outline:none] inline-block font-dm-sans text-3xl bg-[transparent] h-[29px] relative font-bold text-white text-left p-0 z-[1] mq450:text-lg"
                   placeholder="Event Name"
                   type="text"
                   onChange={handleChange}
@@ -77,7 +77,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
               <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                 <input
                   id="address"
-                  className="w-full [border:none] [outline:none] inline-block font-dm-sans text-3xl bg-[transparent] h-[29px] relative font-bold text-white text-left p-0 z-[1] mq450:text-lg"
+                  className="w-full placeholder-white [border:none] [outline:none] inline-block font-dm-sans text-3xl bg-[transparent] h-[29px] relative font-bold text-white text-left p-0 z-[1] mq450:text-lg"
                   placeholder="Event Address"
                   type="text"
                   onChange={handleChange}

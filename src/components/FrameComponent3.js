@@ -7,17 +7,18 @@ const FrameComponent3 = ({
   className = "",
   group227,
   listYourEventInJustOneCli,
+  event,
 }) => {
   const navigate = useNavigate();
 
   // Define the click handler function
   const handleBookNowClick = useCallback(() => {
-    navigate("/event-listing"); // Update the path as needed
+    navigate(`/perticular`, { state: { event: event } });
   }, [navigate]);
 
   return (
     <div
-      className={`self-stretch flex flex-row items-start justify-center py-0 pr-5 pl-[43px] box-border max-w-full text-left text-base text-black font-poppins mq750:pl-[21px] mq750:box-border ${className}`}
+      className={`self-stretch flex flex-row items-start justify-center py-0 box-border max-w-full text-left text-base text-black font-poppins mq750:p-5 mq750:box-border ${className}`}
     >
       <div className="w-[425px] flex flex-col items-start justify-start gap-[16px] max-w-full">
         <Button
@@ -26,7 +27,7 @@ const FrameComponent3 = ({
           sx={{
             textTransform: "none",
             color: "#fff",
-            fontSize: "24",
+            fontSize: "22px",
             background: "#ff5f17",
             border: "#f5f5f5 solid 1px",
             borderRadius: "50px",
@@ -37,8 +38,8 @@ const FrameComponent3 = ({
         >
           {group227}
         </Button>
-        <div className="self-stretch flex flex-row items-start justify-center py-0 pr-5 pl-[23px]">
-          <div className="relative">{listYourEventInJustOneCli}</div>
+        <div className="self-stretch flex flex-row items-start justify-center">
+          <div className="relative text-xl">{listYourEventInJustOneCli}</div>
         </div>
       </div>
     </div>

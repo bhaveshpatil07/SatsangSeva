@@ -6,13 +6,14 @@ import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LiveEvent from "../components/LiveEvent";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FirstFold1 from "../components/FirstFold1";
 import '../Csss/ProfilePage.css';
 
 const ProfilePage = () => {
   const url = process.env.REACT_APP_BACKEND;
   const navigate = useNavigate();
+  const location = useLocation();
   const userId = localStorage.getItem("userId");
   const [userData, setUserData] = useState(null);
   const [userEvents, setUserEvents] = useState(null);
@@ -22,9 +23,17 @@ const ProfilePage = () => {
     if (userId) {
       fetchUserInfo(userId);
     } else {
-      navigate('/');
+      navigate('/login');
     }
   }, [userId]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const windowHeight = window.innerHeight;
+      const scrollPosition = windowHeight * 0.55;
+      window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+    }, 100);
+  }, [location]);
 
   const fetchUserInfo = async (id) => {
     await axios.get(url + "/user/bookings/" + id).then((resp) => {
@@ -34,6 +43,11 @@ const ProfilePage = () => {
     });
     await axios.get(url + "/user/" + id).then((resp) => {
       setUserData(resp.data.user);
+      localStorage.setItem('userInfo', JSON.stringify({
+        email: resp.data.user.email,
+        name: resp.data.user.name,
+        contact: resp.data.user.phoneNumber,
+      }));
     }).catch((e) => {
       alert("Error: " + e);
     });

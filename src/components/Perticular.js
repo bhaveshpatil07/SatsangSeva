@@ -16,12 +16,27 @@ const Perticular = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const event = location.state?.event;
-  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
+  
   useEffect(() => {
     if (!event) {
       return navigate('/');
     }
+    const userId = localStorage.getItem('userId');
+    if(!userId){
+      alert("You have to login first!");
+      navigate('/login');
+    }
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if(userInfo){
+      setPhoneNumber(userInfo.contact);
+    }
+    setTimeout(() => {
+      const windowHeight = window.innerHeight;
+      const scrollPosition = windowHeight * 0.5;
+      window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+    }, 100);
   }, [event]);
 
   function getDay(dateTimeString) {
@@ -58,7 +73,7 @@ const Perticular = () => {
   };
 
   return (
-    <div style={{marginTop: "-9rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
+    <div style={{marginTop: "-9rem", padding: "4rem 0 0 0"}} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
       {loading && <Loader />}
       <FirstFold1 />
       <div className="event-booking gap-3">
@@ -85,7 +100,7 @@ const Perticular = () => {
             <label>Event ID</label>
             <input type="text" placeholder="Event ID" value={event._id} className="form-input" disabled />
             <label>Enter your contact number</label>
-            <input type="tel" onChange={(e)=>{setPhoneNumber(e.target.value)}} placeholder="Enter your contact number" className="form-input" autoComplete="phone" />
+            <input type="tel" onChange={(e)=>{setPhoneNumber(e.target.value)}} placeholder="Enter your contact number" className="form-input" autoComplete="phone" value={phoneNumber}/>
             <div className="payment-methods">
               <img src={paymnet} alt="Payment Method 1" />
               {/* Add more payment icons as needed */}

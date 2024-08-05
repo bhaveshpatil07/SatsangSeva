@@ -57,10 +57,10 @@ const LiveEvent = ({ className = "", propWidth }) => {
       style={liveEventStyle}
     >
       <div style={{padding: "4rem 0"}} className="w-[1097px] flex flex-row items-center justify-between max-w-full gap-[20px] mq1050:flex-wrap">
-        <div className="w-[443px] flex flex-col items-center justify-center gap-[49px] max-w-full mq450:gap-[24px]">
+        <div style={{fontSize:"3rem"}} className="w-[540px] flex flex-col items-center justify-center gap-[49px] max-w-full mq450:gap-[24px]">
           <b className="self-stretch flex flex-col items-center justify-center relative z-[2] mq450:text-5xl mq1050:text-13xl">
-            <p className="m-0">Live Event Starts In</p>
-            <p className="m-0 text-45xl time">
+            <p className="m-0 mq750:text-9xl">Live Event Starts In</p>
+            <p style={{fontSize:"1.5em"}} className="m-0 time-category">
               <span>
                 {String(timeLeft.hours).padStart(2, '0')}:
               </span>

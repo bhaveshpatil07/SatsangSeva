@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 import "./global.css";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const muiTheme = createTheme();
 
@@ -19,12 +20,14 @@ const root = createRoot(container);
 
 root.render(
   <BrowserRouter>
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={muiTheme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GAUTH_CLIENT_ID}>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={muiTheme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </GoogleOAuthProvider>
   </BrowserRouter>
 );
 

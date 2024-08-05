@@ -14,19 +14,21 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import FirstFold1 from "../components/FirstFold1";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer1";
+import Footer from "../components/Footer";
 import axios from "axios";
 import FrameComponent from "../components/FrameComponent";
 
 import { useDropzone } from "react-dropzone";
+import Loader from "../components/Loader";
 
 const EventListing1 = () => {
   const url = process.env.REACT_APP_BACKEND;
   const navigate = useNavigate();
   const [duration, setDuration] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     eventName: '',
-    eventLinks: '',
+    eventLinks: 'NA',
     eventCategory: '',
     eventLanguage: '',
     eventPerformerName: '',
@@ -43,6 +45,28 @@ const EventListing1 = () => {
     startDate: '',
     endDate: '',
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      localStorage.removeItem('userId');
+      setTimeout(() => {
+        alert("You have to login First!");
+        navigate('/login');
+      }, 2000); // delay for 2 seconds
+    }
+    const eventInfo = localStorage.getItem('addEvent');
+    if (eventInfo) {
+      setFormValues(JSON.parse(eventInfo));
+    }
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    setFormValues({
+      ...formValues,
+      hostName: userInfo.name,
+      sponsorName: userInfo.name,
+      hostContactNumber: userInfo.contact,
+    });
+  }, []);
 
   useEffect(() => {
     if (formValues.startDate !== "" && formValues.endDate !== "") {
@@ -77,23 +101,28 @@ const EventListing1 = () => {
   }
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     const token = localStorage.getItem('token');
     if (!token) {
       localStorage.removeItem('userId');
       alert("You have to login First!");
       navigate('/login');
+      setLoading(false);
       return;
     }
     const startDateObj = new Date(formValues.startDate);
     const endDateObj = new Date(formValues.endDate);
 
     if (startDateObj >= endDateObj) {
+      setLoading(false);
       return alert('Start date is equal or after End date');
     }
     if (!eventPoster) {
+      setLoading(false);
       return alert("Please Select Event Poster.");
     }
     if (formValues.pinCode.length !== 6) {
+      setLoading(false);
       return alert("Enter valid PINCODE!");
     }
     const newData = {
@@ -112,6 +141,7 @@ const EventListing1 = () => {
       endDate: formValues.endDate
     };
     const error = validateEventInputs(newData);
+    localStorage.setItem('addEvent', JSON.stringify(formValues));
     if (!error) {
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -122,15 +152,19 @@ const EventListing1 = () => {
       formData.append('eventPoster', eventPoster);
       await axios.post(url + "/events", formData, { headers }).then((resp) => {
         console.log("Event Created: " + resp.data);
+        localStorage.removeItem('addEvent');
         alert("Event Successfully Created!");
         navigate("/");
       }).catch((e) => {
         console.log(e.response);
         alert("Error in Adding Event: " + e);
+      }).finally(() => {
+        setLoading(false);
       });
     } else {
       alert("Please enter valid inputs. See console for more info.");
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -149,7 +183,7 @@ const EventListing1 = () => {
       errors.eventLang = 'Event language is required and must be a non-empty string';
     }
 
-    if (!inputs.noOfAttendees || typeof inputs.noOfAttendees !== 'string' || parseInt(inputs.noOfAttendees, 10) <= 0) {
+    if (!inputs.noOfAttendees || typeof inputs.noOfAttendees !== 'string') {
       errors.noOfAttendees = 'Number of attendees is required and must be a positive integer';
     }
 
@@ -161,16 +195,16 @@ const EventListing1 = () => {
       errors.hostName = 'Host name is required and must be a non-empty string';
     }
 
-    if (inputs.hostWhatsapp && typeof inputs.hostWhatsapp !== 'string' && inputs.hostWhatsapp.length !== 10) {
+    if (!inputs.hostWhatsapp || typeof inputs.hostWhatsapp !== 'string' || inputs.hostWhatsapp.length !== 10) {
       errors.hostWhatsapp = 'Host WhatsApp number must be of 10 Digits';
     }
 
-    if (inputs.sponserName && typeof inputs.sponserName !== 'string' && inputs.sponserName.trim() !== "") {
+    if (!inputs.sponserName || typeof inputs.sponserName !== 'string' || inputs.sponserName.trim() !== "") {
       errors.sponserName = 'Sponsor name must be a non-empty string';
     }
 
-    if (inputs.eventLink && typeof inputs.eventLink !== 'string' && inputs.eventLink.trim() !== "") {
-      errors.eventLink = 'Event link must be a valid URL';
+    if (!inputs.eventLink || typeof inputs.eventLink !== 'string' || inputs.eventLink.trim() !== "") {
+      errors.eventLink = 'Event link must be a valid URL, Else write NA';
     }
 
     if (!inputs.location || typeof inputs.location !== 'string' || inputs.location.trim() === '') {
@@ -212,10 +246,11 @@ const EventListing1 = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-center justify-center gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[25px]">
+      <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-center justify-center leading-[normal] tracking-[normal] mq750:gap-[25px]">
         <FirstFold1 />
-        <section className="self-stretch flex flex-row items-start justify-center py-0 pr-5 pl-[21px] box-border max-w-full text-center text-base text-black font-poppins">
-          <div className="w-[1239px] flex flex-col items-end justify-start gap-[34px] max-w-full mq750:gap-[17px]">
+        {loading && <Loader />}
+        <section id="form" className="self-stretchflex flex-row items-start justify-center py-0 pr-5 pl-[21px] box-border max-w-full text-center text-base text-black font-poppins pt-5 mq750:!pt-2">
+          <div className="w-[1239px] flex flex-col pt-3 items-end justify-start gap-[34px] max-w-full mq750:gap-[17px]">
             <div className="self-stretch flex flex-row items-start justify-center pt-0 pr-5 pl-[23px] box-border max-w-full text-21xl">
               <div className="flex flex-col items-center justify-center max-w-full">
                 <div className="flex flex-row items-start justify-start py-0 px-16 mq450:pl-5 mq450:pr-5 mq450:box-border">
@@ -265,7 +300,7 @@ const EventListing1 = () => {
             <div className="self-stretch flex flex-row items-start justify-end pt-0 pb-5 box-border max-w-full text-left text-sm font-roboto">
               <div className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full">
                 <div className="self-stretch flex flex-row flex-wrap items-start justify-start max-w-full lg:gap-[91px] mq450:gap-[23px] mq750:gap-[45px]">
-                  <div style={{padding: "0 0 1rem 0"}} className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
+                  <div style={{ padding: "0 0 1rem 0" }} className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
                     <div className="w-[584px] mr-3 self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Event Name `}</span>
@@ -283,7 +318,7 @@ const EventListing1 = () => {
                       <input className="form-control" type="text" name="eventLinks" value={formValues.eventLinks} onChange={handleInputChange} placeholder="enter-links" />
                     </div>
                   </div>
-                  <div style={{padding: "0 2rem 0 0"}} className="flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
+                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span className="whitespace-pre-wrap">{`Event Category  `}</span>
@@ -300,7 +335,7 @@ const EventListing1 = () => {
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch flex flex-row items-start justify-start max-w-full">
-                        <div style={{minWidth: "50%"}} className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full">
+                        <div style={{ minWidth: "50%" }} className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full">
                           <div className="self-stretch pr-3 flex flex-col items-start justify-start gap-[4px]">
                             <div className="self-stretch relative leading-[20px] font-medium">
                               <span>{`Event Language `}</span>
@@ -325,8 +360,12 @@ const EventListing1 = () => {
                             <span className="text-red">*</span>
                           </div>
                           <div className="">
-                            <input className="form-control" type="number" name="expectedAttendees" value={formValues.expectedAttendees} onChange={handleInputChange} placeholder="enter attendees" />
-
+                            <select className="form-control" name="expectedAttendees" value={formValues.expectedAttendees} onChange={handleInputChange}>
+                              <option value="">No Of Attendees</option>
+                              <option value="50-250">50 to 250</option>
+                              <option value="500-1000">500 to 1000</option>
+                              <option value="1000+">1000+</option>
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -339,7 +378,7 @@ const EventListing1 = () => {
                       </div>
                       <div className="self-stretch rounded-md bg-gainsboro-400 box-border flex flex-row items-start justify-start py-1.5 px-[11px] max-w-full text-center border-[1px] border-solid border-gray-600">
                         <div className="flex-1 relative leading-[20px] inline-block overflow-hidden text-ellipsis whitespace-nowrap max-w-full">
-                          <button type="submit">Add</button>
+                          Add
                         </div>
                       </div>
                     </div>
@@ -371,12 +410,12 @@ const EventListing1 = () => {
                       </div>
                       <div className="self-stretch rounded-md bg-gainsboro-400 box-border flex flex-row items-start justify-start py-1.5 px-[11px] max-w-full text-center border-[1px] border-solid border-gray-600">
                         <div className="flex-1 relative leading-[20px] inline-block overflow-hidden text-ellipsis whitespace-nowrap max-w-full">
-                          <button>Add</button>
+                          Add
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div style={{padding: "0 2rem 0 0"}} className="flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
+                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Location (Google Map URL) `}</span>
@@ -425,7 +464,7 @@ const EventListing1 = () => {
                           <span>{`Start Date `}</span>
                           <span className="text-red">*</span>
                         </div>
-                        <input className="form-control" type="datetime-local" name="startDate" value={formValues.startDate} onChange={handleInputChange} />
+                        <input className="form-control" type="datetime-local" name="startDate" value={formValues.startDate} onChange={handleInputChange} min={new Date().toISOString().slice(0, 16)} />
                       </div>
                     </div>
                     <div className="self-stretch flex flex-row items-start justify-start gap-[43.5px] mq750:flex-wrap mq750:gap-[22px]">
@@ -434,7 +473,7 @@ const EventListing1 = () => {
                           <span>{`End Date `}</span>
                           <span className="text-red">*</span>
                         </div>
-                        <input className="form-control" type="datetime-local" name="endDate" value={formValues.endDate} onChange={handleInputChange} />
+                        <input className="form-control" type="datetime-local" name="endDate" value={formValues.endDate} onChange={handleInputChange} min={formValues.startDate?new Date(formValues.startDate).toISOString().slice(0, 16):new Date().toISOString().slice(0, 16)}/>
                       </div>
                     </div>
                   </div>
@@ -460,22 +499,26 @@ const EventListing1 = () => {
                 </div>
               </div>
             </div>
-            <div className="self-stretch relative text-45xl text-gray-500">
-              <div className="top-[0px] left-[0px] box-border w-[1237px] h-px border-t-[1px] border-solid border-gainsboro-400" />
-              <h1 className="m-0 top-[17px] left-[39px] text-inherit font-semibold font-inherit inline-block mq450:text-10xl mq1050:text-32xl">{`Sit back and watch your event come to life `}</h1>
+            <div className="w-full flex flex-col justify-center items-center">
+              <div className="self-stretch relative text-32xl text-gray-500">
+                <div className="top-[0px] left-[0px] box-border w-[1237px] h-px border-t-[1px] border-solid border-gainsboro-400" />
+                <h1 style={{ maxWidth: "75%" }} className="m-0 top-[17px] left-[39px] text-inherit font-semibold font-inherit inline-block mq750:!max-w-full mq450:text-10xl mq1050:text-32xl">
+                  Sit back and watch your event come to life
+                </h1>
+              </div>
+              <div className="self-stretch flex flex-row items-start justify-end py-0 pr-[39px] pl-[43px] box-border max-w-full text-5xl lg:pl-[21px] lg:box-border">
+                <div className="flex-1 flex flex-col items-end justify-start min-h-[105px] max-w-full">
+                  <h2 className="m-0 self-stretch h-[105px] relative text-inherit font-normal font-inherit inline-block shrink-0 mq450:text-base">
+                    Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+                    vulputate libero et velit interdum, ac aliquet odio mattis.t
+                  </h2>
+                  <div className="w-[1038px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full mt-[-80px] text-left text-xs text-white">
 
-            </div>
-            <div className="self-stretch flex flex-row items-start justify-end py-0 pr-[39px] pl-[43px] box-border max-w-full text-5xl lg:pl-[21px] lg:box-border">
-              <div className="flex-1 flex flex-col items-end justify-start min-h-[105px] max-w-full">
-                <h2 className="m-0 self-stretch h-[105px] relative text-inherit font-normal font-inherit inline-block shrink-0 mq450:text-lgi">
-                  Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-                  vulputate libero et velit interdum, ac aliquet odio mattis.t
-                </h2>
-                <div className="w-[1038px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full mt-[-80px] text-left text-xs text-white">
-
+                  </div>
                 </div>
               </div>
             </div>
+
           </div>
         </section>
         <Footer

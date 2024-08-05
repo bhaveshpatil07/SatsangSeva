@@ -69,14 +69,14 @@ const FirstFold1 = ({ className = "" }) => {
       <div style={{ padding: "4rem 0" }} className="flex flex-row items-start justify-center px-[75px] box-border w-full lg:pl-[37px] lg:pr-[37px] lg:box-border">
         <div className="flex flex-col items-start justify-start gap-[11.7px] max-w-full">
           <div className="flex flex-row items-start justify-start gap-[42px] max-w-full mq750:flex-col">
-            <div className="w-[501px] flex flex-col items-start justify-start py-0 pr-[37px] pl-0 box-border gap-[44.7px] max-w-full mq750:gap-[22px]">
+            <div className="w-[530px] flex flex-col items-start justify-start py-0 pr-[37px] pl-0 box-border gap-[44.7px] max-w-full mq750:gap-[22px]">
               <div className="w-[264.9px] flex flex-row items-start justify-start gap-[4.7px]">
                 {/* Additional content or components can go here */}
               </div>
-              <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 box-border max-w-full text-21xl font-montserrat">
+              <div style={{fontSize:"3rem"}} className="self-stretch flex flex-row items-start justify-start py-0 pr-0 box-border max-w-full text-21xl font-montserrat">
                 <b className="flex-1 relative inline-block max-w-full z-[2]">
-                  <p className="m-0">Live Event Starts In</p>
-                  <p className="m-0 text-45xl time">
+                  <p className="m-0 mq750:px-3">Live Event Starts In</p>
+                  <p style={{fontSize: "1.5em"}} className="m-0 time">
                     <span>
                     {String(timeLeft.hours).padStart(2, '0')}:
                     </span>

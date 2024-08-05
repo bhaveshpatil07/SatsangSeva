@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { HashLink as Link } from 'react-router-hash-link';
 import '../Csss/FrameComponent.css';
 import ProfileIcon from '@mui/icons-material/AccountCircleTwoTone';
 import axios from 'axios';
@@ -35,6 +36,7 @@ const FrameComponent = () => {
       setUserId(null);
       localStorage.removeItem('userId');
       localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
       console.log(e);
     }
   };
@@ -55,10 +57,10 @@ const FrameComponent = () => {
 
   return (
     <div className={`nav-main ${scrolled ? 'scrolled' : ''}`}>
-      <div className='left-nav'>
-        <img src="/group-1.svg" alt="SatsangSeva" />
-        <h1>Satsang Seva</h1>
-      </div>
+      <Link className='left-nav no-underline' to="/">
+        <img src="/group1.svg" alt="SatsangSeva" />
+        <h1 className='font-semibold font-sacramento'>Satsang Seva</h1>
+      </Link>
       <div className='hamburger-menu' onClick={toggleMenu}>
         <div></div>
         <div></div>
@@ -68,8 +70,8 @@ const FrameComponent = () => {
         <ul>
           <li className='io' onClick={toggleMenu}><Link to="/">Home</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/#upcomingEvents">Upcoming Events</Link></li>
-          <li className='io' onClick={toggleMenu}><Link to="/event-listing">List Your Events</Link></li>
-          <li className='io' onClick={toggleMenu}><Link to="/categories-page">Categories</Link></li>
+          <li className='io' onClick={toggleMenu}><Link to="/#listEvent">List Your Events</Link></li>
+          <li className='io' onClick={toggleMenu}><Link to="/categories-page#main">Categories</Link></li>
           {!userId ? (
             <li className='log py-1 px-4 text-xl' onClick={toggleMenu}><Link to="/login">Login</Link></li>
           ) : (

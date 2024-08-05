@@ -2,13 +2,15 @@
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
     /* max-width: 1200px; */
     min-width: 70%;
     margin: auto;
     flex-wrap: wrap; /* Add this line for better responsiveness */
+    @media (max-width: 769px) {
+      margin: 10px;
+    }
   }
   
   .event-left {
@@ -20,6 +22,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 20px 10px;
     gap: 20px;
   }
   

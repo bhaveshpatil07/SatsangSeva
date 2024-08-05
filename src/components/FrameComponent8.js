@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
 import Loader from "./Loader";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const FrameComponent8 = ({ className = "" }) => {
   const url = process.env.REACT_APP_BACKEND;
@@ -19,8 +21,15 @@ const FrameComponent8 = ({ className = "" }) => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const onInputChange = (e) => {
+    if(disabled){
+      if(e.target.name==="email" || e.target.name==="name"){
+        alert("Don't mess with Website!");  
+        return window.location.reload();
+      }
+    }
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -31,23 +40,26 @@ const FrameComponent8 = ({ className = "" }) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    if(formData.password!==formData.confirmPassword || formData.password.trim()===""){
+    if (formData.password !== formData.confirmPassword || formData.password.trim() === "") {
       alert("Confirm Password doesn't match!");
       return setLoading(false);
     }
-    if(!formData.name || formData.name.trim()===""){
+    if (!formData.name || formData.name.trim() === "") {
       alert("Enter your name");
       return setLoading(false);
     }
-    if(!formData.phoneNumber || formData.phoneNumber.length !==10){
+    if (!formData.phoneNumber || formData.phoneNumber.length !== 10) {
       alert("Enter 10 Digit Phone Number.");
       return setLoading(false);
     }
-
+    if(!disabled){
+      alert("You have to sign in with Google.");
+      return setLoading(false);
+    }
     try {
-      const response = await axios.post(url + "/user/signup", formData).then((resp)=>{
-          navigate("/login");
-      }).catch((error)=>{
+      const response = await axios.post(url + "/user/signup", formData).then((resp) => {
+        navigate("/login");
+      }).catch((error) => {
         console.log(error);
         alert("Error in SignUp! " + error.data.message);
       });
@@ -64,13 +76,13 @@ const FrameComponent8 = ({ className = "" }) => {
   }, [navigate]);
 
   return (
-    <div style={{width: "100vw"}}
-      className={`flex absolute flex-row items-start justify-center py-0 box-border max-w-full text-left text-base text-black font-poppins ${className}`}
+    <div style={{ width: "100vw" }}
+      className={`flex absolute flex-row items-center justify-center py-0 pt-5 box-border max-w-full text-left text-base text-black font-poppins ${className}`}
     >
       {loading && <Loader />}
-      <div className="w-[512px] shadow-[0px_4px_35px_rgba(0,_0,_0,_0.08)] rounded-xl bg-white flex flex-col items-start justify-start pt-[24.3px] pb-[46.1px] pr-5 pl-5 align-items-center box-border gap-[44.8px] max-w-full z-[6] mq750:gap-[22px] mq1050:pb-[30px] mq1050:box-border mq450:pb-5 mq450:box-border">
-        <div className="self-stretch flex flex-row items-start justify-start py-0 pr-px pl-[7px] box-border max-w-full">
-          <div className="flex-1 flex flex-col items-start justify-start gap-[13.9px] max-w-full">
+      <div className="w-[512px] shadow-[0px_4px_35px_rgba(0,_0,_0,_0.08)] rounded-xl bg-white flex flex-col items-center justify-center pt-[24.3px] pb-[24.3px] pr-5 pl-5 align-items-center box-border gap-[30px] max-w-full z-[6] mq750:gap-[22px] mq1050:pb-[30px] mq1050:box-border mq450:pb-5 mq450:box-border">
+        <div className="self-stretch flex flex-row items-center justify-center py-0 pr-px pl-[7px] box-border max-w-full">
+          <div className="flex-1 flex flex-col items-center justify-center gap-[13.9px] max-w-full">
             <div className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[28.4px]">
               <div className="flex-1 flex flex-col items-start justify-start gap-[10.3px] min-w-[165px] shrink-0">
                 <div className="self-stretch h-[29.5px] relative inline-block shrink-0 z-[7]">
@@ -81,15 +93,35 @@ const FrameComponent8 = ({ className = "" }) => {
                   Host Sign up
                 </h1>
               </div>
-              <div onClick={() => navigate("/login")} className="h-[36.9px] w-[152.6px] cursor-pointer relative text-smi inline-block shrink-0 z-[7] text-gray-200">
+              <div onClick={() => navigate("/login")} className="cursor-pointer relative text-smi inline-block shrink-0 z-[7] text-gray-200">
                 <p className="m-0">Already have an account?</p>
                 <p className="m-0 text-cornflowerblue">Log In</p>
               </div>
             </div>
+            <GoogleLogin 
+              theme="filled_blue"
+              text="signup_with"
+              shape="pill"
+              onSuccess={(credentialResponse) => {
+                const decoded = jwtDecode(credentialResponse?.credential);
+                // console.log(decoded);
+                setFormData({
+                  ...formData,
+                  email: decoded.email,
+                  name: decoded.name,
+                });
+                setDisabled(true);
+                alert("Account Verified! Fill the details and click SignUp.")
+                console.log(decoded.picture);
+                
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }} />
           </div>
         </div>
         <form onSubmit={onFormSubmit} className="w-[429.7px] flex flex-row items-start justify-start py-0 px-[7px] box-border max-w-full">
-          <div className="flex-1 flex flex-col items-start justify-start gap-[28.6px] max-w-full">
+          <div className="flex-1 flex flex-col items-start justify-start gap-[25px] max-w-full">
             <TextField
               label="Enter your name"
               name="name"
@@ -100,6 +132,7 @@ const FrameComponent8 = ({ className = "" }) => {
               variant="outlined"
               size="small"
               placeholder="Name"
+              disabled={disabled}
             />
             <TextField
               label="Enter your email address"
@@ -111,6 +144,7 @@ const FrameComponent8 = ({ className = "" }) => {
               variant="outlined"
               size="small"
               placeholder="Email"
+              disabled={disabled}
             />
             <TextField
               label="+91 | Enter your phone number"
@@ -164,7 +198,7 @@ const FrameComponent8 = ({ className = "" }) => {
               Sign up
             </Button>
             {error && <div className="text-red-500">{error}</div>}
-            <div onClick={()=>{navigate('/login')}} className="flex cursor-pointer">
+            <div onClick={() => { navigate('/login') }} className="flex cursor-pointer">
               <p className="m-0">Already have an Account ? </p>
               <p className="m-0 text-cornflowerblue"> Log In</p>
             </div>

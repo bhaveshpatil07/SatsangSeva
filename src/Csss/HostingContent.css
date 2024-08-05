@@ -9,7 +9,7 @@
     width: 100%;
     text-align: left;
     font-family: 'Poppins', sans-serif;
-    color: #6b7280;
+    color: #000;
   }
   
   .header {
@@ -50,6 +50,14 @@
     position: relative;
     cursor: pointer;
     border: none;
+    transform: scale(1);
+    transition: transform 0.35s ease-in-out;
+    &:hover{
+      transform: scale(1.1);
+      img{
+        filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+      }
+    }
   }
   
   .card img {
@@ -100,15 +108,15 @@
   .footer-content {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: start;
+    align-items: center;
+    justify-content: center;
     gap: 40px;
     width: 100%;
   }
   
   .footer-title {
     margin: 0;
-    font-size: 45px;
+    font-size: 3.5rem;
     font-weight: 600;
   }
   
@@ -175,7 +183,7 @@
   .header-subtitle h2 {
     margin: 0;
     font-size: 1.5rem; /* Adjust as necessary */
-    color: #555; /* Adjust as necessary */
+    color: #000; /* Adjust as necessary */
   }
   
   .footer {
@@ -187,10 +195,8 @@
     padding: 20px;
   }
   
-  
-  
   .footer-content {
-    max-width: 600px; /* Adjust as necessary */
+    max-width: 90%; /* Adjust as necessary */
   }
 
   
