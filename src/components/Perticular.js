@@ -2,6 +2,12 @@ import { Button } from "@mui/material";
 import LiveEvent from "../components/LiveEvent";
 import HostingContent from "../components/HostingContent";
 import '../Csss/Perticular.css'
+import Pin from '@mui/icons-material/LocationOnTwoTone';
+import WhatsApp from '@mui/icons-material/WhatsApp';
+import Start from '@mui/icons-material/AlarmTwoTone';
+import End from '@mui/icons-material/TimerOffTwoTone';
+import Phone from '@mui/icons-material/PhoneTwoTone';
+import Price from '@mui/icons-material/CurrencyRupeeTwoTone';
 
 import FirstFold1 from "./FirstFold1";
 import Footer from "./Footer"
@@ -17,6 +23,7 @@ const Perticular = () => {
   const navigate = useNavigate();
   const event = location.state?.event;
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [noOfAttendees, setNoOfAttendees] = useState("1");
   const [loading, setLoading] = useState(false);
   
   useEffect(() => {
@@ -41,8 +48,17 @@ const Perticular = () => {
 
   function getDay(dateTimeString) {
     const date = new Date(dateTimeString);
-    return `${date}`;
+    return `${date.toLocaleString()}`;
   }
+
+  const handlePrice = (e)=>{
+    const count = e.target.value;
+    if(count<1){
+      setNoOfAttendees(1);
+      return alert("No Of Attendees should be atleast 1");
+    }
+    setNoOfAttendees(count);
+  };
 
   const handleBookEvent = async () => {
     const eventId = event._id;
@@ -61,6 +77,9 @@ const Perticular = () => {
       {
         event: eventId,
         attendeeContact: phoneNumber,
+        noOfAttendee: noOfAttendees,
+        amountPaid: "0",
+        paymentId: null,
         user: userId
       }).then((rep)=>{
         alert("Event Booked Successfully!");
@@ -84,26 +103,27 @@ const Perticular = () => {
             className="event-image"
           />
           <div className="content p-3">
-            <h2>{event.eventName}</h2>
-            <h6>Address: {event.eventAddress}</h6>
-            <h6>StartDate: <br /><b>{getDay(event.startDate)}</b></h6>
-            <h6>Host: <b><i>{event.hostName}</i></b></h6>
-            <h6>HostContact: <a href={`tel:+${event.hostWhatsapp}`}><b><i>{event.hostWhatsapp}</i></b></a></h6>
-            <h6>Sponser: <b><i>{event.sponserName}</i></b></h6>
+            <span className="flex justify-between"><h2>{event.eventName}</h2> <h3><Price className="text-end" sx={{color: "#D26600"}}/>{event?.eventPrice*noOfAttendees}</h3></span>
+            <h6><Pin sx={{color: "#D26600"}} /> {event.eventAddress}</h6>
+            <h6><Start sx={{color: "#D26600"}}/><b> {getDay(event.startDate)}</b></h6>
+            <h6><End sx={{color: "#D26600"}} /><b> {getDay(event.endDate)}</b></h6>
+            {/* <h6>Host: <b><i>{event.hostName}</i></b></h6> */}
+            <h6><Phone sx={{color: "#D26600"}}/> <a href={`tel:+${event.hostWhatsapp}`}><b><i> +91-{event.hostWhatsapp}</i></b></a></h6>
+            {/* <h6>Sponser: <b><i>{event.sponserName}</i></b></h6> */}
           </div>
         </div>
         <div className="booking-form" style={{ minWidth: "30%" }}>
           <h3 className="form-title">Book Event</h3>
           <form>
-            <label>Event Name</label>
-            <input type="text" placeholder="Event Name" value={event.eventName} className="form-input" readOnly />
             <label>Event ID</label>
             <input type="text" placeholder="Event ID" value={event._id} className="form-input" disabled />
             <label>Enter your contact number</label>
             <input type="tel" onChange={(e)=>{setPhoneNumber(e.target.value)}} placeholder="Enter your contact number" className="form-input" autoComplete="phone" value={phoneNumber}/>
+            <label>No Of Attendees</label>
+            <input type="number" min={1} placeholder="No Of Attendees" onChange={(e)=>{handlePrice(e)}} value={noOfAttendees}  className="form-input" />
             <div className="payment-methods">
               <img src={paymnet} alt="Payment Method 1" />
-              {/* Add more payment icons as needed */}
+              {/* Add more payment icons as needed */} 
             </div>
           </form>
           <button onClick={handleBookEvent} className="pay-now-button">Book Now</button>

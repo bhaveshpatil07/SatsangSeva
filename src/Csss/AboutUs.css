@@ -1,0 +1,29 @@
+.about-us {
+  h2 {
+    background-color: white;
+    width: max-content;
+    padding: 0.3rem 0.6rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    span {
+      color: #d26600 !important;
+    }
+  }
+  h4 {
+    text-align: justify;
+    text-align-last: left;
+    span{
+        color: #F58021 !important;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+  }
+  hr{
+    border-color: #d26600 !important;
+  }
+
+  @media (max-width: 750px) {
+    padding: 2rem 1rem !important;
+  }
+}

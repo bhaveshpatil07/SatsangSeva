@@ -4,6 +4,7 @@ import { HashLink as Link } from 'react-router-hash-link';
 import '../Csss/FrameComponent.css';
 import ProfileIcon from '@mui/icons-material/AccountCircleTwoTone';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const FrameComponent = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -21,8 +22,34 @@ const FrameComponent = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [userId]);
 
+  useEffect(() => {
+    verifyToken();
+  }, []);
+  
   const handleScroll = () => {
     setScrolled(window.scrollY > 50);
+  };
+
+  const verifyToken = ()=>{
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setUserId(null);
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
+    } else {
+      const exp = jwtDecode(token).exp;
+      const currentTime = Math.floor(Date.now() / 1000);
+      const isExpired = exp < currentTime;
+      if (isExpired) {
+        setUserId(null);
+        localStorage.removeItem('userId');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
+        alert("Session Expired! Login Again.");
+        navigate("/login");
+      }
+    }
   };
 
   const verifyUser = async (userId) => {
@@ -32,6 +59,7 @@ const FrameComponent = () => {
       if (userName) {
         setName(trimFirstName(userName));
       }
+      verifyToken();
     } catch (e) {
       setUserId(null);
       localStorage.removeItem('userId');

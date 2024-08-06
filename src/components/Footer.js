@@ -78,8 +78,8 @@ const Footer = ({ className = "" }) => {
                 Eventick
               </b>
               <div className="relative text-sm leading-[200%] font-medium text-white z-[1]">
-                <p className="m-0">About Us</p>
-                <p className="m-0">Contact Us</p>
+                <p className="m-0"><Link className="text-white no-underline" to="/aboutus">About Us</Link></p>
+                <p className="m-0"><Link className="text-white no-underline" to="/contactus">Contact Us</Link></p>
                 <p className="m-0">Help Center</p>
                 <p className="m-0">How it Works</p>
               </div>

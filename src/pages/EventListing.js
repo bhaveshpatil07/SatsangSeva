@@ -30,6 +30,8 @@ const EventListing1 = () => {
     eventName: '',
     eventLinks: 'NA',
     eventCategory: '',
+    eventDesc: '',
+    eventPrice: '0',
     eventLanguage: '',
     eventPerformerName: '',
     expectedAttendees: '',
@@ -60,12 +62,15 @@ const EventListing1 = () => {
       setFormValues(JSON.parse(eventInfo));
     }
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    setFormValues({
-      ...formValues,
-      hostName: userInfo.name,
-      sponsorName: userInfo.name,
-      hostContactNumber: userInfo.contact,
-    });
+    if (userInfo) {
+      setFormValues({
+        ...formValues,
+        hostName: userInfo.name,
+        sponsorName: userInfo.name,
+        hostContactNumber: userInfo.contact,
+      });
+    }
+
   }, []);
 
   useEffect(() => {
@@ -128,6 +133,8 @@ const EventListing1 = () => {
     const newData = {
       eventName: formValues.eventName,
       eventCategory: formValues.eventCategory,
+      eventDesc: formValues.eventDesc,
+      eventPrice: formValues.eventPrice,
       eventLang: formValues.eventLanguage,
       noOfAttendees: formValues.expectedAttendees,
       performerName: formValues.eventPerformerName,
@@ -177,6 +184,14 @@ const EventListing1 = () => {
 
     if (!inputs.eventCategory || typeof inputs.eventCategory !== 'string' || inputs.eventCategory.trim() === '') {
       errors.eventCategory = 'Event category is required and must be a non-empty string';
+    }
+
+    if (!inputs.eventDesc || typeof inputs.eventDesc !== 'string' || inputs.eventDesc.trim() === '') {
+      errors.eventDesc = 'Event Description is required and must be a non-empty string';
+    }
+    
+    if (!inputs.eventPrice || typeof inputs.eventPrice !== 'string' || inputs.eventPrice.trim() === '' || parseInt(inputs.eventPrice, 10)<0) {
+      errors.eventPrice = 'Event Price is required and must be >=0';
     }
 
     if (!inputs.eventLang || typeof inputs.eventLang !== 'string' || inputs.eventLang.trim() === '') {
@@ -318,7 +333,7 @@ const EventListing1 = () => {
                       <input className="form-control" type="text" name="eventLinks" value={formValues.eventLinks} onChange={handleInputChange} placeholder="enter-links" />
                     </div>
                   </div>
-                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
+                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[20px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span className="whitespace-pre-wrap">{`Event Category  `}</span>
@@ -371,7 +386,7 @@ const EventListing1 = () => {
                       </div>
                       <input className="form-control" type="text" name="eventPerformerName" value={formValues.eventPerformerName} onChange={handleInputChange} autoComplete="given-name" placeholder="Performer Name1, Name2, ..." required />
                     </div>
-                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
+                    {/* <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Add Performer Sponsor `}</span>
                         <span className="text-red">*</span>
@@ -381,7 +396,7 @@ const EventListing1 = () => {
                           Add
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Host Name `}</span>
@@ -403,7 +418,21 @@ const EventListing1 = () => {
                       </div>
                       <input className="form-control" type="text" name="sponsorName" value={formValues.sponsorName} onChange={handleInputChange} placeholder="Sponsor Name1, Name2, ..." />
                     </div>
-                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                      <div className="self-stretch relative leading-[20px] font-medium">
+                        <span>{`Event Bio `}</span>
+                        <span className="text-red">*</span>
+                      </div>
+                      <textarea maxLength={500} className="form-control" type="text" name="eventDesc" value={formValues.eventDesc} onChange={handleInputChange} placeholder="Enter Event Description (Max-500 Characters.)" />
+                    </div>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                      <div className="self-stretch relative leading-[20px] font-medium">
+                        <span>{`Event Price (per person)`} &#8377;</span>
+                        <span className="text-red">*</span>
+                      </div>
+                      <input min={0} className="form-control" type="number" name="eventPrice" value={formValues.eventPrice} onChange={handleInputChange} placeholder="Event Price &#x20b9; (Per Person)" />
+                    </div>
+                    {/* <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Add Sponsor `}</span>
                         <span className="text-red">*</span>
@@ -413,7 +442,7 @@ const EventListing1 = () => {
                           Add
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
@@ -428,14 +457,14 @@ const EventListing1 = () => {
                         <span>{`Address (Line 1) `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="addressLine1" value={formValues.addressLine1} onChange={handleInputChange} placeholder="enter address" />
+                      <input className="form-control" type="text" name="addressLine1" value={formValues.addressLine1} onChange={handleInputChange} placeholder="Enter Address" />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Address (Line 2)/Landmark `}</span>
-                        <span className="text-red">*</span>
+                        {/* <span className="text-red">*</span> */}
                       </div>
-                      <input className="form-control" type="text" name="addressLine2" value={formValues.addressLine2} onChange={handleInputChange} placeholder="enter address" />
+                      <input className="form-control" type="text" name="addressLine2" value={formValues.addressLine2} onChange={handleInputChange} placeholder="Enter Address Landmark (Optional)" />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
@@ -473,7 +502,7 @@ const EventListing1 = () => {
                           <span>{`End Date `}</span>
                           <span className="text-red">*</span>
                         </div>
-                        <input className="form-control" type="datetime-local" name="endDate" value={formValues.endDate} onChange={handleInputChange} min={formValues.startDate?new Date(formValues.startDate).toISOString().slice(0, 16):new Date().toISOString().slice(0, 16)}/>
+                        <input className="form-control" type="datetime-local" name="endDate" value={formValues.endDate} onChange={handleInputChange} min={formValues.startDate ? new Date(formValues.startDate).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16)} />
                       </div>
                     </div>
                   </div>

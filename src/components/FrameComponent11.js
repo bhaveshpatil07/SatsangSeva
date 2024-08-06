@@ -1,5 +1,10 @@
 import React from 'react';
 import '../Csss/FrameComponent11.css';
+import { Link } from 'react-router-dom';
+import Like from '@mui/icons-material/ThumbUpTwoTone';
+import Pin from '@mui/icons-material/LocationOnTwoTone';
+import WhatsApp from '@mui/icons-material/WhatsApp';
+import Start from '@mui/icons-material/AlarmTwoTone';
 
 const FrameComponent11 = ({event=null}) => {
   function formatDateTime(dateString) {
@@ -21,37 +26,51 @@ const FrameComponent11 = ({event=null}) => {
   
     return `${weekday} • ${month} ${day}, ${year} • ${hour}:${minute}`;
   }
+
+  function formatNames(names) {
+    if (names.split(",").length > 1) {
+      const formattedNames = names.split(" ").map((name, index) => {
+        return `${index + 1}) ${name}`;
+      }).join(" ");
+      return formattedNames;
+    } else {
+      return names;
+    }
+  }
+
+  const capitalizedStr = (str)=>{return str.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");} 
   return (
     <div className="event-container">
       <div className="event-left">
-        <div className="event-details">
-          <h1>{event?.eventName}</h1>
-          <p>Category: <strong>{event?event.eventCategory:"ABc"}</strong></p>
-          <p>Starts: <strong>{event && formatDateTime(event?.startDate)}</strong></p>
-          <p>Ends: <strong>{event && formatDateTime(event.endDate)}</strong></p>
-          <p><span role="img" aria-label="location">📍</span> {event?.eventAddress}</p>
-          <p><a target='blank' href={event?.location}>[Get Direction]</a></p>
+        <div className="event-details p-0">
+          <h1 className='py-2'>{event?.eventName}</h1>
+          <p><Start sx={{color: "#D26600"}} /><strong> {event && formatDateTime(event?.startDate)}</strong></p>
+          <p><Pin sx={{color: "#D26600"}}/> <strong>{event?.eventAddress}</strong></p>
+          <p><a target='blank' href={event?.location}>[Location Link]</a></p>
+          <p className='py-2'>{event?.eventDesc}</p>
+          <p><strong>Ends: </strong>{event && formatDateTime(event.endDate)}</p>
+          <p><strong>Category: </strong>{event?capitalizedStr(event.eventCategory):"ABc"}</p>
           {/* <p>
             Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Corem ipsum dolor sit amet, consectetur adipiscing elit.
             Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Corem ipsum dolor sit amet.
           </p> */}
-          <p><strong>Host Name :</strong> {event?event.hostName:"Rahul Sharma (also can be organization)"}</p>
-          <p><strong>Sponsor Name :</strong>{event?event.sponserName:" SPONSER"}</p>
-          <p><strong>Performer Name :</strong> {event?event.performerName:"Sham Sharma"}</p>
-          <p><strong>Contact Details (WhatsApp) :</strong> {event?`+91-${event.hostWhatsapp}`:"9456976531"}</p>
-          <p><strong>Language :</strong> {event?event.eventLang:"Hindi/English"}</p>
+          <p><strong>Host Name : </strong> {event?<Link to={"/public-profile?q="+event.user+"&name="+encodeURIComponent(event.hostName)}>{event.hostName}</Link>:"Rahul Sharma (also can be organization)"}</p>
+          <p><strong>Sponsor Name : </strong>{event?formatNames(event.sponserName):" SPONSER"}</p>
+          <p><strong>Performer Name : </strong> {event?formatNames(event.performerName):"Sham Sharma"}</p>
+          <p><strong>Contact Details <WhatsApp sx={{color: "#D26600"}}/> : </strong> {event?`+91-${event.hostWhatsapp}`:"9456976531"}</p>
+          <p><strong>Language : </strong> {event?capitalizedStr(event.eventLang):"Hindi/English"}</p>
         </div>
       </div>
       <div className="event-right">
-        <div className="event-meta">
+        <div className="event-meta flex flex-col items-end gap-[20px] mq750:items-center">
           <div className="interest">
-            <span role="img" aria-label="like">👍</span> 569 Already Interested
+            <Like fontSize='large' className='like-icon' sx={{color: "#D26600"}}/><span> {event?.bookings.length} Already Interested</span>
           </div>
           <div className="attendees">
-            Expected Attendees : <strong>{event?event.noOfAttendees:"200"}+</strong>
+            Expected Attendees : <strong style={{color: "#D26600"}}>{event?event.noOfAttendees:"200"}+</strong>
           </div>
         </div>
-        <div className="event-map">
+        <div className="event-map text-center" style={{color: "#D26600"}}>
           <h4>Location of the event</h4>
           <div className="map-container">
             <iframe

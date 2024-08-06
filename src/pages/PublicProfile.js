@@ -10,20 +10,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 import FirstFold1 from "../components/FirstFold1";
 import '../Csss/ProfilePage.css';
 
-const ProfilePage = () => {
+const PublicProfile = () => {
   const url = process.env.REACT_APP_BACKEND;
   const navigate = useNavigate();
   const location = useLocation();
   const userId = localStorage.getItem("userId");
   const [userData, setUserData] = useState(null);
   const [userEvents, setUserEvents] = useState(null);
-  const [userBookings, setUserBookings] = useState(null);
+//   const [userBookings, setUserBookings] = useState(null);
 
   useEffect(() => {
-    if (userId) {
-      fetchUserInfo(userId);
-    } else {
-      navigate('/login');
+    const queryParams = new URLSearchParams(location.search);
+    const publicUser = queryParams.get('q');
+    if(publicUser===userId){
+        navigate("/profile-page");
+    }else{
+        fetchUserInfo(publicUser);
     }
   }, [userId]);
 
@@ -36,11 +38,11 @@ const ProfilePage = () => {
   }, [location]);
 
   const fetchUserInfo = async (id) => {
-    await axios.get(url + "/user/bookings/" + id).then((resp) => {
-      setUserBookings(resp.data.bookings);
-    }).catch((e) => {
-      alert("Error: " + e);
-    });
+    // await axios.get(url + "/user/bookings/" + id).then((resp) => {
+    //   setUserBookings(resp.data.bookings);
+    // }).catch((e) => {
+    //   alert("Error: " + e);
+    // });
     await axios.get(url + "/user/" + id).then((resp) => {
       setUserData(resp.data.user);
       localStorage.setItem('userInfo', JSON.stringify({
@@ -66,12 +68,6 @@ const ProfilePage = () => {
       window.location.reload();
       navigate("/login");
     }
-  };
-
-  const handleCopyUrl = () => {
-    const publicURL = window.location.origin + "/public-profile?q=" + userId;
-    navigator.clipboard.writeText(publicURL);
-    alert("Public Profile URL Copied to Clipboard!");
   };
 
   return (
@@ -105,7 +101,7 @@ const ProfilePage = () => {
                 </div>
               </div>
               <div className="w-28 flex flex-col items-end justify-start gap-[45.6px]">
-                <div onClick={handleCopyUrl} className="w-[26px] cursor-pointer rounded-8xs box-border flex flex-col items-start justify-start py-[3px] px-1 border-[1px] border-solid border-chocolate">
+                <div onClick={() => {navigator.clipboard.writeText(window.location.href); alert("Public Profile URL Copied to Clipboard! ")}} title="Copy Public URL" className="w-[26px] cursor-pointer rounded-8xs box-border flex flex-col items-start justify-start py-[3px] px-1 border-[1px] border-solid border-chocolate">
                   <img
                     className="w-4 h-[14.4px] relative"
                     alt=""
@@ -173,110 +169,16 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
-          <div style={{ width: "100vw" }} className=" flex flex-col items-end justify-center pt-0 px-0 box-border gap-[81.5px] max-w-full lg:gap-[41px] lg:pb-[67px] lg:box-border mq750:gap-[20px] mq750:pb-11 mq750:box-border">
+          <div style={{ width: "100vw" }} className=" flex flex-col items-end justify-center pt-0 px-0 box-border gap-[20px] max-w-full lg:gap-[41px] lg:pb-[67px] lg:box-border mq750:gap-[20px] mq750:pb-11 mq750:box-border">
             <div className="self-stretch flex flex-row items-start justify-center max-w-full text-center">
               <div className="w-[854px] flex flex-col items-end justify-start gap-[24px] max-w-full">
                 <div className="self-stretch flex flex-row items-start justify-center max-w-full">
                   <div className="w-[751px] flex flex-col items-center justify-start gap-[15px] max-w-full">
-                    <div className="self-stretch flex flex-row items-start justify-start max-w-full">
-                      <div className="w-[414px] flex flex-row flex-wrap items-start justify-start gap-[14px] max-w-full">
-                        <div className="w-[123px] flex flex-col items-start justify-start py-0 pr-[7px] pl-0 box-border">
-                          <Button
-                            className="self-stretch h-[33px]"
-                            disableElevation
-                            variant="outlined"
-                            sx={{
-                              textTransform: "none",
-                              color: "#d26600",
-                              fontSize: "14",
-                              borderColor: "#d26600",
-                              borderRadius: "50px",
-                              "&:hover": { borderColor: "#d26600" },
-                              height: 33,
-                            }}
-                            onClick={handleLogOut}
-                          >
-                            Log Out
-                          </Button>
-                        </div>
-                        <Button
-                          className="h-[33px] flex-1 min-w-[94px]"
-                          disableElevation
-                          variant="contained"
-                          sx={{
-                            textTransform: "none",
-                            color: "#fff",
-                            fontSize: "14",
-                            background: "#d26600",
-                            border: "#f5f5f5 solid 1px",
-                            borderRadius: "50px",
-                            "&:hover": { background: "#d26600" },
-                            height: 33,
-                          }}
-                        >
-                          <a href="#bookings" style={{ color: "white", textDecoration: "none" }}>Bookings</a>
-                        </Button>
-                        <Button
-                          className="h-[33px] w-[118px]"
-                          disableElevation
-                          variant="contained"
-                          sx={{
-                            textTransform: "none",
-                            color: "#fff",
-                            fontSize: "14",
-                            background: "#d26600",
-                            border: "#f5f5f5 solid 1px",
-                            borderRadius: "50px",
-                            "&:hover": { background: "#d26600" },
-                            width: 118,
-                            height: 33,
-                          }}
-                        >
-                          <a href="#events" style={{ color: "white", textDecoration: "none" }}>Events</a>
-                        </Button>
-                      </div>
-                    </div>
-                    <h1 id="#bookings" className="pt-5 m-0 relative text-inherit leading-[48px] font-bold font-inherit mq1050:text-13xl mq1050:leading-[38px] mq450:text-5xl mq450:leading-[29px]">
-                      <span>{`Your `}</span>
-                      <span className="text-tomato">Bookings</span>
-                    </h1>
-                    <p style={{ fontSize: "1rem" }}>Attend your favourite religious event</p>
-                    {userBookings &&
-                      <>
-                        <div className="w-full flex flex-wrap justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
-                          <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
-                            {userBookings.map((item, index) => (
-                              <GroupComponent2 key={item.event._id+index}
-                                eventCardImage={item.event.eventPoster ? `${item.event.eventPoster}` : "/rectangle-12-1@2x.png"}
-                                event={item.event}
-                                title={item.event.eventName}
-                                date={item.event.startDate}
-                                endDate={item.event.endDate}
-                                address={item.event.eventAddress}
-                                className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
-                              />
-                            ))}
-                            <div onClick={()=>{navigate("/search-bar")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
-                              <div className="flex flex-row items-start justify-start py-0 px-3">
-                                <img
-                                  className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"
-                                  loading="lazy"
-                                  alt=""
-                                  src="/add-circle.svg"
-                                />
-                              </div>
-                              <b className="relative leading-[19px] inline-block min-w-[120px] z-[1]">
-                                Book Event Now!
-                              </b>
-                            </div>
-                          </div>
-                        </div>
-                      </>}
                     <h1 id="events" className="pt-5 m-0 relative text-inherit leading-[48px] font-bold font-inherit mq1050:text-13xl mq1050:leading-[38px] mq450:text-5xl mq450:leading-[29px]">
-                      <span>{`Your `}</span>
+                      <span>{userData?.name.split(' ')[0]}'s </span>
                       <span className="text-tomato">Events</span>
                     </h1>
-                    <p style={{ fontSize: "1rem" }}>Host your religious event and reach a wider audience</p>
+                    {/* <p style={{ fontSize: "1rem" }}>Host your religious event and reach a wider audience</p> */}
                   </div>
                 </div>
               </div>
@@ -600,4 +502,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default PublicProfile;

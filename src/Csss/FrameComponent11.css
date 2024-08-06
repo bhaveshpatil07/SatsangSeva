@@ -1,96 +1,120 @@
 .event-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    /* max-width: 1200px; */
-    min-width: 70%;
-    margin: auto;
-    flex-wrap: wrap; /* Add this line for better responsiveness */
-    @media (max-width: 769px) {
-      margin: 10px;
-    }
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  /* border: 1px solid #ccc;
+    border-radius: 10px; */
+  max-width: 78%;
+  margin: auto;
+  flex-wrap: wrap; /* Add this line for better responsiveness */
+  strong{
+    color: rgba(0, 0, 0, 0.87);
   }
-  
-  .event-left {
-    flex: 1;
-    padding-right: 20px;
+  p{
+    color: #333 !important;
   }
-  
-  .event-right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 10px;
-    gap: 20px;
-  }
-  
-  .event-details h2 {
-    font-size: 2rem !important;
-    margin-bottom: 10px;
-  }
-  
-  .event-details p {
-    margin: 5px 0;
-    font-size: 1.2rem !important;
-  }
-  
-  .event-details a {
-    color: blue;
-    text-decoration: underline;
-  }
-  
-  .event-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .interest,
-  .attendees {
-    font-size: 1.2rem;
-  }
-  
-  .event-map h2 {
-    margin-bottom: 10px;
-  }
-  
-  .map-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    height: 0;
-    overflow: hidden;
-  }
-  
-  .map-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    border-radius: 10px;
-  }
-  
   @media (max-width: 769px) {
-    .event-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .event-left,
-    .event-right {
-      padding-right: 0;
-    }
-  
-    .event-map h2 {
-      text-align: center;
-    }
-    .event-right
-    {
-        width: 100%;
-    }
+    margin: 10px;
+    max-width: 90%;
   }
-  
+}
+
+.interest{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #D26600;
+  border-radius: 0.5rem;
+  width: max-content;
+  padding: 0 0.5rem;
+  color: #D26600;
+  font-weight: 500;
+  .like-icon{
+    border-right: 2px solid #D26600;
+    border-radius: 0.5rem ;
+    padding-right: 5px;
+  }
+  span{
+    padding: 0 0.5rem;
+  }
+}
+
+.event-left {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.event-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px;
+  gap: 50px;
+}
+
+.event-details h2 {
+  font-size: 2rem !important;
+  margin-bottom: 10px;
+}
+
+.event-details p {
+  margin: 5px 0;
+  font-size: 1.2rem !important;
+}
+
+.event-details a {
+  color: blue;
+  text-decoration: underline;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.interest,
+.attendees {
+  font-size: 1.2rem;
+}
+
+.event-map h2 {
+  margin-bottom: 10px;
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.map-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 10px;
+}
+
+@media (max-width: 769px) {
+  .event-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .event-left,
+  .event-right {
+    padding-right: 0;
+  }
+
+  .event-map h2 {
+    text-align: center;
+  }
+  .event-right {
+    width: 100%;
+  }
+}

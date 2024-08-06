@@ -21,6 +21,9 @@ import FrameComponent from "./components/FrameComponent";
 import Upcard from "./pages/Upcard";
 import WatchLiveWrapper from "./components/WatchLiveWrapper";
 import Footer from "./components/Footer";
+import PublicProfile from "./pages/PublicProfile";
+import About from "./pages/About";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   const action = useNavigationType();
@@ -111,10 +114,13 @@ function App() {
         <Route path="/categories-page" element={<SpeakersPage />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/event-listing" element={<EventListing1 />} />
-        <Route path="/profile-page" element={<ProfilePage />} />
+        <Route exact path="/profile-page" element={<ProfilePage />} />
+        <Route exact path="/public-profile" element={<PublicProfile />} />
         <Route path="/search-bar" element={<SearchBar />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/perticular" element={<Perticular />} />
+        <Route path="/aboutus" element={<About />} />
+        <Route path="/contactus" element={<ContactUs />} />
         {/* <Route path="/upcard" element={<Upcard />} /> */}
         {/* <Route path="/live" element={<LiveEvent />} /> */}
         <Route path="*" element={<LogIn />} />
