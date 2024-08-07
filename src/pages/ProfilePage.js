@@ -9,6 +9,8 @@ import LiveEvent from "../components/LiveEvent";
 import { useLocation, useNavigate } from "react-router-dom";
 import FirstFold1 from "../components/FirstFold1";
 import '../Csss/ProfilePage.css';
+import Edit from '@mui/icons-material/BorderColorTwoTone';
+import Loader from '../components/Loader';
 
 const ProfilePage = () => {
   const url = process.env.REACT_APP_BACKEND;
@@ -18,6 +20,18 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [userEvents, setUserEvents] = useState(null);
   const [userBookings, setUserBookings] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    mobile: '',
+    description: '',
+    state: '',
+    city: '',
+    facebook: '',
+    instagram: '',
+    twitter: '',
+    profileImage: null
+  });
 
   useEffect(() => {
     if (userId) {
@@ -34,6 +48,23 @@ const ProfilePage = () => {
       window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
     }, 100);
   }, [location]);
+
+  useEffect(() => {
+    if (userData) {
+      setFormData(prevData => ({
+        ...prevData,
+        name: userData.name,
+        mobile: userData.phoneNumber,
+        description: userData.desc ? userData.desc : "",
+        city: userData.location ? userData.location.split(", ")[0] : "",
+        state: userData.location ? userData.location.split(", ")[1] : "",
+        facebook: userData.social[0] ? userData.social[0].link : "",
+        instagram: userData.social[1] ? userData.social[1].link : "",
+        twitter: userData.social[2] ? userData.social[2].link : "",
+      }));
+
+    }
+  }, [userData]);
 
   const fetchUserInfo = async (id) => {
     await axios.get(url + "/user/bookings/" + id).then((resp) => {
@@ -64,7 +95,6 @@ const ProfilePage = () => {
       localStorage.removeItem('userId');
       localStorage.removeItem('token');
       window.location.reload();
-      navigate("/login");
     }
   };
 
@@ -74,33 +104,276 @@ const ProfilePage = () => {
     alert("Public Profile URL Copied to Clipboard!");
   };
 
+  const updateUserInfo = async () => {
+    if (formData.name.length < 3 || formData.mobile.length != 10) {
+      return alert("Enter valid name and PhoneNumber.");
+    }
+    try {
+      setLoading(true);
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+      const newData = {
+        name: formData.name,
+        phoneNumber: formData.mobile,
+        desc: formData.description,
+        location: formData.city + ", " + formData.state + ", IN",
+        social: { facebook: formData.facebook, instagram: formData.instagram, twitter: formData.twitter },
+      }
+      const newForm = new FormData();
+      newForm.append('updateUser', JSON.stringify(newData));
+      if (formData.profileImage) { newForm.append('image', formData.profileImage); }
+
+      await axios.put(url + "/user/update/" + userId, newForm, { headers }).then((resp) => {
+        alert("Profile Updated Successfully!");
+        window.location.reload();
+      }).catch((e) => {
+        console.log(e);
+        alert("Error In Updating Your details! Try later.");
+      }).finally(() => {
+        // console.log('Form Data:', formData);
+        handleCloseForm();
+        setLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+      handleCloseForm();
+    }
+  };
+
+  const handleEditClick = () => {
+    $('#editForm').fadeIn();
+  };
+
+  const handleCloseForm = () => {
+    $('#editForm').fadeOut();
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setFormData(prevData => ({
+      ...prevData,
+      profileImage: e.target.files[0]
+    }));
+  };
+
+  const memberSince = (x) => {
+    const date = new Date(x);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+    return `${day}${getOrdinal(day)} ${month}, ${year}`;
+  }
+  function getOrdinal(day) {
+    if (day === 1 || day === 21 || day === 31) return 'st';
+    if (day === 2 || day === 22) return 'nd';
+    if (day === 3 || day === 23) return 'rd';
+    return 'th';
+  }
+
   return (
-    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
+    <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
       <FirstFold1 />
       <main style={{ width: "100vw" }} className="flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
+        {loading && <Loader />}
         <section className="w-[1256px] flex flex-col items-start justify-start max-w-full text-left text-21xl text-black font-poppins mq750:gap-[18px]">
           <div className="w-[1229px] flex flex-row items-start justify-start py-0 px-3.5 box-border max-w-full text-xs">
             <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
               <div className="w-[685px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border max-w-full">
                 <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-[20px] mq750:flex-wrap">
-                <div className="profile-icon">{userData ? userData.name.charAt(0).toUpperCase() :"..."}</div>
-                  <div className="w-[403px] flex flex-col items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
+                  {userData && userData.profile ? (
+                    <img className="profile-icon" src={userData.profile} alt="Profile Image" />
+                  ) : (
+
+                    <div className="profile-icon">{userData ? userData.name.charAt(0).toUpperCase() : "..."}</div>
+                  )}
+                  <div className="w-[550px] flex flex-col gap-2 items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
                     <div className="flex flex-col items-start justify-start text-lg">
                       <b style={{ fontSize: "2rem" }} className="relative">{userData && userData.name ? userData.name : "Loading..."}</b>
+                      <div style={{ fontSize: "1rem", fontWeight: "450" }} className="relative text-sm z-[1]">
+                        Member Since: {userData && userData.createdAt ? memberSince(userData.createdAt) : "Loading..."}
+                      </div>
                       <div style={{ fontSize: "1rem" }} className="relative text-sm z-[1]">
-                        Email: {userData && userData.email ? userData.email : "Loading..."}
+                        {userData && userData.location ? userData.location : ""}
                       </div>
                     </div>
-                    <div style={{ fontSize: "1rem" }} className="relative inline-block min-w-[121px]">
+                    {/* <div style={{ fontSize: "1rem" }} className="relative inline-block min-w-[121px]">
                       Contact: {userData && userData.phoneNumber ? "+91-" + userData.phoneNumber : "+91-Loading..."}
+                      </div> */}
+                    <div className="self-stretch relative text-justify">
+                      {(userData && userData.desc) ? userData.desc : ""}
                     </div>
-                    {/* <div className="self-stretch relative">
-                      In publishing and graphic design, Lorem ipsum is a
-                      placeholder text commonly used to demonstrate the visual
-                      form of a document or a typeface without relying on
-                      meaningful content. Lorem ipsum may be used as a
-                      placeholder before the final copy is available.
-                    </div> */}
+                    <Edit onClick={handleEditClick} className="cursor-pointer mb-3" sx={{ color: "#D26600" }} />
+                  </div>
+                  <div id="editForm" className="edit-form" style={{ display: 'none' }}>
+                    <h2 className="text-center">Edit Your Profile</h2>
+                    <div>
+                      <label htmlFor="name">Edit Name:</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="mobile">Edit Mobile:</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="mobile"
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="description">Edit Description:</label>
+                      <textarea
+                        className="form-control"
+                        id="description"
+                        name="description"
+                        value={formData.description}
+                        maxLength={500}
+                        onChange={handleInputChange}
+                      />
+
+                      <label htmlFor="state">Edit State:</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="state"
+                        name="state"
+                        value={formData.state}
+                        onChange={e => {
+                          // setInputState(e.target.value);
+                          handleInputChange(e);
+                        }}
+                      // list="stateList"
+                      />
+                      <datalist id="stateList">
+                        {/* {stateSuggestions.map(state => (
+                          <option key={state.abbreviation} value={state.name} />
+                          ))} */}
+                      </datalist>
+                      <label htmlFor="city">Edit City:</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={e => {
+                          // setInputCity(e.target.value);
+                          handleInputChange(e);
+                        }}
+                      // list="cityList"
+                      />
+                      <label htmlFor="facebook">Edit Facebook Link:</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="facebook"
+                        name="facebook"
+                        value={formData.facebook}
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="instagram">Edit Instagram Link:</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="instagram"
+                        name="instagram"
+                        value={formData.instagram}
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="twitter">Edit Twitter Link:</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="twitter"
+                        name="twitter"
+                        value={formData.twitter}
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="profileImage">Edit Profile Image:</label>
+                      <input
+                        className="form-control"
+                        type="file"
+                        id="profileImage"
+                        name="profileImage"
+                        accept=".jpg, .jpeg, .png"
+                        onChange={handleFileChange}
+                      />
+                      <div className="flex pt-3">
+                        <button type="submit" onClick={updateUserInfo}>Update</button>
+                        <button type="button" onClick={handleCloseForm}>Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div className="self-stretch flex flex-row items-end justify-end max-w-full">
+                  <div className="w-[414px] flex flex-row flex-wrap items-start justify-start gap-[14px] max-w-full">
+                    <div className="w-[123px] flex flex-col items-start justify-start py-0 pr-[7px] pl-0 box-border">
+                      <Button
+                        className="self-stretch h-[33px]"
+                        disableElevation
+                        variant="outlined"
+                        sx={{
+                          textTransform: "none",
+                          color: "#d26600",
+                          fontSize: "14",
+                          borderColor: "#d26600",
+                          borderRadius: "50px",
+                          "&:hover": { borderColor: "#d26600" },
+                          height: 33,
+                        }}
+                        onClick={handleLogOut}
+                      >
+                        Log Out
+                      </Button>
+                    </div>
+                    <Button
+                      className="h-[33px] flex-1 min-w-[94px]"
+                      disableElevation
+                      variant="contained"
+                      sx={{
+                        textTransform: "none",
+                        color: "#fff",
+                        fontSize: "14",
+                        background: "#d26600",
+                        border: "#f5f5f5 solid 1px",
+                        borderRadius: "50px",
+                        "&:hover": { background: "#d26600" },
+                        height: 33,
+                      }}
+                    >
+                      <a href="#bookings" style={{ color: "white", textDecoration: "none" }}>Bookings</a>
+                    </Button>
+                    <Button
+                      className="h-[33px] w-[118px]"
+                      disableElevation
+                      variant="contained"
+                      sx={{
+                        textTransform: "none",
+                        color: "#fff",
+                        fontSize: "14",
+                        background: "#d26600",
+                        border: "#f5f5f5 solid 1px",
+                        borderRadius: "50px",
+                        "&:hover": { background: "#d26600" },
+                        width: 118,
+                        height: 33,
+                      }}
+                    >
+                      <a href="#events" style={{ color: "white", textDecoration: "none" }}>Events</a>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -131,12 +404,14 @@ const ProfilePage = () => {
                           />
                         </a>
                       </div>
-                      <img
-                        className="w-7 h-7 relative overflow-hidden shrink-0"
-                        loading="lazy"
-                        alt=""
-                        src="/facebook1.svg"
-                      />
+                      <a href={userData && userData.social[0] ? userData.social[0].link : "#"} target="_blank" rel="noopener noreferrer">
+                        <img
+                          className="w-7 h-7 relative overflow-hidden shrink-0"
+                          loading="lazy"
+                          alt=""
+                          src="/facebook1.svg"
+                        />
+                      </a>
                     </div>
                     <div className="flex flex-col items-start justify-start gap-[12px]">
                       <a href={userData ? "mailto:" + userData.email : "#"}>
@@ -147,26 +422,30 @@ const ProfilePage = () => {
                           src="/mail.svg"
                         />
                       </a>
-                      <img
-                        className="w-7 h-7 relative overflow-hidden shrink-0"
-                        loading="lazy"
-                        alt=""
-                        src="/twitterx.svg"
-                      />
+                      <a href={userData && userData.social[2] ? userData.social[2].link : "#"} target="_blank" rel="noopener noreferrer">
+                        <img
+                          className="w-7 h-7 relative overflow-hidden shrink-0"
+                          loading="lazy"
+                          alt=""
+                          src="/twitterx.svg"
+                        />
+                      </a>
                     </div>
-                    <div className="flex flex-col items-start justify-start gap-[8px]">
+                    <div className="flex flex-col items-start justify-start gap-[12px]">
                       <img
                         className="w-[25px] h-7 relative overflow-hidden shrink-0"
                         loading="lazy"
                         alt=""
                         src="/iconsmappin-1.svg"
                       />
-                      <img
-                        className="w-7 h-7 relative overflow-hidden shrink-0"
-                        loading="lazy"
-                        alt=""
-                        src="/instagram.svg"
-                      />
+                      <a href={userData && userData.social[1] ? userData.social[1].link : "#"} target="_blank" rel="noopener noreferrer">
+                        <img
+                          className="w-7 h-7 relative overflow-hidden shrink-0"
+                          loading="lazy"
+                          alt=""
+                          src="/instagram.svg"
+                        />
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -175,67 +454,9 @@ const ProfilePage = () => {
           </div>
           <div style={{ width: "100vw" }} className=" flex flex-col items-end justify-center pt-0 px-0 box-border gap-[81.5px] max-w-full lg:gap-[41px] lg:pb-[67px] lg:box-border mq750:gap-[20px] mq750:pb-11 mq750:box-border">
             <div className="self-stretch flex flex-row items-start justify-center max-w-full text-center">
-              <div className="w-[854px] flex flex-col items-end justify-start gap-[24px] max-w-full">
+              <div className="w-full flex flex-col items-end justify-start gap-[24px] max-w-full">
                 <div className="self-stretch flex flex-row items-start justify-center max-w-full">
-                  <div className="w-[751px] flex flex-col items-center justify-start gap-[15px] max-w-full">
-                    <div className="self-stretch flex flex-row items-start justify-start max-w-full">
-                      <div className="w-[414px] flex flex-row flex-wrap items-start justify-start gap-[14px] max-w-full">
-                        <div className="w-[123px] flex flex-col items-start justify-start py-0 pr-[7px] pl-0 box-border">
-                          <Button
-                            className="self-stretch h-[33px]"
-                            disableElevation
-                            variant="outlined"
-                            sx={{
-                              textTransform: "none",
-                              color: "#d26600",
-                              fontSize: "14",
-                              borderColor: "#d26600",
-                              borderRadius: "50px",
-                              "&:hover": { borderColor: "#d26600" },
-                              height: 33,
-                            }}
-                            onClick={handleLogOut}
-                          >
-                            Log Out
-                          </Button>
-                        </div>
-                        <Button
-                          className="h-[33px] flex-1 min-w-[94px]"
-                          disableElevation
-                          variant="contained"
-                          sx={{
-                            textTransform: "none",
-                            color: "#fff",
-                            fontSize: "14",
-                            background: "#d26600",
-                            border: "#f5f5f5 solid 1px",
-                            borderRadius: "50px",
-                            "&:hover": { background: "#d26600" },
-                            height: 33,
-                          }}
-                        >
-                          <a href="#bookings" style={{ color: "white", textDecoration: "none" }}>Bookings</a>
-                        </Button>
-                        <Button
-                          className="h-[33px] w-[118px]"
-                          disableElevation
-                          variant="contained"
-                          sx={{
-                            textTransform: "none",
-                            color: "#fff",
-                            fontSize: "14",
-                            background: "#d26600",
-                            border: "#f5f5f5 solid 1px",
-                            borderRadius: "50px",
-                            "&:hover": { background: "#d26600" },
-                            width: 118,
-                            height: 33,
-                          }}
-                        >
-                          <a href="#events" style={{ color: "white", textDecoration: "none" }}>Events</a>
-                        </Button>
-                      </div>
-                    </div>
+                  <div className="w-full flex flex-col items-center justify-start gap-[15px] max-w-full">
                     <h1 id="#bookings" className="pt-5 m-0 relative text-inherit leading-[48px] font-bold font-inherit mq1050:text-13xl mq1050:leading-[38px] mq450:text-5xl mq450:leading-[29px]">
                       <span>{`Your `}</span>
                       <span className="text-tomato">Bookings</span>
@@ -246,7 +467,7 @@ const ProfilePage = () => {
                         <div className="w-full flex flex-wrap justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
                           <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
                             {userBookings.map((item, index) => (
-                              <GroupComponent2 key={item.event._id+index}
+                              <GroupComponent2 key={item.event._id + index}
                                 eventCardImage={item.event.eventPoster ? `${item.event.eventPoster}` : "/rectangle-12-1@2x.png"}
                                 event={item.event}
                                 title={item.event.eventName}
@@ -256,7 +477,7 @@ const ProfilePage = () => {
                                 className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                               />
                             ))}
-                            <div onClick={()=>{navigate("/search-bar")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
+                            <div onClick={() => { navigate("/search-bar") }} style={{ cursor: "pointer" }} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
                               <div className="flex flex-row items-start justify-start py-0 px-3">
                                 <img
                                   className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"
@@ -286,7 +507,7 @@ const ProfilePage = () => {
                 <div className="w-full flex flex-wrap justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
                   <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
                     {userEvents.map((e, index) => (
-                      <GroupComponent2 key={e._id+index}
+                      <GroupComponent2 key={e._id + index}
                         eventCardImage={e.eventPoster ? `${e.eventPoster}` : "/rectangle-12-1@2x.png"}
                         event={e}
                         title={e.eventName}
@@ -296,7 +517,7 @@ const ProfilePage = () => {
                         className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                       />
                     ))}
-                    <div onClick={()=>{navigate("/event-listing")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
+                    <div onClick={() => { navigate("/event-listing") }} style={{ cursor: "pointer" }} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
                       <div className="flex flex-row items-start justify-start py-0 px-3">
                         <img
                           className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"

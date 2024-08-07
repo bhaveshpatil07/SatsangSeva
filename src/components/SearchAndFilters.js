@@ -35,7 +35,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
         const newScrollPosition = currentScrollPosition + scrollAmount;
         window.scrollTo({ top: newScrollPosition, behavior: 'smooth' });
       }).catch((e)=>{
-        alert("Error: " + e);
+        console.log("Error: " + e);
       }).finally(()=>{
         setLoading(false);
       });
@@ -49,8 +49,8 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
       className={`flex flex-row items-start justify-center pt-3 px-5 pb-2.5 box-border max-w-full ${className}`}
     >
       {loading && <Loader />}
-      <form className="m-0 w-[1221px] flex flex-col items-start justify-start gap-[37px] max-w-full mq750:gap-[18px]">
-        <div className="w-[1198px] flex flex-row items-start justify-start py-0 px-0 box-border max-w-full lg:pl-7 lg:pr-7 lg:box-border">
+      <form className="m-0 w-[1275px] flex flex-col items-start justify-start gap-[37px] max-w-full mq750:gap-[18px]">
+        <div className="w-full flex flex-row items-start justify-start py-0 px-0 box-border max-w-full lg:pl-7 lg:pr-7 lg:box-border">
           <div className="flex-1 align-items-center shadow-[0px_10px_50px_rgba(61,_55,_241,_0.25)] rounded-xl bg-darkorange-200 flex flex-row flex-wrap items-start justify-start py-[30px] px-12 box-border gap-[60px] min-h-[140px] max-w-full lg:gap-[30px] lg:pl-6 lg:pr-6 lg:box-border mq750:gap-[15px]">
             <div className="h-[140px] w-[1086px] relative shadow-[0px_10px_50px_rgba(61,_55,_241,_0.25)] rounded-xl bg-darkorange-200 hidden max-w-full" />
             <div className="flex-1 flex flex-col items-start justify-start gap-[11px] min-w-[217px]">
@@ -65,6 +65,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
                   type="text"
                   onChange={handleChange}
                   value={formData.eventName}
+                  autoComplete="off"
                 />
                 <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
               </div>
@@ -82,6 +83,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
                   type="text"
                   onChange={handleChange}
                   value={formData.address}
+                  autoComplete="off"
                 />
                 <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
               </div>

@@ -55,7 +55,7 @@ const LandingPage = ({ className = "" }) => {
           />
         </div>
 
-        <div style={{ width: "100vw", padding: "21rem 0", zIndex: '2' }} className="flex flex-row items-center justify-center box-border max-w-full lg:pl-[38px] lg:pr-[38px] lg:box-border">
+        <div style={{ width: "100vw", padding: "21.7rem 0", zIndex: '2' }} className="flex flex-row items-center justify-center box-border max-w-full lg:pl-[38px] lg:pr-[38px] lg:box-border">
           {contentArray.map((item, index) => (
             <div key={index} className={`fade-in ${currentIndex === item.index ? "active " : ""}absolute`}>
               <div style={{ maxWidth: "90%" }} className="flex flex-row items-center justify-start max-w-full mq1050:flex-wrap">
@@ -131,7 +131,7 @@ const LandingPage = ({ className = "" }) => {
 
         {/* External Buttons for Changing Content */}
       </div>
-      <div className="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full mt-[-40px] text-base font-dm-sans">
+      <div className="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full mt-[-80px] text-base font-dm-sans">
         <SearchBox />
       </div>
     </section>

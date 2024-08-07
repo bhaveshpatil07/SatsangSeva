@@ -4,6 +4,17 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
 import { useLocation } from "react-router-dom";
+import NotFound from '@mui/icons-material/EventBusy';
+import Select from 'react-select';
+
+const categoryOptions = [
+  // { value: '', label: 'Any Category' },
+  { value: 'Satsang', label: 'Satsang' },
+  { value: 'Bhajan', label: 'Bhajan' },
+  { value: 'Samaroh', label: 'Samaroh' },
+  { value: 'Langar', label: 'Langar' },
+  { value: 'Other', label: 'Other' },
+];
 
 const EventList = ({ className = "", data }) => {
   const [searchTopAnchorEl, setSearchTopAnchorEl] = useState(null);
@@ -14,6 +25,8 @@ const EventList = ({ className = "", data }) => {
   const [events, setEvents] = useState(data);
   const [filteredEvents, setFilteredEvents] = useState(null);
   const [category, setCategory] = useState("");
+  const [lang, setLang] = useState("");
+  const [type, setType] = useState("");
   const location = useLocation();
 
   const handleSearchTopClick = (event) => {
@@ -25,7 +38,7 @@ const EventList = ({ className = "", data }) => {
     setCategory("");
     setEvents(data);
     setFilteredEvents(data);
-    if(data){
+    if (data) {
       setLoading(false);
       setVisibleEvents(7);
       setHasMoreEvents(data.length > 7);
@@ -33,16 +46,16 @@ const EventList = ({ className = "", data }) => {
   }, [data]);
 
   useEffect(() => {
-    if(events && filteredEvents){
+    if (events && filteredEvents) {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('q');
-      if(category){
+      if (category) {
         setCategory(category);
-        filterEvents(category);
+        filterEvents();
       }
     }
   }, [filteredEvents])
-  
+
 
   const handleLoadMore = () => {
     const newVisibleEvents = visibleEvents + 7;
@@ -50,23 +63,34 @@ const EventList = ({ className = "", data }) => {
     setHasMoreEvents(events.length > newVisibleEvents);
   };
 
-  const handleCategoryChange = (event) => {
-    const selectedCategory = event.target.value;
-    setCategory(selectedCategory);
-    filterEvents(selectedCategory);
+  const handleTypeChange = (event) => {
+    const selectedfee = event.target.value;
+    setType(selectedfee);
+    filterEvents(lang, category, selectedfee);
   };
 
-  const filterEvents = (selectedCategory = "") => {
-    if (!selectedCategory.length > 0) {
-      setEvents(filteredEvents);
-      setVisibleEvents(7);
-      setHasMoreEvents(filteredEvents.length > 7);
-    } else {
-      const result = filteredEvents.filter((event) => event.eventCategory === selectedCategory);
-      setEvents(result);
-      setVisibleEvents(7);
-      setHasMoreEvents(result.length > 7);
-    }
+  const handleLangChange = (event) => {
+    const selectedLang = event.target.value;
+    setLang(selectedLang);
+    filterEvents(selectedLang, category, type);
+  };
+
+  const handleCategoryChange = (selectedCategory) => {
+    setCategory(selectedCategory);
+    filterEvents(lang, selectedCategory, type);
+  };
+
+  const filterEvents = (lang, categories, priceType) => {
+    const langWords = lang.split(/\s+/); // split input string into individual words
+    const filtered = filteredEvents.filter((event) => {
+      const langMatch = lang === "" || langWords.some((word) => event.eventLang.match(new RegExp(word, 'i')));
+      const categoryMatch = categories.length === 0 || categories.some((category) => category.value === event.eventCategory);
+      const priceTypeMatch = priceType === "" || (priceType === "Free" && event.eventPrice === "0") || (priceType === "Paid" && event.eventPrice !== "0");
+      return langMatch && categoryMatch && priceTypeMatch;
+    });
+    setEvents(filtered);
+    setVisibleEvents(7);
+    setHasMoreEvents(filtered.length > 7);
   };
 
 
@@ -75,85 +99,93 @@ const EventList = ({ className = "", data }) => {
       className={`self-stretch flex flex-row items-start justify-center py-0 pr-[21px] pl-5 box-border max-w-full text-center text-21xl text-gray-500 font-poppins ${className}`}
     >
       {loading && <Loader />}
-      <div className="w-[1275px] flex flex-col items-start justify-start max-w-full">
-        <div className="w-full flex items-center justify-between pt-2 px-[18px] pb-10 box-border max-w-full mq750:flex-col">
-          <h1 className="m-0 pl-3 relative text-inherit leading-[48px] font-bold font-inherit mq450:leading-[29px] mq1050:text-13xl mq1050:leading-[38px]">
+      <div className="w-[1275px] flex flex-col items-center justify-start max-w-full">
+        <div className="w-full flex items-center justify-between pt-2 pb-10 box-border max-w-full mq750:flex-col">
+          <h1 className="w-[500px] m-0 relative text-inherit leading-[48px] font-bold font-inherit mq450:leading-[29px] mq1050:text-13xl mq1050:leading-[38px]">
             {/* <span></span> */}
             <span className="text-tomato">{`Events `}</span>
             <span>For You</span>
           </h1>
-          <div className="w-[544px] flex flex-col items-start justify-start pt-0.5 px-0 pb-0 box-border max-w-full text-sm text-darkorange-200 font-dm-sans">
+          <div className="w-full flex flex-col items-start justify-start pt-0.5 px-0 pb-0 box-border max-w-full text-sm text-darkorange-200 font-dm-sans">
             <div className="self-stretch flex flex-row items-start justify-start gap-[20px] mq750:flex-wrap">
-              <div className="h-[46px] flex-1 min-w-[109px] relative">
-                <select
-                  aria-controls="menu-undefined"
-                  aria-haspopup="true"
-                  // aria-expanded={searchTopOpen ? "true" : undefined}
-                  // onClick={handleSearchTopClick}
-                  className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none pr-8 mega"
-                  style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
-                >
-                  <option value="allDays">All Days</option>
-                  <option value="monday">Monday</option>
-                  <option value="tuesday">Tuesday</option>
-                  <option value="wednesday">Wednesday</option>
-                  <option value="thursday">Thursday</option>
-                  <option value="friday">Friday</option>
-                  <option value="saturday">Saturday</option>
-                  <option value="sunday">Sunday</option>
-                </select>
-                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
-
-                  <svg className="w-4 h-4 text-[#ff5f17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </span>
-              </div>
-
-              <div className="h-[46px] flex-1 min-w-[109px] relative">
-                <select
-                  aria-controls="menu-undefined"
-                  aria-haspopup="true"
-                  // aria-expanded={searchTopOpen ? "true" : undefined}
-                  // onClick={handleSearchTopClick}
-                  className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none pr-8 mega"
-                  style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
-                >
-                  <option value="eventTypes">Event Types</option>
-                  <option value="concert">Concert</option>
-                  <option value="conference">Conference</option>
-                  <option value="workshop">Workshop</option>
-                  <option value="seminar">Seminar</option>
-                </select>
-                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                  <svg className="w-4 h-4 text-[#ff5f17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </span>
-              </div>
-
-              <div className="h-[46px] flex-1 min-w-[109px] relative">
+              <div className="h-[46px] flex-2 min-w-[160px] relative">
                 <select
                   aria-controls="menu-undefined"
                   aria-haspopup="true"
                   aria-expanded={searchTopOpen ? "true" : undefined}
-                  onChange={handleCategoryChange}
-                  value={category}
+                  onChange={handleTypeChange}
+                  value={type}
                   className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none pr-8 mega"
                   style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
                 >
-                  <option value="">Any Category</option>
-                  <option value="Satsang">Satsang</option>
-                  <option value="Bhajan">Bhajan</option>
-                  <option value="Samaroh">Samaroh</option>
-                  <option value="Langar">Langar</option>
-                  <option value="Other">Other</option>
+                  <option value="">Event Type</option>
+                  <option value="Free">Free</option>
+                  <option value="Paid">Paid</option>
+                </select>
+                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
+
+                  <svg className="w-4 h-4 text-[#ff5f17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </span>
+              </div>
+
+              <div className="h-[46px] flex-2 min-w-[160px] relative">
+                <select
+                  aria-controls="menu-undefined"
+                  aria-haspopup="true"
+                  aria-expanded={searchTopOpen ? "true" : undefined}
+                  onChange={handleLangChange}
+                  value={lang}
+                  className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none pr-8 mega"
+                  style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
+                >
+                  <option value="">Event Language</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="English">English</option>
+                  <option value="Hindi & English">Hindi & English</option>
                 </select>
                 <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   <svg className="w-4 h-4 text-[#ff5f17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </span>
+              </div>
+
+              <div className="w-full h-[46px] flex-1 min-w-[200px] relative">
+                <Select
+                  isMulti
+                  value={category} // Initialize with an empty array for multiple selects
+                  onChange={handleCategoryChange}
+                  options={categoryOptions}
+                  className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none mega"
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      width: '100%',
+                      height: "46px",
+                      lineHeight: '1.5rem',
+                      backgroundColor: "transparent",
+                      border: state.isFocused ?  "2px solid #000":"none" ,
+                      borderRadius: "1rem",
+                      boxShadow: state.isFocused ? "none" : "none",
+                      outline: "none",
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: '#ff5f17',
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      minWidth: 'initial',
+                      maxWidth: '300px',
+                      left: 0,
+                      right: "auto",
+                    }),
+                  }}
+
+                  placeholder="Any Category"
+                />
               </div>
             </div>
           </div>
@@ -288,6 +320,8 @@ const EventList = ({ className = "", data }) => {
             </Button>
           </div>
         )}
+
+        {(events && events.length === 0) && <><NotFound fontSize="large" sx={{ color: "#D26600" }} /><h2 className="text-center text-danger pb-5">No Events Found!</h2></>}
 
       </div>
     </section>

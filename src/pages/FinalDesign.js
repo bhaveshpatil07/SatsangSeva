@@ -36,7 +36,7 @@ const FinalDesign = () => {
             />
             <div className="flex flex-col items-start justify-start gap-[20px] max-w-full transform transition-transform duration-300 hover:scale-105">
               <img
-                className="self-stretch h-[210px] relative rounded-xl max-w-full overflow-hidden shrink-0 object-cover"
+                className="self-stretch h-[210px] bg-orange relative rounded-xl max-w-full overflow-hidden shrink-0 object-cover"
                 loading="lazy"
                 alt=""
                 src="/rectangle-14@2x.png"

@@ -74,7 +74,10 @@ const LogIn = () => {
           alert(resp.data.message + "!");
           window.location.reload();
         }).catch((e) => {
-          alert("Error in LoginIn: " + e.response.data.message);
+          alert("Error: " + e.response.data.message);
+          if(e.response.status===404){
+            navigate('/sign-in');
+          };
         }).finally(() => {
           setLoading(false);
         });

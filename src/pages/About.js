@@ -8,18 +8,31 @@ function About() {
     const location = useLocation();
 
     useEffect(() => {
-        setTimeout(() => {
-            const windowHeight = window.innerHeight;
-            const scrollPosition = windowHeight * 0.55;
-            window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-        }, 100);
-    }, [location]);
+        if (location.hash) {
+            setTimeout(() => {
+                const sectionId = location.hash.substring(1); // Remove the leading '#'
+                const sectionElement = document.getElementById(sectionId);
+                if (sectionElement) {
+                    const offsetTop = sectionElement.offsetTop;
+                    const windowHeight = window.innerHeight;
+                    const additionalScroll = windowHeight * 0.2; // 10% of window height
+                    window.scrollTo({ top: offsetTop - additionalScroll, behavior: 'smooth' });
+                }
+            }, 100);
+        } else {
+            setTimeout(() => {
+                const windowHeight = window.innerHeight;
+                const scrollPosition = windowHeight * 0.55;
+                window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+            }, 100);
+        }
+    }, [location, location.hash]);
 
     return (
         <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start py-0 px-px box-border leading-[normal] tracking-[normal]">
             <FirstFold1 />
             <section className="pt-5 self-stretch flex flex-col items-center justify-center box-border max-w-full">
-                <div style={{ minHeight: "90vh", backgroundColor: "#FFCBA4", color: "black", borderRadius: "2rem" }} className="about-us container gap-0 w-full flex flex-col p-5 mb-5">
+                <div style={{ minHeight: "90vh", color: "black", borderRadius: "2rem" }} className="about-us container gap-0 w-full flex flex-col p-5 mb-5">
                     <h2><b>ABOUT <span>US</span></b></h2>
                     <h4 className='px-4'>Welcome to Satsang Seva, your dedicated online platform for connecting with religious and spiritual events. At Satsang Seva, we bridge the gap between event organizers and participants, making it easier for you to find and join spiritual gatherings and religious ceremonies in your area.</h4>
                     <hr className="self-stretch border border-1 opacity-75 my-4" />
@@ -33,7 +46,7 @@ function About() {
                             <h4>Whether you are interested in Ramayan recitations, Sundarkand sessions, Shiv Puran readings, Jagran nights, Khatu Shyam Bhajan Sandhyas, or yoga and meditation retreats, Satsang Seva is your go-to platform. We list a wide variety of events, ensuring there's something for everyone seeking spiritual enrichment.</h4>
                         </div>
                     </div>
-                    <hr className="self-stretch border border-1 opacity-75 my-4" />
+                    <hr id='howitworks' className="self-stretch border border-1 opacity-75 my-4" />
                     <div className="works">
                         <h2>How It <span>Works</span></h2>
                         <h4>Discover Events: Browse through our comprehensive list of religious and spiritual events happening near you. Our platform provides detailed information about each event, including the type, date, time, location, and whether it is free or chargeable.
@@ -50,7 +63,7 @@ function About() {
                             <br /><span>Easy Access:</span> Find events in your vicinity with just a few clicks and get all the details you need to attend.
                             <br /><span>Community Building:</span> We aim to build a vibrant community of like-minded individuals who share a passion for spiritual growth and communal worship.
                             <br /><span>Support for Organizers:</span> Event organizers can reach a larger audience and effectively manage their event listings through our user-friendly interface.
-                            <br /><br />Join Us 
+                            <br /><br />Join Us
                             Become a part of the Satsang Seva community today. Whether you are an event organizer looking to share your spiritual gatherings or a participant eager to join, our platform is designed to meet your needs.
                             <br />
                             <br />For more information or to get started, visit our website and explore the world of spiritual and religious events waiting for you.</h4>

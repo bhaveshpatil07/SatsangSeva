@@ -10,6 +10,7 @@ const FrameComponent = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [userId, setUserId] = useState(localStorage.getItem('userId'));
   const [name, setName] = useState('');
+  const [profile, setProfile] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const url = process.env.REACT_APP_BACKEND;
@@ -25,12 +26,12 @@ const FrameComponent = () => {
   useEffect(() => {
     verifyToken();
   }, []);
-  
+
   const handleScroll = () => {
     setScrolled(window.scrollY > 50);
   };
 
-  const verifyToken = ()=>{
+  const verifyToken = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       setUserId(null);
@@ -59,6 +60,9 @@ const FrameComponent = () => {
       if (userName) {
         setName(trimFirstName(userName));
       }
+      if (resp.data.user.profile) {
+        setProfile(resp.data.user.profile);
+      }
       verifyToken();
     } catch (e) {
       setUserId(null);
@@ -85,7 +89,7 @@ const FrameComponent = () => {
 
   return (
     <div className={`nav-main ${scrolled ? 'scrolled' : ''}`}>
-      <Link className='left-nav no-underline' to="/">
+      <Link className='left-nav no-underline' to="/#home">
         <img src="/group1.svg" alt="SatsangSeva" />
         <h1 className='font-semibold font-sacramento'>Satsang Seva</h1>
       </Link>
@@ -96,7 +100,7 @@ const FrameComponent = () => {
       </div>
       <div className={`right-nav ${isMenuOpen ? 'active' : ''}`}>
         <ul>
-          <li className='io' onClick={toggleMenu}><Link to="/">Home</Link></li>
+          <li className='io' onClick={toggleMenu}><Link to="/#home">Home</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/#upcomingEvents">Upcoming Events</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/#listEvent">List Your Events</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/categories-page#main">Categories</Link></li>
@@ -107,9 +111,11 @@ const FrameComponent = () => {
               <Link to='/profile-page'>
                 <div className="info flex items-center justify-center">
                   <span className='user-name pr-2'>{name}</span>
-                  <span className="profile-icon small">
-                    {name.charAt(0).toUpperCase()}
-                  </span>
+                  {profile ?
+                    <img className='profile-icon small' src={profile} alt="User Profile"/> :
+                    <span className="profile-icon small">
+                      {name.charAt(0).toUpperCase()}
+                    </span>}
                 </div>
 
               </Link>

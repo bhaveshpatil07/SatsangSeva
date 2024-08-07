@@ -29,18 +29,57 @@ function ContactUs() {
         });
     };
 
+    const validateForm = () => {
+        const { firstName, lastName, email, phone, msg } = formData;
+        let isValid = true;
+        let errorAt = "";
+
+        if (!firstName.trim()) {
+            errorAt += "FirstName ";
+            isValid = false;
+        }
+
+        if (!lastName.trim()) {
+            errorAt += ", LastName";
+            isValid = false;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email)) {
+            errorAt += ", Email";
+            isValid = false;
+        }
+
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+            errorAt += ", Phone Number";
+            isValid = false;
+        }
+
+        if (!msg.trim()) {
+            errorAt += ", Message.";
+            isValid = false;
+        }
+
+        return errorAt;
+    };
+
     const handleSubmit = () => {
-        console.log(formData);
-        alert("Thank You For Contacting Us!");
+        const error = validateForm(formData);
+        if(error.length>1){
+            return alert("Invalid Inputs : " + error);
+        }
+        //Axios call to backend Nodemailer send mail to info@satsangseva.com
+        
     };
 
     return (
         <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start py-0 px-px box-border leading-[normal] tracking-[normal]">
             <FirstFold1 />
             <section className="py-5 self-stretch flex flex-col items-center justify-center box-border max-w-full">
-                <div className="md:container p-5 md:mx-auto mq750:!p-5 mq750:!py-[40px]" style={{ backgroundColor: "#FFCBA4", borderRadius: "2rem" }}>
-                    <h1>Contact <span style={{ color: '#D26600' }}>US</span></h1>
-                    <form id="contact_form" name="contact_form">
+                <div className="md:container p-5 md:mx-auto mq750:!p-5 mq750:!py-[40px]" style={{ border: "1px solid #333", borderRadius: "2rem" }}>
+                    <h1 className='pb-4'>Contact <span style={{ color: '#D26600' }}>US</span></h1>
+                    <div>
                         <div className="mb-5 row">
                             <div className="col">
                                 <label>First Name</label>
@@ -53,22 +92,22 @@ function ContactUs() {
                         </div>
                         <div className="mb-5 row">
                             <div className="col">
-                                <label htmlFor="email_addr">Email address</label>
+                                <label htmlFor="email">Email address</label>
                                 <input type="email" required maxLength="50" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange}
                                     placeholder="Enter Email" />
                             </div>
                             <div className="col">
-                                <label htmlFor="phone_input">Phone</label>
+                                <label htmlFor="phone">Phone Number</label>
                                 <input type="tel" required maxLength="50" className="form-control" id="phone" name="Phone" value={formData.phone} onChange={handleChange}
-                                    placeholder="Enter Phone Number" />
+                                    placeholder="+91-XXXXX-XXXXX" />
                             </div>
                         </div>
                         <div className="mb-5">
-                            <label htmlFor="message">Message</label>
-                            <textarea placeholder='Write your message...' className="form-control" id="msg" name="message" rows="5" value={formData.msg} onChange={handleChange}></textarea>
+                            <label htmlFor="msg">Message</label>
+                            <textarea placeholder='Write your message...' className="form-control" id="msg" name="message" rows="5" value={formData.msg} maxLength={500} onChange={handleChange}></textarea>
                         </div>
-                        <button onClick={handleSubmit} className="btn btn-primary px-4 btn-lg">Send</button>
-                    </form>
+                        <button type='submit' onClick={handleSubmit} className="btn px-4 btn-lg" style={{ backgroundColor: "#FFCBA4" }}>Send</button>
+                    </div>
                 </div>
             </section>
             <Footer />

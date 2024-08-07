@@ -9,13 +9,13 @@
   font-size: 7rem;
   font-weight: bold;
   text-align: center;
-  width: 30%;
+  width: 33%;
   aspect-ratio: 1;
   @media (max-width: 769px) {
-    width: 80%;
+    width: 100%;
   }
 }
-.small{
+.small {
   border: 1px double #000;
   background-color: #fff;
   color: #f58021e2;
@@ -26,36 +26,104 @@
     width: 35px;
   }
 }
-.time{
+.time {
   display: flex;
   justify-content: start;
   align-items: center;
   @media (max-width: 769px) {
     font-size: 1.2em !important;
-    span{
+    span {
       min-width: 5.5rem !important;
     }
   }
 }
-.time span{
+.time span {
   display: inline-block;
   text-align: center;
-  min-width:7rem;
+  min-width: 7rem;
 }
 
-.time-category{
+.time-category {
   display: flex;
   justify-content: start;
   align-items: center;
   @media (max-width: 769px) {
     font-size: 2.3em !important;
-    span{
+    span {
       min-width: 5rem !important;
     }
   }
 }
-.time-category span{
+.time-category span {
   display: inline-block;
   text-align: center;
-  min-width:7rem;
+  min-width: 7rem;
+}
+
+/* Add this to your CSS file */
+
+.edit-form {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%; /* Adjust width if needed */
+  max-width: 500px; /* Adjust max-width if needed */
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+  padding: 15px; /* Reduced padding for a more compact box */
+  z-index: 1000;
+  height: auto; /* Allow height to adjust based on content */
+  max-height: 80vh; /* Limit height to prevent overflow */
+  overflow-y: auto; /* Add scroll if content exceeds max-height */
+}
+
+.edit-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form label {
+  font-weight: bold;
+  margin: 5px 0; /* Reduced margin for a more compact form */
+  color: #D26600;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="file"],
+.edit-form textarea {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px; /* Reduced padding for a more compact input field */
+  font-size: 14px; /* Adjust font size if needed */
+  margin-bottom: 10px; /* Reduced margin for a more compact form */
+}
+
+.edit-form textarea {
+  resize: vertical;
+  min-height: 80px; /* Adjust min-height if needed */
+}
+
+.edit-form button {
+  background-color: #D26600;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem; /* Reduced padding for a more compact button */
+  font-size: 14px; /* Adjust font size if needed */
+  cursor: pointer;
+  margin-right: 8px; /* Reduced margin for a more compact button layout */
+}
+
+.edit-form button:hover {
+  background-color: #0056b3;
+}
+
+.edit-form button:last-of-type {
+  background-color: #6c757d;
+}
+
+.edit-form button:last-of-type:hover {
+  background-color: #5a6268;
 }

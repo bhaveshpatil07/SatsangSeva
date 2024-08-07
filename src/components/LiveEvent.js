@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@mui/material";
 import PropTypes from "prop-types";
 import '../Csss/ProfilePage.css';
+import { HashLink } from "react-router-hash-link";
 
 const LiveEvent = ({ className = "", propWidth }) => {
   const getTargetDate = () => {
@@ -91,7 +92,7 @@ const LiveEvent = ({ className = "", propWidth }) => {
                 height: 60.2,
               }}
             >
-              Join Now
+              <HashLink className="text-white no-underline" to="/#upcomingEvents"> Join Now</HashLink>
             </Button>
             <Button
               className="h-[60.2px] flex-1 min-w-[118px] z-[2]" // Removed shadow class
@@ -110,7 +111,7 @@ const LiveEvent = ({ className = "", propWidth }) => {
                 height: 60.2,
               }}
             >
-              Learn More
+              <HashLink className="text-white no-underline" to="/#upcomingEvents">Learn More</HashLink>
             </Button>
           </div>
         </div>

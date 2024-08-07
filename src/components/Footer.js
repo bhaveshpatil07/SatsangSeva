@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
 import PropTypes from "prop-types";
 import { HashLink as Link } from 'react-router-hash-link';
+import Mail from '@mui/icons-material/MailTwoTone';
+import Contact from '@mui/icons-material/ContactPhoneTwoTone';
 
 const Footer = ({ className = "" }) => {
   return (
@@ -34,7 +36,9 @@ const Footer = ({ className = "" }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-row items-start justify-start gap-[15.7px]">
+          <div className="flex flex-row items-center justify-center gap-[15.7px]">
+            <a className="text-white" href="tel:+91-7737237335"><Contact fontSize="large" /></a>
+            <a className="text-white" href="mailto:info@satsangseva.com"><Mail fontSize="large" /></a>
             <img
               className="h-9 w-9 relative overflow-hidden shrink-0 min-h-[36px] z-[1]"
               loading="lazy"
@@ -80,8 +84,8 @@ const Footer = ({ className = "" }) => {
               <div className="relative text-sm leading-[200%] font-medium text-white z-[1]">
                 <p className="m-0"><Link className="text-white no-underline" to="/aboutus">About Us</Link></p>
                 <p className="m-0"><Link className="text-white no-underline" to="/contactus">Contact Us</Link></p>
-                <p className="m-0">Help Center</p>
-                <p className="m-0">How it Works</p>
+                <p className="m-0"><Link className="text-white no-underline" to="/contactus">Help Center</Link></p>
+                <p className="m-0"><Link className="text-white no-underline" to="/aboutus#howitworks">How it Works</Link></p>
               </div>
             </div>
           </div>

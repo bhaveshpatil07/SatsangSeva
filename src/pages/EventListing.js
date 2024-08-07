@@ -156,7 +156,7 @@ const EventListing1 = () => {
       };
       const formData = new FormData();
       formData.append('eventData', JSON.stringify(newData));
-      formData.append('eventPoster', eventPoster);
+      formData.append('image', eventPoster);
       await axios.post(url + "/events", formData, { headers }).then((resp) => {
         console.log("Event Created: " + resp.data);
         localStorage.removeItem('addEvent');
@@ -325,7 +325,7 @@ const EventListing1 = () => {
                     </div>
                     <div className="w-[584px] self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
-                        <span>{`Event Links `}</span>
+                        <span>{`Event Live Link `}</span>
                         <span className="text-red">*</span>
                       </div>
 
@@ -420,7 +420,7 @@ const EventListing1 = () => {
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
-                        <span>{`Event Bio `}</span>
+                        <span>{`About Event `}</span>
                         <span className="text-red">*</span>
                       </div>
                       <textarea maxLength={500} className="form-control" type="text" name="eventDesc" value={formValues.eventDesc} onChange={handleInputChange} placeholder="Enter Event Description (Max-500 Characters.)" />

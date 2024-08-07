@@ -17,15 +17,18 @@ const PublicProfile = () => {
   const userId = localStorage.getItem("userId");
   const [userData, setUserData] = useState(null);
   const [userEvents, setUserEvents] = useState(null);
-//   const [userBookings, setUserBookings] = useState(null);
+  //   const [userBookings, setUserBookings] = useState(null);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const publicUser = queryParams.get('q');
-    if(publicUser===userId){
-        navigate("/profile-page");
-    }else{
-        fetchUserInfo(publicUser);
+    if(!publicUser || publicUser.length<5){
+      return navigate('/');
+    }
+    if (publicUser === userId) {
+      navigate("/profile-page");
+    } else {
+      fetchUserInfo(publicUser);
     }
   }, [userId]);
 
@@ -45,11 +48,6 @@ const PublicProfile = () => {
     // });
     await axios.get(url + "/user/" + id).then((resp) => {
       setUserData(resp.data.user);
-      localStorage.setItem('userInfo', JSON.stringify({
-        email: resp.data.user.email,
-        name: resp.data.user.name,
-        contact: resp.data.user.phoneNumber,
-      }));
     }).catch((e) => {
       alert("Error: " + e);
     });
@@ -70,8 +68,22 @@ const PublicProfile = () => {
     }
   };
 
+  const memberSince = (x) => {
+    const date = new Date(x);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+    return `${day}${getOrdinal(day)} ${month}, ${year}`;
+  }
+  function getOrdinal(day) {
+    if (day === 1 || day === 21 || day === 31) return 'st';
+    if (day === 2 || day === 22) return 'nd';
+    if (day === 3 || day === 23) return 'rd';
+    return 'th';
+  }
+
   return (
-    <div style={{marginTop: "-5rem"}} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
+    <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-start justify-start gap-[50px] leading-[normal] tracking-[normal] mq750:gap-[41px] mq450:gap-[20px] ">
       <FirstFold1 />
       <main style={{ width: "100vw" }} className="flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <section className="w-[1256px] flex flex-col items-start justify-start max-w-full text-left text-21xl text-black font-poppins mq750:gap-[18px]">
@@ -79,29 +91,33 @@ const PublicProfile = () => {
             <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
               <div className="w-[685px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border max-w-full">
                 <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-[20px] mq750:flex-wrap">
-                <div className="profile-icon">{userData ? userData.name.charAt(0).toUpperCase() :"..."}</div>
-                  <div className="w-[403px] flex flex-col items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
+                {userData && userData.profile ? (
+                    <img className="profile-icon" src={userData.profile} alt="Profile Image" />
+                  ) : (
+
+                    <div className="profile-icon">{userData ? userData.name.charAt(0).toUpperCase() : "..."}</div>
+                  )}
+                  <div className="w-[550px] flex flex-col gap-2 items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
                     <div className="flex flex-col items-start justify-start text-lg">
                       <b style={{ fontSize: "2rem" }} className="relative">{userData && userData.name ? userData.name : "Loading..."}</b>
+                      <div style={{ fontSize: "1rem", fontWeight: "450" }} className="relative text-sm z-[1]">
+                        Member Since: {userData && userData.createdAt ? memberSince(userData.createdAt) : "Loading..."}
+                      </div>
                       <div style={{ fontSize: "1rem" }} className="relative text-sm z-[1]">
-                        Email: {userData && userData.email ? userData.email : "Loading..."}
+                        {userData && userData.location ? userData.location : ""}
                       </div>
                     </div>
-                    <div style={{ fontSize: "1rem" }} className="relative inline-block min-w-[121px]">
+                    {/* <div style={{ fontSize: "1rem" }} className="relative inline-block min-w-[121px]">
                       Contact: {userData && userData.phoneNumber ? "+91-" + userData.phoneNumber : "+91-Loading..."}
-                    </div>
-                    {/* <div className="self-stretch relative">
-                      In publishing and graphic design, Lorem ipsum is a
-                      placeholder text commonly used to demonstrate the visual
-                      form of a document or a typeface without relying on
-                      meaningful content. Lorem ipsum may be used as a
-                      placeholder before the final copy is available.
                     </div> */}
+                    <div className="self-stretch relative text-justify">
+                      {(userData && userData.desc) ? userData.desc : ""}
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="w-28 flex flex-col items-end justify-start gap-[45.6px]">
-                <div onClick={() => {navigator.clipboard.writeText(window.location.href); alert("Public Profile URL Copied to Clipboard! ")}} title="Copy Public URL" className="w-[26px] cursor-pointer rounded-8xs box-border flex flex-col items-start justify-start py-[3px] px-1 border-[1px] border-solid border-chocolate">
+                <div onClick={() => { navigator.clipboard.writeText(window.location.href); alert("Public Profile URL Copied to Clipboard! ") }} title="Copy Public URL" className="w-[26px] cursor-pointer rounded-8xs box-border flex flex-col items-start justify-start py-[3px] px-1 border-[1px] border-solid border-chocolate">
                   <img
                     className="w-4 h-[14.4px] relative"
                     alt=""
@@ -127,12 +143,14 @@ const PublicProfile = () => {
                           />
                         </a>
                       </div>
-                      <img
-                        className="w-7 h-7 relative overflow-hidden shrink-0"
-                        loading="lazy"
-                        alt=""
-                        src="/facebook1.svg"
-                      />
+                      <a href={userData && userData.social[0] ? userData.social[0].link : "#"} target="_blank" rel="noopener noreferrer">
+                        <img
+                          className="w-7 h-7 relative overflow-hidden shrink-0"
+                          loading="lazy"
+                          alt=""
+                          src="/facebook1.svg"
+                        />
+                      </a>
                     </div>
                     <div className="flex flex-col items-start justify-start gap-[12px]">
                       <a href={userData ? "mailto:" + userData.email : "#"}>
@@ -143,26 +161,30 @@ const PublicProfile = () => {
                           src="/mail.svg"
                         />
                       </a>
-                      <img
-                        className="w-7 h-7 relative overflow-hidden shrink-0"
-                        loading="lazy"
-                        alt=""
-                        src="/twitterx.svg"
-                      />
+                      <a href={userData && userData.social[2] ? userData.social[2].link : "#"} target="_blank" rel="noopener noreferrer">
+                        <img
+                          className="w-7 h-7 relative overflow-hidden shrink-0"
+                          loading="lazy"
+                          alt=""
+                          src="/twitterx.svg"
+                        />
+                      </a>
                     </div>
-                    <div className="flex flex-col items-start justify-start gap-[8px]">
+                    <div className="flex flex-col items-start justify-start gap-[12px]">
                       <img
                         className="w-[25px] h-7 relative overflow-hidden shrink-0"
                         loading="lazy"
                         alt=""
                         src="/iconsmappin-1.svg"
                       />
-                      <img
-                        className="w-7 h-7 relative overflow-hidden shrink-0"
-                        loading="lazy"
-                        alt=""
-                        src="/instagram.svg"
-                      />
+                      <a href={userData && userData.social[1] ? userData.social[1].link : "#"} target="_blank" rel="noopener noreferrer">
+                        <img
+                          className="w-7 h-7 relative overflow-hidden shrink-0"
+                          loading="lazy"
+                          alt=""
+                          src="/instagram.svg"
+                        />
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -188,7 +210,7 @@ const PublicProfile = () => {
                 <div className="w-full flex flex-wrap justify-center gap-[62.5px] max-w-full text-center text-xs-4 text-orangered font-dm-sans lg:gap-[31px] mq750:gap-[16px]">
                   <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
                     {userEvents.map((e, index) => (
-                      <GroupComponent2 key={e._id+index}
+                      <GroupComponent2 key={e._id + index}
                         eventCardImage={e.eventPoster ? `${e.eventPoster}` : "/rectangle-12-1@2x.png"}
                         event={e}
                         title={e.eventName}
@@ -198,7 +220,7 @@ const PublicProfile = () => {
                         className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                       />
                     ))}
-                    <div onClick={()=>{navigate("/event-listing")}} style={{cursor: "pointer"}} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
+                    <div onClick={() => { navigate("/event-listing") }} style={{ cursor: "pointer" }} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
                       <div className="flex flex-row items-start justify-start py-0 px-3">
                         <img
                           className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"

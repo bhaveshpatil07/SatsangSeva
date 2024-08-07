@@ -13,25 +13,43 @@ const FrameComponent14 = ({ className = "", item }) => {
   const handleBook = () => {
     history(`/perticular`, { state: { event: item } });
   };
-  const formatDate = (dateTime)=> {
+  
+  const formatDate = (dateTime) => {
     const date = new Date(dateTime);
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    const formattedDate = new Intl.DateTimeFormat('en-GB', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(date);
+    const formattedTime = new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }).format(date);
+    return `${formattedDate} ${formattedTime}`;
   };
+
+  const handleCopy = () => {
+    const publicURL = window.location.origin + "/live-event?q=" + item._id;
+    navigator.clipboard.writeText(publicURL);
+    alert("Event URL Copied to Clipboard!");
+  };
+
   return (
     <div
       className={`self-stretch rounded-11xl box-border flex flex-row items-start justify-between py-[18px] pr-[21px] pl-[19px] max-w-full gap-[20px] text-left text-lg text-black font-poppins border-[1px] border-solid border-gainsboro-100 mq1050:flex-wrap mq1050:justify-center ${className}`}
     >
       <div className="max-content flex flex-row items-center justify-center gap-[49px] max-w-full mq750:flex-wrap mq750:gap-[24px]">
         <img
-        style={{borderRadius: "1rem"}}
+          style={{ borderRadius: "1rem" }}
           className="h-[133px] w-[133px] relative object-cover"
           loading="lazy"
           alt=""
-          src={item.eventPoster?`${item.eventPoster}`:"/rectangle-12-1@2x.png"}
+          src={item.eventPoster ? `${item.eventPoster}` : "/rectangle-12-1@2x.png"}
         />
         <div className="flex-1 flex flex-row items-start justify-start gap-[12px] min-w-[259px] max-w-full mq450:flex-wrap">
           <div className="flex-1 flex flex-col items-start justify-start pt-0 px-0 pb-2 box-border gap-[4px] min-w-[211px] max-w-full">
-            <b className="relative">{item.eventName?item.eventName:"Bhajan/Kirtan by Narendra Chopra"}</b>
+            <b className="relative">{item.eventName ? item.eventName : "Bhajan/Kirtan by Narendra Chopra"}</b>
             <div className="flex flex-row items-start justify-start pt-0 px-0 pb-0 box-border gap-[3px]">
               <img
                 className="h-6 w-6 relative overflow-hidden shrink-0 min-h-[24px]"
@@ -40,12 +58,12 @@ const FrameComponent14 = ({ className = "", item }) => {
                 src="/iconsmappin11.svg"
               />
               <div className="relative">
-                <span className="font-semibold">{item.eventAddress?item.eventAddress:"NA"}</span>
+                <span className="font-semibold">{item.eventAddress ? item.eventAddress : "NA"}</span>
                 {/* <span className="font-medium">(within 2km)</span> */}
               </div>
             </div>
             <div className="relative text-base font-medium whitespace-nowrap pl-5">
-              {item.startDate?formatDate(item.startDate):"NA"}
+              {item.startDate ? formatDate(item.startDate) : "NA"}
             </div>
             {/* <div className="rounded-3xs overflow-x-auto flex flex-row items-end justify-start text-3xs text-chocolate border-[1px] border-solid border-chocolate">
               <div className="w-[30px] rounded-3xs box-border shrink-0 flex flex-row items-start justify-center pt-[3px] px-[7px] pb-1 border-[1px] border-solid border-chocolate">
@@ -72,10 +90,11 @@ const FrameComponent14 = ({ className = "", item }) => {
           </div>
           <div className="w-[26px] rounded-8xs box-border flex flex-col items-start justify-start py-[3px] px-1 border-[1px] border-solid border-chocolate">
             <img
-              className="w-4 h-[14.4px] relative"
+              className="w-4 h-[14.4px] relative cursor-pointer"
               loading="lazy"
-              alt=""
+              title="Copy Event URL"
               src="/vector-6.svg"
+              onClick={handleCopy}
             />
           </div>
         </div>

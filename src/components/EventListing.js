@@ -6,7 +6,10 @@ import GroupComponent1 from "./GroupComponent1";
 import GroupComponent from "./GroupComponent";
 import PropTypes from "prop-types";
 import axios from "axios";
+import NotFound from '@mui/icons-material/EventBusy';
 import '../Csss/EventListing.css'
+
+
 const EventListing = ({ className = "" }) => {
   const url = process.env.REACT_APP_BACKEND;
   const [searchTopAnchorEl, setSearchTopAnchorEl] = useState(null);
@@ -16,6 +19,9 @@ const EventListing = ({ className = "" }) => {
   const [filteredEvents, setFilteredEvents] = useState(null);
   const [visibleEvents, setVisibleEvents] = useState(9);
   const [hasMoreEvents, setHasMoreEvents] = useState(true);
+  const [category, setCategory] = useState("");
+  const [lang, setLang] = useState("");
+  const [type, setType] = useState("");
 
   const handleSearchTopClick = (event) => {
     setSearchTopAnchorEl(event.currentTarget);
@@ -41,18 +47,35 @@ const EventListing = ({ className = "" }) => {
     })
   };
 
+  const handleTypeChange = (event) => {
+    const selectedfee = event.target.value;
+    setType(selectedfee);
+    filterEvents(lang, category, selectedfee);
+  };
+
+  const handleLangChange = (event) => {
+    const selectedLang = event.target.value;
+    setLang(selectedLang);
+    filterEvents(selectedLang, category, type);
+  };
+
   const handleCategoryChange = (event) => {
     const selectedCategory = event.target.value;
-    if (!selectedCategory.length > 0) {
-      setEvents(filteredEvents);
-      setVisibleEvents(9);
-      setHasMoreEvents(filteredEvents.length>9);
-    } else {
-      const result = filteredEvents.filter((event) => event.eventCategory === selectedCategory);
-      setEvents(result);
-      setVisibleEvents(9);
-      setHasMoreEvents(result.length>9);
-    }
+    setCategory(selectedCategory);
+    filterEvents(lang, selectedCategory, type);
+  };
+
+  const filterEvents = (lang, category, priceType) => {
+    const langWords = lang.split(/\s+/); // split input string into individual words
+    const filtered = filteredEvents.filter((event) => {
+      const langMatch = lang === "" || langWords.some((word) => event.eventLang.match(new RegExp(word, 'i')));
+      const categoryMatch = category === "" || event.eventCategory === category;
+      const priceTypeMatch = priceType === "" || (priceType === "Free" && event.eventPrice === "0") || (priceType === "Paid" && event.eventPrice !== "0");
+      return langMatch && categoryMatch && priceTypeMatch;
+    });
+    setEvents(filtered);
+    setVisibleEvents(9);
+    setHasMoreEvents(filtered.length > 9);
   };
 
   const handleLoadMore = () => {
@@ -84,18 +107,14 @@ const EventListing = ({ className = "" }) => {
                   aria-controls="menu-undefined"
                   aria-haspopup="true"
                   aria-expanded={searchTopOpen ? "true" : undefined}
-                  onClick={handleSearchTopClick}
+                  onChange={handleTypeChange}
+                  value={type}
                   className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none pr-8 mega"
                   style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
                 >
-                  <option value="allDays">All Days</option>
-                  <option value="monday">Monday</option>
-                  <option value="tuesday">Tuesday</option>
-                  <option value="wednesday">Wednesday</option>
-                  <option value="thursday">Thursday</option>
-                  <option value="friday">Friday</option>
-                  <option value="saturday">Saturday</option>
-                  <option value="sunday">Sunday</option>
+                  <option value="">Event Type</option>
+                  <option value="Free">Free</option>
+                  <option value="Paid">Paid</option>
                 </select>
                 <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
 
@@ -110,15 +129,15 @@ const EventListing = ({ className = "" }) => {
                   aria-controls="menu-undefined"
                   aria-haspopup="true"
                   aria-expanded={searchTopOpen ? "true" : undefined}
-                  onClick={handleSearchTopClick}
+                  onChange={handleLangChange}
+                  value={lang}
                   className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none pr-8 mega"
                   style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
                 >
-                  <option value="eventTypes">Event Types</option>
-                  <option value="concert">Concert</option>
-                  <option value="conference">Conference</option>
-                  <option value="workshop">Workshop</option>
-                  <option value="seminar">Seminar</option>
+                  <option value="">Any Language</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="English">English</option>
+                  {/* <option value="Hindi & English">Hindi & English</option> */}
                 </select>
                 <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   <svg className="w-4 h-4 text-[#ff5f17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -133,6 +152,7 @@ const EventListing = ({ className = "" }) => {
                   aria-haspopup="true"
                   aria-expanded={searchTopOpen ? "true" : undefined}
                   onChange={handleCategoryChange}
+                  value={category}
                   className="w-full h-[46px] bg-[#ffe6c5] rounded-full text-[#ff5f17] font-normal text-base flex items-center justify-center cursor-pointer appearance-none pr-8 mega"
                   style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
                 >
@@ -179,14 +199,14 @@ const EventListing = ({ className = "" }) => {
               <Button
                 className="self-stretch w-[182px] border-[#ff5f17] text-[#ff5f17] rounded-full text-lg transition-all duration-200 ease-in-out hover:border-[#ff5f17] hover:shadow-md active:shadow-sm active:scale-95"
                 variant="outlined"
-                onClick={handleLoadMore} 
+                onClick={handleLoadMore}
               >
                 Load More
               </Button>
             </div>
           )}
-
         </div>
+        {(events && events.length === 0) && <><NotFound fontSize="large" sx={{ color: "#D26600" }} /><h2 className="text-center text-danger pb-5">No Events Found!</h2></>}
       </div>
     </section>
   );

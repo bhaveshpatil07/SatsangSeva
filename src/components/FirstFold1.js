@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import FrameComponent from "./FrameComponent"; // Import FrameComponent
 import { useEffect, useState } from "react";
 import '../Csss/ProfilePage.css';
+import { HashLink } from "react-router-hash-link";
 
 const FirstFold1 = ({ className = "" }) => {
   const getTargetDate = () => {
@@ -131,7 +132,7 @@ const FirstFold1 = ({ className = "" }) => {
                   height: 60.2,
                 }}
               >
-                Join Now
+                <HashLink className="text-white no-underline" to="/#upcomingEvents">Join Now</HashLink>
               </Button>
               <Button
                 className="self-stretch flex-1 shadow-[0px_10px_50px_rgba(61,_55,_241,_0.25)] z-[2]"
@@ -145,7 +146,7 @@ const FirstFold1 = ({ className = "" }) => {
                   "&:hover": { borderColor: "#fff" },
                 }}
               >
-                Learn More
+                <HashLink className="text-white no-underline" to="/#upcomingEvents">Learn More</HashLink>
               </Button>
             </div>
           </div>
