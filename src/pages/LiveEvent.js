@@ -65,7 +65,7 @@ const LiveEvent = () => {
   useEffect(() => {
     setTimeout(() => {
       const windowHeight = window.innerHeight;
-      const scrollPosition = windowHeight * 0.58;
+      const scrollPosition = windowHeight * 1.2;
       window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
     }, 100);
   }, [location]);

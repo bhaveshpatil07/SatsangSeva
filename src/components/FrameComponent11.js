@@ -5,6 +5,7 @@ import Like from '@mui/icons-material/ThumbUpTwoTone';
 import Pin from '@mui/icons-material/LocationOnTwoTone';
 import WhatsApp from '@mui/icons-material/WhatsApp';
 import Start from '@mui/icons-material/AlarmTwoTone';
+import Map from '../img/Map.png';
 
 const FrameComponent11 = ({ event = null }) => {
   function formatDateTime(dateString) {
@@ -38,6 +39,15 @@ const FrameComponent11 = ({ event = null }) => {
     }
   }
 
+  function getTotalAttendees(bookings) {
+    return bookings.reduce((total, booking) => total + parseInt(booking.noOfAttendee, 10), 0);
+  }
+
+  function extractCity(address) {
+    const addressParts = address.split(',');
+    return addressParts[addressParts.length-3].trim();
+  }
+
   const handleCopy = () => {
     const publicURL = window.location.origin + "/live-event?q=" + event._id;
     navigator.clipboard.writeText(publicURL);
@@ -59,9 +69,7 @@ const FrameComponent11 = ({ event = null }) => {
             />
           </h1>
           <p><Start sx={{ color: "#D26600" }} /><strong> {event && formatDateTime(event?.startDate)}</strong></p>
-          <p><Pin sx={{ color: "#D26600" }} /> <strong>{event?.eventAddress}</strong></p>
-          <p><a target='blank' href={event?.location}>[Location Link]</a></p>
-          <p className='py-2'>{event?.eventDesc}</p>
+          <p className='py-2 text-justify'>{event?.eventDesc}</p>
           <p><strong>Ends: </strong>{event && formatDateTime(event.endDate)}</p>
           <p><strong>Category: </strong>{event ? capitalizedStr(event.eventCategory) : "Loading..."}</p>
           {/* <p>
@@ -78,16 +86,21 @@ const FrameComponent11 = ({ event = null }) => {
       <div className="event-right">
         <div className="event-meta flex flex-col items-end gap-[20px] mq750:items-center">
           <div className="interest">
-            <Like fontSize='large' className='like-icon' sx={{ color: "#D26600" }} /><span> {event?.bookings.length} Already Interested</span>
+            <Like fontSize='large' className='like-icon' sx={{ color: "#D26600" }} /><span> {event ? getTotalAttendees(event.bookings) : "0"} Already Interested</span>
           </div>
           <div className="attendees">
             Expected Attendees : <strong style={{ color: "#D26600" }}>{event ? event.noOfAttendees : "200"}+</strong>
           </div>
         </div>
-        <div className="event-map text-center" style={{ color: "#D26600" }}>
-          <h4>Location of the event</h4>
+        <div className="event-map text-start" style={{ color: "#D26600" }}>
+          <h4 className='text-center mb-0'>Location of the event</h4>
+          <h4>{event ? extractCity(event.eventAddress) : ""}</h4>
+          <p><Pin sx={{ color: "#D26600" }} /> <strong>{event?.eventAddress}</strong></p>
           <div className="map-container">
-            <iframe
+            <a target='blank' href={event?.location}>
+              <img width={450} src={Map} alt="Location Map" srcset="" />
+            </a>
+            {/* <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15283671.192382284!2d72.09916297514248!3d20.7359935153674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1722344493258!5m2!1sen!2sin"
               width="600"
               height="450"
@@ -96,7 +109,7 @@ const FrameComponent11 = ({ event = null }) => {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Event Location"
-            ></iframe>
+            ></iframe> */}
           </div>
         </div>
       </div>

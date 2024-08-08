@@ -58,6 +58,7 @@ const FrameComponent8 = ({ className = "" }) => {
     }
     try {
       const response = await axios.post(url + "/user/signup", formData).then((resp) => {
+        alert("Account Created Successfully! Please Login.");
         navigate("/login");
       }).catch((error) => {
         console.log(error);
@@ -112,7 +113,7 @@ const FrameComponent8 = ({ className = "" }) => {
                 });
                 setDisabled(true);
                 alert("Account Verified! Fill the details and click SignUp.")
-                console.log(decoded.picture);
+                // console.log(decoded.picture);
                 
               }}
               onError={() => {

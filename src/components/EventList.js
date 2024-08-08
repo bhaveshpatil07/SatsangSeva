@@ -42,6 +42,9 @@ const EventList = ({ className = "", data }) => {
       setLoading(false);
       setVisibleEvents(7);
       setHasMoreEvents(data.length > 7);
+      setLang("");
+      setCategory("");
+      setType("");
     }
   }, [data]);
 
@@ -85,7 +88,25 @@ const EventList = ({ className = "", data }) => {
     const filtered = filteredEvents.filter((event) => {
       const langMatch = lang === "" || langWords.some((word) => event.eventLang.match(new RegExp(word, 'i')));
       const categoryMatch = categories.length === 0 || categories.some((category) => category.value === event.eventCategory);
-      const priceTypeMatch = priceType === "" || (priceType === "Free" && event.eventPrice === "0") || (priceType === "Paid" && event.eventPrice !== "0");
+      let priceTypeMatch;
+
+      switch (priceType) {
+        case "Free":
+          priceTypeMatch = event.eventPrice === "0";
+          break;
+        case "":
+          priceTypeMatch = true;
+          break;
+        case "Below Rs500":
+          priceTypeMatch = parseInt(event.eventPrice, 10) < 500;
+          break;
+        case "Above Rs500":
+          priceTypeMatch = parseInt(event.eventPrice, 10) >= 500;
+          break;
+        default:
+          priceTypeMatch = true; // no filtering by price (default)
+      }
+
       return langMatch && categoryMatch && priceTypeMatch;
     });
     setEvents(filtered);
@@ -120,7 +141,8 @@ const EventList = ({ className = "", data }) => {
                 >
                   <option value="">Event Type</option>
                   <option value="Free">Free</option>
-                  <option value="Paid">Paid</option>
+                  <option value="Below Rs500">Below &#8377;500</option>
+                  <option value="Above Rs500">Above &#8377;500</option>
                 </select>
                 <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
 
@@ -166,7 +188,7 @@ const EventList = ({ className = "", data }) => {
                       height: "46px",
                       lineHeight: '1.5rem',
                       backgroundColor: "transparent",
-                      border: state.isFocused ?  "2px solid #000":"none" ,
+                      border: state.isFocused ? "2px solid #000" : "none",
                       borderRadius: "1rem",
                       boxShadow: state.isFocused ? "none" : "none",
                       outline: "none",

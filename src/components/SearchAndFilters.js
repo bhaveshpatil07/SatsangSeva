@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "./Loader";
+import '../Csss/Search.css';
 
 const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
   const url = process.env.REACT_APP_BACKEND;
@@ -22,30 +23,60 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
   });
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    setShouldFetchSuggestions(true);
   };
 
-  const handleSearch = async()=>{
-    if(formData.address || formData.eventName || formData.startTime){
+  const handleSearch = async () => {
+    if (formData.address || formData.eventName || formData.startTime) {
       setLoading(true);
-      await axios.get(url + "/event/search?name="+encodeURIComponent(formData.eventName)+"&add="+encodeURIComponent(formData.address)+"&date="+encodeURIComponent(formData.startTime)).then((resp)=>{
+      await axios.get(url + "/event/search?name=" + encodeURIComponent(formData.eventName) + "&add=" + encodeURIComponent(formData.address) + "&date=" + encodeURIComponent(formData.startTime)).then((resp) => {
         handleSearchDataChange(resp.data.events);
         const windowHeight = window.innerHeight;
         const scrollAmount = windowHeight * 0.35; // 5% of the window height
         const currentScrollPosition = window.scrollY;
         const newScrollPosition = currentScrollPosition + scrollAmount;
         window.scrollTo({ top: newScrollPosition, behavior: 'smooth' });
-      }).catch((e)=>{
+      }).catch((e) => {
         console.log("Error: " + e);
-      }).finally(()=>{
+      }).finally(() => {
         setLoading(false);
       });
-    }else{
+    } else {
       alert("Please Enter atleast one field.");
     }
   };
-  
+
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [shouldFetchSuggestions, setShouldFetchSuggestions] = useState(true);
+
+  useEffect(() => {
+    if (formData.eventName.length > 0 && shouldFetchSuggestions) {
+      handleInputChange();
+    }
+  }, [formData.eventName]);
+
+  const handleInputChange = async () => {
+    const response = await axios.get(`${url}/event/suggestions?name=${encodeURIComponent(formData.eventName)}`);
+    const suggestions = response.data.suggestions;
+    setSuggestions(suggestions);
+    setShowSuggestions(suggestions.length > 0);
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setFormData({ ...formData, eventName: suggestion });
+    setShowSuggestions(false);
+    setShouldFetchSuggestions(false); 
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 100);
+  };
+
   return (
-    <section style={{width: "100vw"}}
+    <section style={{ width: "100vw" }}
       className={`flex flex-row items-start justify-center pt-3 px-5 pb-2.5 box-border max-w-full ${className}`}
     >
       {loading && <Loader />}
@@ -64,9 +95,19 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
                   placeholder="Event Name"
                   type="text"
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={formData.eventName}
                   autoComplete="off"
                 />
+                {showSuggestions && (
+                  <ul className="list-group absolute mt-5 z-10 max-h-[300px] overflow-y-scroll suggestion-list">
+                    {suggestions.map((suggestion, index) => (
+                      <li className="list-group-item cursor-pointer" key={suggestion + index} onClick={() => { handleSuggestionClick(suggestion); }}>
+                        {suggestion}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
               </div>
             </div>
@@ -97,32 +138,33 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
                 <input
                   id="startTime"
                   className="w-full [border:none] [outline:none] inline-block font-dm-sans text-2xl bg-[transparent] h-[29px] relative font-bold text-white text-left p-0 z-[1] mq450:text-lg"
-                  placeholder="Event Address"
-                  type="datetime-local"
+                  placeholder="Event Time"
+                  type="date"
                   onChange={handleChange}
                   value={formData.startTime}
+                  min={new Date().toISOString().slice(0, 10)}
                 />
                 <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
               </div>
             </div>
             <Button
-                className="h-[44px] flex-1"
-                disableElevation
-                variant="outlined"
-                sx={{
-                  backgroundColor: "white",
-                  textTransform: "none",
-                  color: "#d26600",
-                  fontSize: "1.3rem",
-                  borderColor: "#d26600",
-                  borderRadius: "50px",
-                  "&:hover": { borderColor: "#d26600", backgroundColor: "whitesmoke" },
-                  height: 33,
-                }}
-                onClick={handleSearch}
-              >
-                Submit
-              </Button>
+              className="h-[44px] flex-1"
+              disableElevation
+              variant="outlined"
+              sx={{
+                backgroundColor: "white",
+                textTransform: "none",
+                color: "#d26600",
+                fontSize: "1.3rem",
+                borderColor: "#d26600",
+                borderRadius: "50px",
+                "&:hover": { borderColor: "#d26600", backgroundColor: "whitesmoke" },
+                height: 33,
+              }}
+              onClick={handleSearch}
+            >
+              Submit
+            </Button>
           </div>
         </div>
         {/* <div className="self-stretch flex flex-row items-end justify-between max-w-full gap-[20px]">

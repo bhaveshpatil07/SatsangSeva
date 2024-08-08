@@ -143,7 +143,7 @@ const PublicProfile = () => {
                           />
                         </a>
                       </div>
-                      <a href={userData && userData.social[0] ? userData.social[0].link : "#"} target="_blank" rel="noopener noreferrer">
+                      <a href={userData && userData.social[0] ? userData.social[0].link : null} target="_blank" rel="noopener noreferrer">
                         <img
                           className="w-7 h-7 relative overflow-hidden shrink-0"
                           loading="lazy"
@@ -161,7 +161,7 @@ const PublicProfile = () => {
                           src="/mail.svg"
                         />
                       </a>
-                      <a href={userData && userData.social[2] ? userData.social[2].link : "#"} target="_blank" rel="noopener noreferrer">
+                      <a href={userData && userData.social[2] ? userData.social[2].link : null} target="_blank" rel="noopener noreferrer">
                         <img
                           className="w-7 h-7 relative overflow-hidden shrink-0"
                           loading="lazy"
@@ -177,7 +177,7 @@ const PublicProfile = () => {
                         alt=""
                         src="/iconsmappin-1.svg"
                       />
-                      <a href={userData && userData.social[1] ? userData.social[1].link : "#"} target="_blank" rel="noopener noreferrer">
+                      <a href={userData && userData.social[1] ? userData.social[1].link : null} target="_blank" rel="noopener noreferrer">
                         <img
                           className="w-7 h-7 relative overflow-hidden shrink-0"
                           loading="lazy"
@@ -220,7 +220,7 @@ const PublicProfile = () => {
                         className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                       />
                     ))}
-                    <div onClick={() => { navigate("/event-listing") }} style={{ cursor: "pointer" }} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
+                    {/* <div onClick={() => { navigate("/event-listing") }} style={{ cursor: "pointer" }} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
                       <div className="flex flex-row items-start justify-start py-0 px-3">
                         <img
                           className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"
@@ -232,7 +232,7 @@ const PublicProfile = () => {
                       <b className="relative leading-[19px] inline-block min-w-[120px] z-[1]">
                         Add Your Event!
                       </b>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </>}

@@ -321,7 +321,7 @@ const EventListing1 = () => {
                         <span>{`Event Name `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="eventName" value={formValues.eventName} onChange={handleInputChange} placeholder="enter name" />
+                      <input className="form-control" type="text" name="eventName" value={formValues.eventName} onChange={handleInputChange} placeholder="Enter Event Name" />
                     </div>
                     <div className="w-[584px] self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
@@ -450,42 +450,42 @@ const EventListing1 = () => {
                         <span>{`Location (Google Map URL) `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="location" value={formValues.location} onChange={handleInputChange} placeholder="Enter location" />
+                      <input className="form-control" type="text" name="location" value={formValues.location} onChange={handleInputChange} placeholder="Enter Event Location" />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Address (Line 1) `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="addressLine1" value={formValues.addressLine1} onChange={handleInputChange} placeholder="Enter Address" />
+                      <input className="form-control" type="text" name="addressLine1" value={formValues.addressLine1} onChange={handleInputChange} placeholder="Enter Event Address" />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Address (Line 2)/Landmark `}</span>
                         {/* <span className="text-red">*</span> */}
                       </div>
-                      <input className="form-control" type="text" name="addressLine2" value={formValues.addressLine2} onChange={handleInputChange} placeholder="Enter Address Landmark (Optional)" />
+                      <input className="form-control" type="text" name="addressLine2" value={formValues.addressLine2} onChange={handleInputChange} placeholder="Enter Event Address Landmark (Optional)" />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`City `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="city" value={formValues.city} onChange={handleInputChange} placeholder="enter city" />
+                      <input className="form-control" type="text" name="city" value={formValues.city} onChange={handleInputChange} placeholder="Enter Event City" />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`State `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="state" value={formValues.state} onChange={handleInputChange} placeholder="enter state" />
+                      <input className="form-control" type="text" name="state" value={formValues.state} onChange={handleInputChange} placeholder="Enter Event State" />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Pin Code `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="number" name="pinCode" value={formValues.pinCode} onChange={handleInputChange} placeholder="enter Pincode" />
+                      <input className="form-control" type="number" name="pinCode" value={formValues.pinCode} onChange={handleInputChange} placeholder="Enter Event City Pincode" />
                     </div>
                     <div className="self-stretch flex flex-row items-start justify-start gap-[43.5px] mq750:flex-wrap mq750:gap-[22px]">
                       <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[140px]">

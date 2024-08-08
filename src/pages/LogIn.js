@@ -74,7 +74,7 @@ const LogIn = () => {
           alert(resp.data.message + "!");
           window.location.reload();
         }).catch((e) => {
-          alert("Error: " + e.response.data.message);
+          alert(e.response.data.message);
           if(e.response.status===404){
             navigate('/sign-in');
           };

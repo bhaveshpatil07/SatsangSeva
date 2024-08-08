@@ -99,7 +99,7 @@ const LandingPage = ({ className = "" }) => {
                         }}
                       >
                         <HashLink className="no-underline text-white" to="/#upcomingEvents">
-                          Book Now
+                          Explore
                         </HashLink>
                       </Button>
                       <Button
@@ -115,7 +115,7 @@ const LandingPage = ({ className = "" }) => {
                           height: 60.2,
                         }}
                       >
-                        <HashLink className="no-underline text-white" to="/#upcomingEvents">
+                        <HashLink className="no-underline text-white" to="/aboutus">
                           Learn More
                         </HashLink>
                       </Button>

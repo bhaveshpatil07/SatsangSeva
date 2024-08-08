@@ -11,6 +11,7 @@ import FirstFold1 from "../components/FirstFold1";
 import '../Csss/ProfilePage.css';
 import Edit from '@mui/icons-material/BorderColorTwoTone';
 import Loader from '../components/Loader';
+import Verify from '@mui/icons-material/AssignmentIndOutlined';
 
 const ProfilePage = () => {
   const url = process.env.REACT_APP_BACKEND;
@@ -30,7 +31,8 @@ const ProfilePage = () => {
     facebook: '',
     instagram: '',
     twitter: '',
-    profileImage: null
+    profileImage: null,
+    doc: null
   });
 
   useEffect(() => {
@@ -132,21 +134,57 @@ const ProfilePage = () => {
         alert("Error In Updating Your details! Try later.");
       }).finally(() => {
         // console.log('Form Data:', formData);
-        handleCloseForm();
+        handleCloseForm('editForm');
         setLoading(false);
       });
     } catch (error) {
       console.log(error);
-      handleCloseForm();
+      handleCloseForm('editForm');
     }
   };
 
-  const handleEditClick = () => {
-    $('#editForm').fadeIn();
+  const submitDoc = async () => {
+    if (!formData.doc) {
+      return alert("Please Upload Document, before submitting.");
+    }
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        localStorage.removeItem('userId');
+        alert("You have to login First!");
+        navigate('/login');
+        setLoading(false);
+        return;
+      }
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      };
+      const newForm = new FormData();
+      if (formData.doc) { newForm.append('image', formData.doc); }
+
+      await axios.post(url + "/user/verify", newForm, {headers}).then((resp) => {
+        alert("Document Uploaded Successfully!");
+      }).catch((e) => {
+        console.log(e);
+        alert("Error In Uploading document! Try later.");
+      }).finally(() => {
+        handleCloseForm('registerForm');
+        setLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+      handleCloseForm('registerForm');
+    }
   };
 
-  const handleCloseForm = () => {
-    $('#editForm').fadeOut();
+  const handleEditClick = (ip) => {
+    $('#' + ip).fadeIn();
+  };
+
+  const handleCloseForm = (ip) => {
+    $('#' + ip).fadeOut();
   };
 
   const handleInputChange = (e) => {
@@ -158,10 +196,17 @@ const ProfilePage = () => {
   };
 
   const handleFileChange = (e) => {
-    setFormData(prevData => ({
-      ...prevData,
-      profileImage: e.target.files[0]
-    }));
+    const file = e.target.files[0];
+    const fileSizeLimit = 1024 * 1024 * 2; // 2MB limit (adjust to your desired limit)
+
+    if (file.size > fileSizeLimit) {
+      return alert(`File size exceeds the limit of ${fileSizeLimit / 1024 / 1024} MB`);
+    } else {
+      setFormData(prevData => ({
+        ...prevData,
+        [e.target.name]: e.target.files[0]
+      }));
+    }
   };
 
   const memberSince = (x) => {
@@ -210,7 +255,10 @@ const ProfilePage = () => {
                     <div className="self-stretch relative text-justify">
                       {(userData && userData.desc) ? userData.desc : ""}
                     </div>
-                    <Edit onClick={handleEditClick} className="cursor-pointer mb-3" sx={{ color: "#D26600" }} />
+                    <div className="flex gap-3">
+                      <Edit onClick={() => { handleEditClick("editForm") }} className="cursor-pointer mb-3" titleAccess="Update Profile" sx={{ color: "#D26600" }} />
+                      <Verify onClick={() => { handleEditClick("registerForm") }} className="cursor-pointer mb-3" titleAccess="Register Here" sx={{ color: "#D26600", fontSize: "27px" }} />
+                    </div>
                   </div>
                   <div id="editForm" className="edit-form" style={{ display: 'none' }}>
                     <h2 className="text-center">Edit Your Profile</h2>
@@ -312,7 +360,27 @@ const ProfilePage = () => {
                       />
                       <div className="flex pt-3">
                         <button type="submit" onClick={updateUserInfo}>Update</button>
-                        <button type="button" onClick={handleCloseForm}>Cancel</button>
+                        <button type="button" onClick={() => { handleCloseForm('editForm') }}>Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div id="registerForm" className="edit-form" style={{ display: 'none' }}>
+                    <h2 className="text-center">Upload Document To get Verified.</h2>
+                    <div>
+                      <label htmlFor="doc">Upload PDF Document (SizeLimit- 2MB):</label>
+                      <input
+                        className="form-control"
+                        type="file"
+                        id="doc"
+                        name="doc"
+                        accept=".pdf"
+                        title="Select Valid Document below 2MB"
+                        onChange={handleFileChange}
+                      />
+                      <div className="flex pt-3">
+                        <button type="submit" onClick={submitDoc}>Update</button>
+                        <button type="button" onClick={() => { handleCloseForm('registerForm') }}>Cancel</button>
                       </div>
 
                     </div>
@@ -378,13 +446,16 @@ const ProfilePage = () => {
                 </div>
               </div>
               <div className="w-28 flex flex-col items-end justify-start gap-[45.6px]">
-                <div onClick={handleCopyUrl} className="w-[26px] cursor-pointer rounded-8xs box-border flex flex-col items-start justify-start py-[3px] px-1 border-[1px] border-solid border-chocolate">
-                  <img
-                    className="w-4 h-[14.4px] relative"
-                    alt=""
-                    src="/vector-6.svg"
-                  />
+                <div className="flex gap-5">
+                  <div onClick={handleCopyUrl} className="w-[26px] h-[26px] cursor-pointer rounded-8xs box-border flex flex-col items-start justify-start py-[3px] px-1 border-[1px] border-solid border-chocolate">
+                    <img
+                      className="w-4 h-[14.4px] relative"
+                      alt=""
+                      src="/vector-6.svg"
+                    />
+                  </div>
                 </div>
+
                 <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                   <div className="self-stretch flex flex-row items-start justify-end">
                     <div className="relative inline-block min-w-[70px]">
