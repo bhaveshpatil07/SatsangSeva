@@ -30,7 +30,7 @@ const FrameComponent11 = ({ event = null }) => {
 
   function formatNames(names) {
     if (names.split(",").length > 1) {
-      const formattedNames = names.split(" ").map((name, index) => {
+      const formattedNames = names.split(",").map((name, index) => {
         return `${index + 1}) ${name}`;
       }).join(" ");
       return formattedNames;
@@ -89,7 +89,7 @@ const FrameComponent11 = ({ event = null }) => {
             <Like fontSize='large' className='like-icon' sx={{ color: "#D26600" }} /><span> {event ? getTotalAttendees(event.bookings) : "0"} Already Interested</span>
           </div>
           <div className="attendees">
-            Expected Attendees : <strong style={{ color: "#D26600" }}>{event ? event.noOfAttendees : "200"}+</strong>
+            Expected Attendees : <strong style={{ color: "#D26600" }}>{event ? `(${event.noOfAttendees}) ` : "200 "}+</strong>
           </div>
         </div>
         <div className="event-map text-start" style={{ color: "#D26600" }}>
@@ -98,7 +98,7 @@ const FrameComponent11 = ({ event = null }) => {
           <p><Pin sx={{ color: "#D26600" }} /> <strong>{event?.eventAddress}</strong></p>
           <div className="map-container">
             <a target='blank' href={event?.location}>
-              <img width={450} src={Map} alt="Location Map" srcset="" />
+              <img width={450} src={Map} alt="Location Map"/>
             </a>
             {/* <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15283671.192382284!2d72.09916297514248!3d20.7359935153674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1722344493258!5m2!1sen!2sin"

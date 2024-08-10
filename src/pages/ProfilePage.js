@@ -1,17 +1,16 @@
 import { Button } from "@mui/material";
-import FirstFold2 from "../components/FirstFold2";
 import GroupComponent2 from "../components/GroupComponent2";
-import GroupComponent1 from "../components/GroupComponent1";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import LiveEvent from "../components/LiveEvent";
 import { useLocation, useNavigate } from "react-router-dom";
 import FirstFold1 from "../components/FirstFold1";
 import '../Csss/ProfilePage.css';
 import Edit from '@mui/icons-material/BorderColorTwoTone';
 import Loader from '../components/Loader';
 import Verify from '@mui/icons-material/AssignmentIndOutlined';
+import Select from "react-select";
+import { Country, State, City } from "country-state-city";
 
 const ProfilePage = () => {
   const url = process.env.REACT_APP_BACKEND;
@@ -21,6 +20,8 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [userEvents, setUserEvents] = useState(null);
   const [userBookings, setUserBookings] = useState(null);
+  const [selectedState, setSelectedState] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -109,6 +110,11 @@ const ProfilePage = () => {
   const updateUserInfo = async () => {
     if (formData.name.length < 3 || formData.mobile.length != 10) {
       return alert("Enter valid name and PhoneNumber.");
+    }
+    if(formData.state){
+      if(!formData.city){
+        return alert("Please Select City.");
+      }
     }
     try {
       setLoading(true);
@@ -256,8 +262,8 @@ const ProfilePage = () => {
                       {(userData && userData.desc) ? userData.desc : ""}
                     </div>
                     <div className="flex gap-3">
-                      <Edit onClick={() => { handleEditClick("editForm") }} className="cursor-pointer mb-3" titleAccess="Update Profile" sx={{ color: "#D26600" }} />
-                      <Verify onClick={() => { handleEditClick("registerForm") }} className="cursor-pointer mb-3" titleAccess="Register Here" sx={{ color: "#D26600", fontSize: "27px" }} />
+                      <Edit onClick={() => { handleEditClick("editForm"); handleCloseForm("registerForm") }} className="cursor-pointer mb-3" titleAccess="Update Profile" sx={{ color: "#D26600" }} />
+                      <Verify onClick={() => { handleEditClick("registerForm"); handleCloseForm("editForm") }} className="cursor-pointer mb-3" titleAccess="Register Here" sx={{ color: "#D26600", fontSize: "27px" }} />
                     </div>
                   </div>
                   <div id="editForm" className="edit-form" style={{ display: 'none' }}>
@@ -271,6 +277,7 @@ const ProfilePage = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        placeholder="Enter Name"
                       />
                       <label htmlFor="mobile">Edit Mobile:</label>
                       <input
@@ -280,6 +287,7 @@ const ProfilePage = () => {
                         name="mobile"
                         value={formData.mobile}
                         onChange={handleInputChange}
+                        placeholder="Enter Mobile Number"
                       />
                       <label htmlFor="description">Edit Description:</label>
                       <textarea
@@ -289,10 +297,32 @@ const ProfilePage = () => {
                         value={formData.description}
                         maxLength={500}
                         onChange={handleInputChange}
+                        placeholder="Enter Your Bio here... (Max: 500 Chars)"
+                      />
+                      <label >Edit State:</label>
+                      <Select
+                        id="state"
+                        className="w-full"
+                        placeholder={formData.state?formData.state:"Select Event State"}
+                        options={State?.getStatesOfCountry('IN')}
+                        getOptionLabel={(options) => {
+                          return options["name"];
+                        }}
+                        getOptionValue={(options) => {
+                          return options["name"];
+                        }}
+                        value={selectedState}
+                        onChange={(item) => {
+                          setSelectedState(item);
+                          setFormData({
+                            ...formData,
+                            state: item.name,
+                            city: "",
+                          });
+                        }}
                       />
 
-                      <label htmlFor="state">Edit State:</label>
-                      <input
+                      {/* <input
                         className="form-control"
                         type="text"
                         id="state"
@@ -303,14 +333,32 @@ const ProfilePage = () => {
                           handleInputChange(e);
                         }}
                       // list="stateList"
+                      /> */}
+                      <label >Edit City:</label>
+                      <Select
+                        id="city"
+                        className="w-full"
+                        placeholder={formData.city?formData.city:"Select Event City"}
+                        options={City.getCitiesOfState(
+                          selectedState?.countryCode,
+                          selectedState?.isoCode
+                        )}
+                        getOptionLabel={(options) => {
+                          return options["name"];
+                        }}
+                        getOptionValue={(options) => {
+                          return options["name"];
+                        }}
+                        value={selectedCity}
+                        onChange={(item) => {
+                          setSelectedCity(item);
+                          setFormData({
+                            ...formData,
+                            city: item.name,
+                          });
+                        }}
                       />
-                      <datalist id="stateList">
-                        {/* {stateSuggestions.map(state => (
-                          <option key={state.abbreviation} value={state.name} />
-                          ))} */}
-                      </datalist>
-                      <label htmlFor="city">Edit City:</label>
-                      <input
+                      {/* <input
                         className="form-control"
                         type="text"
                         id="city"
@@ -321,7 +369,7 @@ const ProfilePage = () => {
                           handleInputChange(e);
                         }}
                       // list="cityList"
-                      />
+                      /> */}
                       <label htmlFor="facebook">Edit Facebook Link:</label>
                       <input
                         className="form-control"
@@ -330,6 +378,7 @@ const ProfilePage = () => {
                         name="facebook"
                         value={formData.facebook}
                         onChange={handleInputChange}
+                        placeholder="Facebook Link"
                       />
                       <label htmlFor="instagram">Edit Instagram Link:</label>
                       <input
@@ -339,6 +388,7 @@ const ProfilePage = () => {
                         name="instagram"
                         value={formData.instagram}
                         onChange={handleInputChange}
+                        placeholder="Instagram Link"
                       />
                       <label htmlFor="twitter">Edit Twitter Link:</label>
                       <input
@@ -348,6 +398,7 @@ const ProfilePage = () => {
                         name="twitter"
                         value={formData.twitter}
                         onChange={handleInputChange}
+                        placeholder="Twitter (X) Link"
                       />
                       <label htmlFor="profileImage">Edit Profile Image:</label>
                       <input

@@ -74,10 +74,14 @@ const LogIn = () => {
           alert(resp.data.message + "!");
           window.location.reload();
         }).catch((e) => {
-          alert(e.response.data.message);
-          if(e.response.status===404){
-            navigate('/sign-in');
-          };
+          if (e.response) {
+            alert(e.response.data.message);
+            if (e.response.status === 404) {
+              navigate('/sign-in');
+            };
+          }else{
+            alert(e.message)
+          }
         }).finally(() => {
           setLoading(false);
         });
@@ -222,7 +226,7 @@ const LogIn = () => {
               }}
               onClick={handleLogin}
             >
-              {forgotPassword?"Reset Password":"Log in"}
+              {forgotPassword ? "Reset Password" : "Log in"}
             </Button>
             <div onClick={() => { navigate('/sign-in') }} className="flex cursor-pointer">
               <p className="m-0">No Account ? </p>

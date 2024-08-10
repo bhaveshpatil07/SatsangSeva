@@ -83,13 +83,15 @@ const FrameComponent = () => {
     setMenuOpen(!isMenuOpen);
   };
 
-  const handleLoginRedirect = useCallback(() => {
-    navigate('/login');
-  }, [navigate]);
+  const goToTop = ()=>{
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
 
   return (
     <div className={`nav-main ${scrolled ? 'scrolled' : ''}`}>
-      <Link className='left-nav no-underline' to="/#home">
+      <Link className='left-nav no-underline' to="/#home" onClick={goToTop}>
         <img src="/group1.svg" alt="SatsangSeva" />
         <h1 className='font-semibold font-sacramento'>Satsang Seva</h1>
       </Link>
@@ -100,7 +102,7 @@ const FrameComponent = () => {
       </div>
       <div className={`right-nav ${isMenuOpen ? 'active' : ''}`}>
         <ul>
-          <li className='io' onClick={toggleMenu}><Link to="/#home">Home</Link></li>
+          <li className='io' onClick={()=>{toggleMenu(); goToTop();}}><Link to="/#home">Home</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/#upcomingEvents">Upcoming Events</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/#listEvent">List Your Events</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/categories-page#main">Categories</Link></li>

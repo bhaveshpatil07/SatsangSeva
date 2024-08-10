@@ -24,6 +24,7 @@ import Footer from "./components/Footer";
 import PublicProfile from "./pages/PublicProfile";
 import About from "./pages/About";
 import ContactUs from "./pages/ContactUs";
+import NearBy from "./pages/NearBy";
 
 function App() {
   const action = useNavigationType();
@@ -121,6 +122,7 @@ function App() {
         <Route path="/perticular" element={<Perticular />} />
         <Route path="/aboutus" element={<About />} />
         <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/nearby" element={<NearBy />} />
         {/* <Route path="/upcard" element={<Upcard />} /> */}
         {/* <Route path="/live" element={<LiveEvent />} /> */}
         <Route path="*" element={<LogIn />} />

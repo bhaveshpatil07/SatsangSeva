@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { HashLink as Link } from 'react-router-hash-link';
 import Mail from '@mui/icons-material/MailTwoTone';
 import Contact from '@mui/icons-material/ContactPhoneTwoTone';
+import Facebook from '@mui/icons-material/FacebookTwoTone';
+import Instagram from '@mui/icons-material/Instagram';
+import X from '@mui/icons-material/X';
 
 const Footer = ({ className = "" }) => {
   return (
@@ -12,7 +15,7 @@ const Footer = ({ className = "" }) => {
     >
       <div className="w-[1440px] h-[430px] relative bg-darkorange-100 hidden max-w-full z-[0]" />
       <div className="w-[1240px] flex flex-row items-center justify-between max-w-full gap-[20px] lg:flex-wrap lg:justify-center">
-        <div className="w-[364px] flex flex-col items-start justify-start py-0 pr-[35px] pl-0 box-border gap-[32px] max-w-full text-14xl-6 font-sacramento mq450:gap-[16px]">
+        <div className="w-[364px] flex flex-col items-start justify-start py-0 pr-[35px] pl-0 box-border gap-[10px] max-w-full text-14xl-6 font-sacramento mq450:gap-[16px]">
           <div className="self-stretch flex flex-col items-start justify-start gap-[4.6px] max-w-full">
           <div className="flex pt-3 flex-row items-center gap-4">
             <div className="flex-shrink-0 flex items-center justify-center">
@@ -39,30 +42,9 @@ const Footer = ({ className = "" }) => {
           <div className="flex flex-row items-center justify-center gap-[15.7px]">
             <a className="text-white" href="tel:+91-7737237335"><Contact fontSize="large" /></a>
             <a className="text-white" href="mailto:info@satsangseva.com"><Mail fontSize="large" /></a>
-            <img
-              className="h-9 w-9 relative overflow-hidden shrink-0 min-h-[36px] z-[1]"
-              loading="lazy"
-              alt=""
-              src="/facebook.svg"
-            />
-            <img
-              className="h-9 w-9 relative overflow-hidden shrink-0 min-h-[36px] z-[1]"
-              loading="lazy"
-              alt=""
-              src="/twitter.svg"
-            />
-            <img
-              className="h-9 w-9 relative overflow-hidden shrink-0 min-h-[36px] z-[1]"
-              loading="lazy"
-              alt=""
-              src="/linkedin.svg"
-            />
-            <img
-              className="h-9 w-9 relative rounded-71xl object-cover min-h-[36px] z-[3]"
-              loading="lazy"
-              alt=""
-              src="/image-21@2x.png"
-            />
+            <a href="http://facebook.com" target="_blank" rel="noopener noreferrer"><Facebook sx={{color: "#fff"}} fontSize="large" /></a>
+            <a href="http://instagram.com" target="_blank" rel="noopener noreferrer"><Instagram sx={{color: "#fff"}} fontSize="large" /></a>
+            <a href="http://x.com" target="_blank" rel="noopener noreferrer"><X sx={{color: "#fff", fontSize: "1.7rem"}} /></a>
           </div>
         </div>
         <div className="w-[364px] flex flex-col items-start justify-start pt-4 px-0 pb-0 box-border">
@@ -97,8 +79,8 @@ const Footer = ({ className = "" }) => {
               Join our mailing list to stay in the loop with our newest for
               Event and concert
             </div>
-            <div className="self-stretch rounded-[45.59px] bg-white box-border flex flex-row items-center justify-center max-w-full [row-gap:20px] z-[1] text-smi-2 text-darkgray-300 border-[2px] border-solid border-whitesmoke-300 mq450:flex-wrap mq450:box-border">
-              <div className="h-[60.8px] w-[364px] relative rounded-[45.59px] bg-white box-border hidden max-w-full border-[2px] border-solid border-whitesmoke-300" />
+            <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="self-stretch no-underline rounded-[45.59px] bg-white box-border flex flex-row items-center justify-center max-w-full [row-gap:20px] z-[1] text-smi-2 text-darkgray-300 border-[2px] border-solid border-whitesmoke-300 mq450:flex-wrap mq450:box-border">
+              <div className="h-[60.8px] w-[ relative rounded-[45.59px] bg-white box-border hidden max-w-full border-[2px] border-solid border-whitesmoke-300" />
               <div className="flex-1 flex flex-col items-start justify-start  px-0 pb-0 box-border min-w-[93px]">
                 <div className="p-3 pt-0 pb-0 self-stretch relative z-[1]">
                   Get all Notification to your Whatsapp..
@@ -122,7 +104,7 @@ const Footer = ({ className = "" }) => {
                   Subscribe Now
                 </Button>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>

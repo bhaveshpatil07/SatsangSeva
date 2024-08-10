@@ -66,13 +66,13 @@ function ContactUs() {
 
     const handleSubmit = () => {
         const error = validateForm(formData);
-        if(error.length>1){
+        if (error.length > 1) {
             return alert("Invalid Inputs : " + error);
         }
         //Axios call to backend Nodemailer send mail to info@satsangseva.com
-        
-    };
 
+    };
+    
     return (
         <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start py-0 px-px box-border leading-[normal] tracking-[normal]">
             <FirstFold1 />

@@ -1,22 +1,12 @@
-import { useState, useCallback, useEffect } from "react";
-import {
-  TextField,
-  InputAdornment,
-  Icon,
-  IconButton,
-  Select,
-  InputLabel,
-  MenuItem,
-  FormHelperText,
-  FormControl,
-} from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { useState, useEffect } from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import FirstFold1 from "../components/FirstFold1";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import axios from "axios";
-import FrameComponent from "../components/FrameComponent";
+import Select from "react-select";
+import { State, City } from "country-state-city";
 
 import { useDropzone } from "react-dropzone";
 import Loader from "../components/Loader";
@@ -24,7 +14,10 @@ import Loader from "../components/Loader";
 const EventListing1 = () => {
   const url = process.env.REACT_APP_BACKEND;
   const navigate = useNavigate();
+  const [geoCoordinates, setGeoCoordinates] = useState([]);
   const [duration, setDuration] = useState(null);
+  const [selectedState, setSelectedState] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     eventName: '',
@@ -78,6 +71,22 @@ const EventListing1 = () => {
       calculateDuration();
     }
   }, [formValues.startDate, formValues.endDate]);
+
+  useEffect(() => {
+    if (formValues.pinCode.length === 6) {
+      fetchGeoCodes();
+    }
+  }, [formValues.pinCode]);
+
+  const fetchGeoCodes = async () => {
+    await axios.get(`https://nominatim.openstreetmap.org/search.php?q=${formValues.pinCode}&countrycodes=In&format=geojson`)
+      .then((resp) => {
+        setGeoCoordinates(resp.data.features[0].geometry.coordinates);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 
 
   const handleInputChange = (e) => {
@@ -143,7 +152,14 @@ const EventListing1 = () => {
       sponserName: formValues.sponsorName,
       eventLink: formValues.eventLinks,
       location: formValues.location,
-      eventAddress: formValues.addressLine1 + ", " + formValues.addressLine2 + ", " + formValues.city + ", " + formValues.state + ", PIN: " + formValues.pinCode,
+      eventAddress: [
+        formValues.addressLine1 ? formValues.addressLine1 : '',
+        formValues.addressLine2 ? formValues.addressLine2 : '',
+        formValues.city ? formValues.city : '',
+        formValues.state ? formValues.state : '',
+        formValues.pinCode ? `PIN: ${formValues.pinCode}` : ''
+      ].filter(Boolean).join(', '),
+      geoCoordinates: geoCoordinates,
       startDate: formValues.startDate,
       endDate: formValues.endDate
     };
@@ -189,8 +205,8 @@ const EventListing1 = () => {
     if (!inputs.eventDesc || typeof inputs.eventDesc !== 'string' || inputs.eventDesc.trim() === '') {
       errors.eventDesc = 'Event Description is required and must be a non-empty string';
     }
-    
-    if (!inputs.eventPrice || typeof inputs.eventPrice !== 'string' || inputs.eventPrice.trim() === '' || parseInt(inputs.eventPrice, 10)<0) {
+
+    if (!inputs.eventPrice || typeof inputs.eventPrice !== 'string' || inputs.eventPrice.trim() === '' || parseInt(inputs.eventPrice, 10) < 0) {
       errors.eventPrice = 'Event Price is required and must be >=0';
     }
 
@@ -214,11 +230,11 @@ const EventListing1 = () => {
       errors.hostWhatsapp = 'Host WhatsApp number must be of 10 Digits';
     }
 
-    if (!inputs.sponserName || typeof inputs.sponserName !== 'string' || inputs.sponserName.trim() !== "") {
+    if (!inputs.sponserName || typeof inputs.sponserName !== 'string' || inputs.sponserName.trim() === "") {
       errors.sponserName = 'Sponsor name must be a non-empty string';
     }
 
-    if (!inputs.eventLink || typeof inputs.eventLink !== 'string' || inputs.eventLink.trim() !== "") {
+    if (!inputs.eventLink || typeof inputs.eventLink !== 'string' || !/^(https?:\/\/[^\s]+|na)$/i.test(inputs.eventLink.trim())) {
       errors.eventLink = 'Event link must be a valid URL, Else write NA';
     }
 
@@ -302,7 +318,7 @@ const EventListing1 = () => {
                       alt="Add image"
                       loading="lazy"
                     />
-                    <p className="text-center mt-2 text-black">
+                    <p className="text-center mt-2 text-white">
                       Drag and drop an image here, or click to select one.
                     </p>
                   </>
@@ -468,24 +484,67 @@ const EventListing1 = () => {
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
-                        <span>{`City `}</span>
-                        <span className="text-red">*</span>
-                      </div>
-                      <input className="form-control" type="text" name="city" value={formValues.city} onChange={handleInputChange} placeholder="Enter Event City" />
-                    </div>
-                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
-                      <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`State `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="state" value={formValues.state} onChange={handleInputChange} placeholder="Enter Event State" />
+                      <Select
+                        className="w-full"
+                        placeholder="Select Event State"
+                        options={State?.getStatesOfCountry('IN')}
+                        getOptionLabel={(options) => {
+                          return options["name"];
+                        }}
+                        getOptionValue={(options) => {
+                          return options["name"];
+                        }}
+                        value={selectedState}
+                        onChange={(item) => {
+                          setSelectedState(item);
+                          setFormValues({
+                            ...formValues,
+                            state: item.name,
+                            city: "",
+                          });
+                          setSelectedCity(null);
+                        }}
+                      />
+                      {/* <input className="form-control" type="text" name="state" value={formValues.state} onChange={handleInputChange} placeholder="Enter Event State" /> */}
+                    </div>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                      <div className="self-stretch relative leading-[20px] font-medium">
+                        <span>{`City `}</span>
+                        <span className="text-red">*</span>
+                      </div>
+                      <Select
+                        className="w-full"
+                        placeholder="Select Event City"
+                        options={City.getCitiesOfState(
+                          selectedState?.countryCode,
+                          selectedState?.isoCode
+                        )}
+                        getOptionLabel={(options) => {
+                          return options["name"];
+                        }}
+                        getOptionValue={(options) => {
+                          return options["name"];
+                        }}
+                        value={selectedCity}
+                        onChange={(item) => {
+                          setSelectedCity(item);
+                          setFormValues({
+                            ...formValues,
+                            city: item.name,
+                          });
+                        }}
+                      />
+                      {/* <input className="form-control" type="text" name="city" value={formValues.city} onChange={handleInputChange} placeholder="Enter Event City" /> */}
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Pin Code `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="number" name="pinCode" value={formValues.pinCode} onChange={handleInputChange} placeholder="Enter Event City Pincode" />
+                      <input className="form-control" type="number" name="pinCode" value={formValues.pinCode} onChange={handleInputChange} placeholder="Enter Event City Pincode" min={0} />
                     </div>
                     <div className="self-stretch flex flex-row items-start justify-start gap-[43.5px] mq750:flex-wrap mq750:gap-[22px]">
                       <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[140px]">

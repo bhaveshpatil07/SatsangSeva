@@ -38,6 +38,10 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
         window.scrollTo({ top: newScrollPosition, behavior: 'smooth' });
       }).catch((e) => {
         console.log("Error: " + e);
+        if(e.data){
+          alert(e.data.message);
+        }
+        
       }).finally(() => {
         setLoading(false);
       });

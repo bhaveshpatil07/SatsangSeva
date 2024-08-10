@@ -21,7 +21,7 @@ const EventList = ({ className = "", data }) => {
   const searchTopOpen = Boolean(searchTopAnchorEl);
   const [visibleEvents, setVisibleEvents] = useState(7);
   const [hasMoreEvents, setHasMoreEvents] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState(data);
   const [filteredEvents, setFilteredEvents] = useState(null);
   const [category, setCategory] = useState("");
