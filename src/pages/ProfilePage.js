@@ -20,6 +20,7 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [userEvents, setUserEvents] = useState(null);
   const [userBookings, setUserBookings] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(Country.getCountryByCode('IN'));
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,6 +28,7 @@ const ProfilePage = () => {
     name: '',
     mobile: '',
     description: '',
+    country: 'India',
     state: '',
     city: '',
     facebook: '',
@@ -111,11 +113,14 @@ const ProfilePage = () => {
     if (formData.name.length < 3 || formData.mobile.length != 10) {
       return alert("Enter valid name and PhoneNumber.");
     }
-    if(formData.state){
-      if(!formData.city){
+    if (formData.country) {
+      if (!formData.state) {
+        return alert("Please Select State.");
+      } else if (!formData.city) {
         return alert("Please Select City.");
       }
     }
+
     try {
       setLoading(true);
       const headers = {
@@ -125,12 +130,12 @@ const ProfilePage = () => {
         name: formData.name,
         phoneNumber: formData.mobile,
         desc: formData.description,
-        location: formData.city + ", " + formData.state + ", IN",
+        location: formData.city + ", " + formData.state + ", " + formData.country,
         social: { facebook: formData.facebook, instagram: formData.instagram, twitter: formData.twitter },
       }
       const newForm = new FormData();
       newForm.append('updateUser', JSON.stringify(newData));
-      if (formData.profileImage) { newForm.append('image', formData.profileImage); }
+      if (formData.profileImage) { newForm.append('images', formData.profileImage); }
 
       await axios.put(url + "/user/update/" + userId, newForm, { headers }).then((resp) => {
         alert("Profile Updated Successfully!");
@@ -168,9 +173,9 @@ const ProfilePage = () => {
         'Content-Type': 'multipart/form-data',
       };
       const newForm = new FormData();
-      if (formData.doc) { newForm.append('image', formData.doc); }
+      if (formData.doc) { newForm.append('images', formData.doc); }
 
-      await axios.post(url + "/user/verify", newForm, {headers}).then((resp) => {
+      await axios.post(url + "/user/verify", newForm, { headers }).then((resp) => {
         alert("Document Uploaded Successfully!");
       }).catch((e) => {
         console.log(e);
@@ -217,16 +222,9 @@ const ProfilePage = () => {
 
   const memberSince = (x) => {
     const date = new Date(x);
-    const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'long' });
     const year = date.getFullYear();
-    return `${day}${getOrdinal(day)} ${month}, ${year}`;
-  }
-  function getOrdinal(day) {
-    if (day === 1 || day === 21 || day === 31) return 'st';
-    if (day === 2 || day === 22) return 'nd';
-    if (day === 3 || day === 23) return 'rd';
-    return 'th';
+    return ` ${month}, ${year}`;
   }
 
   return (
@@ -237,7 +235,7 @@ const ProfilePage = () => {
         <section className="w-[1256px] flex flex-col items-start justify-start max-w-full text-left text-21xl text-black font-poppins mq750:gap-[18px]">
           <div className="w-[1229px] flex flex-row items-start justify-start py-0 px-3.5 box-border max-w-full text-xs">
             <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
-              <div className="w-[685px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border max-w-full">
+              <div className="w-[750px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border max-w-full">
                 <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-[20px] mq750:flex-wrap">
                   {userData && userData.profile ? (
                     <img className="profile-icon" src={userData.profile} alt="Profile Image" />
@@ -245,7 +243,7 @@ const ProfilePage = () => {
 
                     <div className="profile-icon">{userData ? userData.name.charAt(0).toUpperCase() : "..."}</div>
                   )}
-                  <div className="w-[550px] flex flex-col gap-2 items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
+                  <div className="w-[650px] flex flex-col gap-2 items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
                     <div className="flex flex-col items-start justify-start text-lg">
                       <b style={{ fontSize: "2rem" }} className="relative">{userData && userData.name ? userData.name : "Loading..."}</b>
                       <div style={{ fontSize: "1rem", fontWeight: "450" }} className="relative text-sm z-[1]">
@@ -299,12 +297,37 @@ const ProfilePage = () => {
                         onChange={handleInputChange}
                         placeholder="Enter Your Bio here... (Max: 500 Chars)"
                       />
+                      <label >Edit Country:</label>
+                      <Select
+                        id="country"
+                        className="w-full"
+                        placeholder={formData.country ? formData.country : "Select Your Country"}
+                        options={Country?.getAllCountries()}
+                        getOptionLabel={(options) => {
+                          return options["name"];
+                        }}
+                        getOptionValue={(options) => {
+                          return options["name"];
+                        }}
+                        value={selectedCountry}
+                        onChange={(item) => {
+                          setSelectedCountry(item);
+                          setFormData({
+                            ...formData,
+                            country: item.name,
+                            state: "",
+                            city: "",
+                          });
+                          setSelectedState(null);
+                          setSelectedCity(null);
+                        }}
+                      />
                       <label >Edit State:</label>
                       <Select
                         id="state"
                         className="w-full"
-                        placeholder={formData.state?formData.state:"Select Event State"}
-                        options={State?.getStatesOfCountry('IN')}
+                        placeholder={formData.state ? formData.state : "Select Your State"}
+                        options={State?.getStatesOfCountry(selectedCountry?.isoCode)}
                         getOptionLabel={(options) => {
                           return options["name"];
                         }}
@@ -338,7 +361,7 @@ const ProfilePage = () => {
                       <Select
                         id="city"
                         className="w-full"
-                        placeholder={formData.city?formData.city:"Select Event City"}
+                        placeholder={formData.city ? formData.city : "Select Your City"}
                         options={City.getCitiesOfState(
                           selectedState?.countryCode,
                           selectedState?.isoCode
@@ -437,8 +460,8 @@ const ProfilePage = () => {
                     </div>
                   </div>
                 </div>
-                <div className="self-stretch flex flex-row items-end justify-end max-w-full">
-                  <div className="w-[414px] flex flex-row flex-wrap items-start justify-start gap-[14px] max-w-full">
+                <div className="self-stretch flex flex-row items-end justify-center max-w-full">
+                  <div style={{ marginLeft: "7rem" }} className="w-[414px] flex flex-row flex-wrap items-start justify-start gap-[14px] max-w-full">
                     <div className="w-[123px] flex flex-col items-start justify-start py-0 pr-[7px] pl-0 box-border">
                       <Button
                         className="self-stretch h-[33px]"
@@ -590,7 +613,7 @@ const ProfilePage = () => {
                           <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
                             {userBookings.map((item, index) => (
                               <GroupComponent2 key={item.event._id + index}
-                                eventCardImage={item.event.eventPoster ? `${item.event.eventPoster}` : "/rectangle-12-1@2x.png"}
+                                eventCardImage={item.event.eventPosters ? `${item.event.eventPosters[0]}` : "/rectangle-12-1@2x.png"}
                                 event={item.event}
                                 title={item.event.eventName}
                                 date={item.event.startDate}
@@ -630,7 +653,7 @@ const ProfilePage = () => {
                   <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
                     {userEvents.map((e, index) => (
                       <GroupComponent2 key={e._id + index}
-                        eventCardImage={e.eventPoster ? `${e.eventPoster}` : "/rectangle-12-1@2x.png"}
+                        eventCardImage={e.eventPosters ? `${e.eventPosters[0]}` : "/rectangle-12-1@2x.png"}
                         event={e}
                         title={e.eventName}
                         date={e.startDate}

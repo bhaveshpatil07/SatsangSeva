@@ -76,7 +76,7 @@ const LiveEvent = () => {
       <FirstFold1 />
       {loading && <Loader />}
       <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[25px] leading-[normal] tracking-[normal]">
-        <FrameComponent4 ytLink={yt} imgLink={(event && event.eventPoster) ? `${event.eventPoster}` : "/rectangle-12-1@2x.png"} />
+        <FrameComponent4 ytLink={yt} imgLinks={(event && event.eventPosters) ? event.eventPosters : ["/rectangle-12-1@2x.png"]} />
         <FrameComponent11 event={event} />
         <FrameComponent3 event={event}
           group227="Book Now!"

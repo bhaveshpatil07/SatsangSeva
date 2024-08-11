@@ -74,6 +74,9 @@ function NearBy() {
 
     const updatePincode = async () => {
         setLoading(true);
+        if(pincode.length!==6){
+            return alert("Invalid Pincode");
+        }
         await axios.get(`https://nominatim.openstreetmap.org/search.php?q=${pincode}&countrycodes=IN&format=jsonv2`).then((resp) => {
             setPosition({
                 latitude: resp.data[0].lat,
@@ -92,7 +95,7 @@ function NearBy() {
             {loading && <Loader />}
             <div className="container gap-0 min-h-[20rem]">
                 <h1>Near By Events</h1>
-                <h5>Location: <span style={{ color: "#D26600" }}>{loc}</span></h5>
+                <h5 className='text-center' style={{maxWidth: "80%"}}>Location: <span style={{ color: "#D26600" }}>{loc}</span></h5>
                 <div className="flex items-end justify-center gap-5">
                     <div className='flex items-end justify-center gap-5'>
                         <span className=''>

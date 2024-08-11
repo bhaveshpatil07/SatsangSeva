@@ -17,6 +17,7 @@ const FrameComponent8 = ({ className = "" }) => {
     phoneNumber: "",
     password: "",
     confirmPassword: "",
+    userType: "Host"
   });
 
   const [error, setError] = useState("");
@@ -24,9 +25,9 @@ const FrameComponent8 = ({ className = "" }) => {
   const [disabled, setDisabled] = useState(false);
 
   const onInputChange = (e) => {
-    if(disabled){
-      if(e.target.name==="email" || e.target.name==="name"){
-        alert("Don't mess with Website!");  
+    if (disabled) {
+      if (e.target.name === "email") {
+        alert("Don't mess with Website!");
         return window.location.reload();
       }
     }
@@ -52,7 +53,7 @@ const FrameComponent8 = ({ className = "" }) => {
       alert("Enter 10 Digit Phone Number.");
       return setLoading(false);
     }
-    if(!disabled){
+    if (!disabled) {
       alert("You have to sign in with Google.");
       return setLoading(false);
     }
@@ -81,9 +82,9 @@ const FrameComponent8 = ({ className = "" }) => {
       className={`flex absolute flex-row items-center justify-center py-0 pt-5 box-border max-w-full text-left text-base text-black font-poppins ${className}`}
     >
       {loading && <Loader />}
-      <div className="w-[512px] shadow-[0px_4px_35px_rgba(0,_0,_0,_0.08)] rounded-xl bg-white flex flex-col items-center justify-center pt-[24.3px] pb-[24.3px] pr-5 pl-5 align-items-center box-border gap-[30px] max-w-full z-[6] mq750:gap-[22px] mq1050:pb-[30px] mq1050:box-border mq450:pb-5 mq450:box-border">
+      <div className="w-[512px] shadow-[0px_4px_35px_rgba(0,_0,_0,_0.08)] rounded-xl bg-white flex flex-col items-center justify-center pt-[20px] pb-[20px] pr-5 pl-5 align-items-center box-border gap-[20px] max-w-full z-[6] mq750:gap-[22px] mq1050:pb-[30px] mq1050:box-border mq450:pb-5 mq450:box-border">
         <div className="self-stretch flex flex-row items-center justify-center py-0 pr-px pl-[7px] box-border max-w-full">
-          <div className="flex-1 flex flex-col items-center justify-center gap-[13.9px] max-w-full">
+          <div className="flex-1 flex flex-col items-center justify-center gap-[10px] max-w-full">
             <div className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[28.4px]">
               <div className="flex-1 flex flex-col items-start justify-start gap-[10.3px] min-w-[165px] shrink-0">
                 <div className="self-stretch h-[29.5px] relative inline-block shrink-0 z-[7]">
@@ -99,7 +100,7 @@ const FrameComponent8 = ({ className = "" }) => {
                 <p className="m-0 text-cornflowerblue">Log In</p>
               </div>
             </div>
-            <GoogleLogin 
+            <GoogleLogin
               theme="filled_blue"
               text="signup_with"
               shape="pill"
@@ -114,7 +115,7 @@ const FrameComponent8 = ({ className = "" }) => {
                 setDisabled(true);
                 alert("Account Verified! Fill the details and click SignUp.")
                 // console.log(decoded.picture);
-                
+
               }}
               onError={() => {
                 console.log('Login Failed');
@@ -123,6 +124,13 @@ const FrameComponent8 = ({ className = "" }) => {
         </div>
         <form onSubmit={onFormSubmit} className="w-[429.7px] flex flex-row items-start justify-start py-0 px-[7px] box-border max-w-full">
           <div className="flex-1 flex flex-col items-start justify-start gap-[25px] max-w-full">
+            <div className="flex w-full justify-between">
+              {/* <label htmlFor="userType">User Type: </label> */}
+              <select className="form-control" value={formData.userType} onChange={onInputChange} name="userType">
+                <option value="Host&Participant">Host & Participant</option>
+                <option value="Host">Host</option>
+              </select>
+            </div>
             <TextField
               label="Enter your name"
               name="name"
@@ -133,7 +141,6 @@ const FrameComponent8 = ({ className = "" }) => {
               variant="outlined"
               size="small"
               placeholder="Name"
-              disabled={disabled}
             />
             <TextField
               label="Enter your email address"
@@ -156,7 +163,7 @@ const FrameComponent8 = ({ className = "" }) => {
               required
               variant="outlined"
               size="small"
-              placeholder="Email"
+              placeholder="Contact"
             />
             <TextField
               label="Enter your password"

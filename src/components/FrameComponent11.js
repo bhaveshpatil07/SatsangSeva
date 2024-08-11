@@ -45,7 +45,7 @@ const FrameComponent11 = ({ event = null }) => {
 
   function extractCity(address) {
     const addressParts = address.split(',');
-    return addressParts[addressParts.length-3].trim();
+    return addressParts[addressParts.length - 4].trim();
   }
 
   const handleCopy = () => {
@@ -54,24 +54,50 @@ const FrameComponent11 = ({ event = null }) => {
     alert("Event URL Copied to Clipboard!");
   };
 
+  const getDuration = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const duration = end - start;
+
+    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+
+    let durationString = '';
+    if (days > 0) {
+      durationString += `${days} Days`;
+    }
+    if (hours > 0) {
+      if (durationString.length > 0) durationString += ', ';
+      durationString += `${hours} Hrs`;
+    }
+    if (minutes > 0) {
+      if (durationString.length > 0) durationString += ', ';
+      durationString += `${minutes} Mins`;
+    }
+
+    return durationString;
+  };
+
   const capitalizedStr = (str) => { return str.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" "); }
   return (
     <div className="event-container">
-      <div className="event-left">
+      <div className="event-left py-2">
         <div className="event-details p-0">
-          <h1 className='py-2'>{(event?.eventName) ? event.eventName : "Loading..."}
+          <div className="flex items-center justify-between">
+            <h1 className='py-2'>{(event?.eventName) ? event.eventName : "Loading..."}</h1>
             <img
-              className="w-20 h-6 relative cursor-pointer mb-2"
+              className="w-6 h-6 relative cursor-pointer"
               onClick={handleCopy}
               loading="lazy"
               title="Copy Event URL"
               src="/vector-6.svg"
             />
-          </h1>
-          <p><Start sx={{ color: "#D26600" }} /><strong> {event && formatDateTime(event?.startDate)}</strong></p>
+          </div>
+          <p><Start sx={{ color: "#D26600" }} /><strong> {event && formatDateTime(event?.startDate) } {event && ` • (${getDuration(event.startDate, event.endDate)})`}</strong></p>
           <p className='py-2 text-justify'>{event?.eventDesc}</p>
-          <p><strong>Ends: </strong>{event && formatDateTime(event.endDate)}</p>
-          <p><strong>Category: </strong>{event ? capitalizedStr(event.eventCategory) : "Loading..."}</p>
+          {/* <p><strong>Ends: </strong>{event && formatDateTime(event.endDate)}</p>
+          <p><strong>Category: </strong>{event ? capitalizedStr(event.eventCategory) : "Loading..."}</p> */}
           {/* <p>
             Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Corem ipsum dolor sit amet, consectetur adipiscing elit.
             Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Corem ipsum dolor sit amet.
@@ -83,8 +109,8 @@ const FrameComponent11 = ({ event = null }) => {
           <p><strong>Language : </strong> {event ? capitalizedStr(event.eventLang) : "Loading..."}</p>
         </div>
       </div>
-      <div className="event-right">
-        <div className="event-meta flex flex-col items-end gap-[20px] mq750:items-center">
+      <div className="event-right pb-0">
+        <div className="event-meta flex flex-col items-end gap-[10px] mq750:items-center">
           <div className="interest">
             <Like fontSize='large' className='like-icon' sx={{ color: "#D26600" }} /><span> {event ? getTotalAttendees(event.bookings) : "0"} Already Interested</span>
           </div>
@@ -98,7 +124,7 @@ const FrameComponent11 = ({ event = null }) => {
           <p><Pin sx={{ color: "#D26600" }} /> <strong>{event?.eventAddress}</strong></p>
           <div className="map-container">
             <a target='blank' href={event?.location}>
-              <img width={450} src={Map} alt="Location Map"/>
+              <img width={450} src={Map} alt="Location Map" />
             </a>
             {/* <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15283671.192382284!2d72.09916297514248!3d20.7359935153674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1722344493258!5m2!1sen!2sin"

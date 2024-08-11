@@ -28,13 +28,44 @@ const GroupComponent2 = ({
 
   const history = useNavigate();
 
+  // const handleClick = () => {
+  //   history(`/live-event`, { state: { event: event } });
+  // };
   const handleClick = () => {
-    history(`/live-event`, { state: { event: event } });
+    history('/live-event?q='+event._id);
+  };
+
+  const getDuration = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const duration = end - start;
+
+    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+
+    let durationString = '';
+    if (days > 0) {
+      durationString += `${days} Days`;
+    }
+    if (hours > 0) {
+      if (durationString.length > 0) durationString += ', ';
+      durationString += `${hours} Hrs`;
+    }
+    if (minutes > 0) {
+      if (durationString.length > 0) durationString += ', ';
+      durationString += `${minutes} Mins`;
+    }
+
+    return durationString;
   };
 
   function getDay(dateTimeString) {
     const date = new Date(dateTimeString);
     const day = date.getDate();
+    if(day<10){
+      return `0${day}`;
+    }
     return `${day}`;
   }
   function getTime(dateTimeString) {
@@ -62,32 +93,32 @@ const GroupComponent2 = ({
         alt=""
         src={eventCardImage}
       />
-      <div className="self-stretch flex flex-row items-start justify-start pt-[19.9px] px-[22px] pb-[23.5px] relative gap-[22.7px]">
+      <div className="self-stretch flex flex-row items-start justify-start px-[22px] py-3 relative gap-[22.7px]">
         {/* <div className="h-full w-full absolute !m-[0] top-[137.4px] right-[-343px] bottom-[-137.4px] left-[343px] rounded-t-[18.95px] rounded-b-none bg-white [transform:_rotate(180deg)] [transform-origin:0_0]" /> */}
         <div className="w-[26.6px] flex flex-col items-start justify-start pt-[1.9px] px-0 pb-0 box-border">
           <div className="self-stretch flex flex-col items-start justify-start">
             <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 pl-px">
-              <b style={{fontSize: "1rem"}} className="flex-1 relative inline-block min-w-[25.6px] shrink-0 z-[1]">
-                {date?getMonth(date):"Jul"}
+              <b style={{ fontSize: "1rem" }} className="flex-1 relative inline-block min-w-[25.6px] shrink-0 z-[1]">
+                {date ? getMonth(date) : "Jul"}
               </b>
             </div>
             <div className="h-[33.2px] flex flex-row items-start justify-start pt-0 px-0 pb-0 box-border text-left text-9xl-4 text-black">
               <b className="mt-[-3.8px] relative inline-block min-w-[26.3px] shrink-0 z-[1] mq450:text-4xl">
-                {date?getDay(date):"07"}
+                {date ? getDay(date) : "07"}
               </b>
             </div>
           </div>
         </div>
         <div className="w-[241.6px] flex flex-col items-start justify-start gap-[9px] text-left text-base text-black">
           <b className="self-stretch relative leading-[150%] z-[1]">
-            {title?title:"Sadhguru World Tour San Francisco"}
+            {title ? title : "Sadhguru World Tour San Francisco"}
           </b>
           <div className="flex flex-col items-start justify-start gap-[3px] text-2xs font-poppins">
             <div className="relative font-medium z-[1]">
-              {address?address:"NSP, New Delhi"}
+              {address ? address : "NSP, New Delhi"}
             </div>
             <div className="relative text-xs font-medium whitespace-nowrap z-[1]">
-              Ends • {endDate?getMonth(endDate)+" " +getDay(endDate)+ " • " + getTime(endDate):"Aug 13 • Sun • 10:00"}
+              {endDate ? getDuration(event.startDate, event.endDate) : "(2Hrs, 25Mins)"}
             </div>
           </div>
         </div>

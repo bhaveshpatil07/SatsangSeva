@@ -32,7 +32,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
       await axios.get(url + "/event/search?name=" + encodeURIComponent(formData.eventName) + "&add=" + encodeURIComponent(formData.address) + "&date=" + encodeURIComponent(formData.startTime)).then((resp) => {
         handleSearchDataChange(resp.data.events);
         const windowHeight = window.innerHeight;
-        const scrollAmount = windowHeight * 0.35; // 5% of the window height
+        const scrollAmount = windowHeight * 0.35; 
         const currentScrollPosition = window.scrollY;
         const newScrollPosition = currentScrollPosition + scrollAmount;
         window.scrollTo({ top: newScrollPosition, behavior: 'smooth' });

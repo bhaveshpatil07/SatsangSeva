@@ -200,7 +200,7 @@ const EventListing = ({ className = "" }) => {
               <div className="flex pb-5 flex-wrap w-full gap-[28.5px] justify-center">
                 {events.slice(0, visibleEvents).map((e) => (
                   <GroupComponent2 key={e._id}
-                    eventCardImage={e.eventPoster ? `${e.eventPoster}` : "/rectangle-12-1@2x.png"}
+                    eventCardImage={e.eventPosters ? `${e.eventPosters[0]}` : "/rectangle-12-1@2x.png"}
                     event={e}
                     title={e.eventName}
                     date={e.startDate}

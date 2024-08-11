@@ -24,7 +24,7 @@ const EventList = ({ className = "", data }) => {
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState(data);
   const [filteredEvents, setFilteredEvents] = useState(null);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState([]);
   const [lang, setLang] = useState("");
   const [type, setType] = useState("");
   const location = useLocation();
@@ -53,8 +53,8 @@ const EventList = ({ className = "", data }) => {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('q');
       if (category) {
-        setCategory(category);
-        filterEvents();
+        setCategory([{value: category, label: category}]);
+        filterEvents(lang, [{value: category, label: category}], type);
       }
     }
   }, [filteredEvents])

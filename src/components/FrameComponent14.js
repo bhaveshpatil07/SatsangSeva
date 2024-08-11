@@ -20,11 +20,13 @@ const FrameComponent14 = ({ className = "", item }) => {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
+      timeZone: 'UTC',
     }).format(date);
     const formattedTime = new Intl.DateTimeFormat('en-US', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
+      timeZone: 'UTC',
     }).format(date);
     return `${formattedDate} ${formattedTime}`;
   };
@@ -33,6 +35,31 @@ const FrameComponent14 = ({ className = "", item }) => {
     const publicURL = window.location.origin + "/live-event?q=" + item._id;
     navigator.clipboard.writeText(publicURL);
     alert("Event URL Copied to Clipboard!");
+  };
+
+  const getDuration = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const duration = end - start;
+
+    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+
+    let durationString = '';
+    if (days > 0) {
+      durationString += `${days} Days`;
+    }
+    if (hours > 0) {
+      if (durationString.length > 0) durationString += ', ';
+      durationString += `${hours} Hrs`;
+    }
+    if (minutes > 0) {
+      if (durationString.length > 0) durationString += ', ';
+      durationString += `${minutes} Mins`;
+    }
+
+    return durationString;
   };
 
   return (
@@ -45,7 +72,7 @@ const FrameComponent14 = ({ className = "", item }) => {
           className="h-[133px] w-[133px] relative object-cover"
           loading="lazy"
           alt=""
-          src={item.eventPoster ? `${item.eventPoster}` : "/rectangle-12-1@2x.png"}
+          src={item.eventPosters ? `${item.eventPosters[0]}` : "/rectangle-12-1@2x.png"}
         />
         <div className="flex-1 flex flex-row items-start justify-start gap-[12px] min-w-[259px] max-w-full mq450:flex-wrap">
           <div className="flex-1 flex flex-col items-start justify-start pt-0 px-0 pb-2 box-border gap-[4px] min-w-[211px] max-w-full">
@@ -63,7 +90,7 @@ const FrameComponent14 = ({ className = "", item }) => {
               </div>
             </div>
             <div className="relative text-base font-medium whitespace-nowrap pl-0">
-              {item.startDate ? formatDate(item.startDate) : "NA"}
+              {item.startDate ? formatDate(item.startDate) : "NA"} • {item.startDate && item.endDate ? getDuration(item.startDate, item.endDate) : "NA"}
             </div>
             {/* <div className="rounded-3xs overflow-x-auto flex flex-row items-end justify-start text-3xs text-chocolate border-[1px] border-solid border-chocolate">
               <div className="w-[30px] rounded-3xs box-border shrink-0 flex flex-row items-start justify-center pt-[3px] px-[7px] pb-1 border-[1px] border-solid border-chocolate">

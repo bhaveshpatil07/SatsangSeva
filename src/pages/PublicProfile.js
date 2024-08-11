@@ -1,11 +1,7 @@
-import { Button } from "@mui/material";
-import FirstFold2 from "../components/FirstFold2";
 import GroupComponent2 from "../components/GroupComponent2";
-import GroupComponent1 from "../components/GroupComponent1";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import LiveEvent from "../components/LiveEvent";
 import { useLocation, useNavigate } from "react-router-dom";
 import FirstFold1 from "../components/FirstFold1";
 import '../Csss/ProfilePage.css';
@@ -22,7 +18,7 @@ const PublicProfile = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const publicUser = queryParams.get('q');
-    if(!publicUser || publicUser.length<5){
+    if (!publicUser || publicUser.length < 5) {
       return navigate('/');
     }
     if (publicUser === userId) {
@@ -70,16 +66,9 @@ const PublicProfile = () => {
 
   const memberSince = (x) => {
     const date = new Date(x);
-    const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'long' });
     const year = date.getFullYear();
-    return `${day}${getOrdinal(day)} ${month}, ${year}`;
-  }
-  function getOrdinal(day) {
-    if (day === 1 || day === 21 || day === 31) return 'st';
-    if (day === 2 || day === 22) return 'nd';
-    if (day === 3 || day === 23) return 'rd';
-    return 'th';
+    return ` ${month}, ${year}`;
   }
 
   return (
@@ -88,16 +77,16 @@ const PublicProfile = () => {
       <main style={{ width: "100vw" }} className="flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <section className="w-[1256px] flex flex-col items-start justify-start max-w-full text-left text-21xl text-black font-poppins mq750:gap-[18px]">
           <div className="w-[1229px] flex flex-row items-start justify-start py-0 px-3.5 box-border max-w-full text-xs">
-            <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq1050:flex-wrap">
-              <div className="w-[685px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border max-w-full">
+            <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq750:!justify-end mq1050:flex-wrap">
+              <div className="w-[750px] flex flex-col items-start justify-start pt-px px-0 pb-0 box-border max-w-full">
                 <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-[20px] mq750:flex-wrap">
-                {userData && userData.profile ? (
+                  {userData && userData.profile ? (
                     <img className="profile-icon" src={userData.profile} alt="Profile Image" />
                   ) : (
 
                     <div className="profile-icon">{userData ? userData.name.charAt(0).toUpperCase() : "..."}</div>
                   )}
-                  <div className="w-[550px] flex flex-col gap-2 items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
+                  <div className="w-[650px] flex flex-col gap-2 items-start justify-center min-w-[403px] max-w-full mq750:flex-1 mq750:min-w-full">
                     <div className="flex flex-col items-start justify-start text-lg">
                       <b style={{ fontSize: "2rem" }} className="relative">{userData && userData.name ? userData.name : "Loading..."}</b>
                       <div style={{ fontSize: "1rem", fontWeight: "450" }} className="relative text-sm z-[1]">
@@ -110,10 +99,11 @@ const PublicProfile = () => {
                     {/* <div style={{ fontSize: "1rem" }} className="relative inline-block min-w-[121px]">
                       Contact: {userData && userData.phoneNumber ? "+91-" + userData.phoneNumber : "+91-Loading..."}
                     </div> */}
-                    <div className="self-stretch relative text-justify">
-                      {(userData && userData.desc) ? userData.desc : ""}
-                    </div>
                   </div>
+                </div>
+                <div style={{fontSize: "1rem"}} className="self-stretch relative text-justify pt-5">
+                  {(userData && userData.desc) ? <h5>About: </h5> : ""}
+                  {(userData && userData.desc) ? userData.desc : ""}
                 </div>
               </div>
               <div className="w-28 flex flex-col items-end justify-start gap-[45.6px]">
@@ -211,7 +201,7 @@ const PublicProfile = () => {
                   <div className="flex flex-wrap w-full gap-[28.5px] justify-center">
                     {userEvents.map((e, index) => (
                       <GroupComponent2 key={e._id + index}
-                        eventCardImage={e.eventPoster ? `${e.eventPoster}` : "/rectangle-12-1@2x.png"}
+                        eventCardImage={e.eventPosters ? `${e.eventPosters[0]}` : "/rectangle-12-1@2x.png"}
                         event={e}
                         title={e.eventName}
                         date={e.startDate}

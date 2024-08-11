@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import axios from "axios";
 import Select from "react-select";
-import { State, City } from "country-state-city";
+import { Country, State, City } from "country-state-city";
 
 import { useDropzone } from "react-dropzone";
 import Loader from "../components/Loader";
@@ -16,6 +16,7 @@ const EventListing1 = () => {
   const navigate = useNavigate();
   const [geoCoordinates, setGeoCoordinates] = useState([]);
   const [duration, setDuration] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(Country.getCountryByCode('IN'));
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,7 @@ const EventListing1 = () => {
     eventCategory: '',
     eventDesc: '',
     eventPrice: '0',
+    eventImages: [],
     eventLanguage: '',
     eventPerformerName: '',
     expectedAttendees: '',
@@ -34,6 +36,7 @@ const EventListing1 = () => {
     location: '',
     addressLine1: '',
     addressLine2: '',
+    country: 'India',
     state: '',
     city: '',
     pinCode: '',
@@ -139,6 +142,16 @@ const EventListing1 = () => {
       setLoading(false);
       return alert("Enter valid PINCODE!");
     }
+    if (!formValues.country) {
+      setLoading(false);
+      return alert("Please select Country!");
+    } else if (!formValues.state) {
+      setLoading(false);
+      return alert("Please select State!");
+    } else if (!formValues.city) {
+      setLoading(false);
+      return alert("Please select City!");
+    }
     const newData = {
       eventName: formValues.eventName,
       eventCategory: formValues.eventCategory,
@@ -157,6 +170,7 @@ const EventListing1 = () => {
         formValues.addressLine2 ? formValues.addressLine2 : '',
         formValues.city ? formValues.city : '',
         formValues.state ? formValues.state : '',
+        formValues.country ? formValues.country : '',
         formValues.pinCode ? `PIN: ${formValues.pinCode}` : ''
       ].filter(Boolean).join(', '),
       geoCoordinates: geoCoordinates,
@@ -172,11 +186,14 @@ const EventListing1 = () => {
       };
       const formData = new FormData();
       formData.append('eventData', JSON.stringify(newData));
-      formData.append('image', eventPoster);
+      formData.append('images', eventPoster);
+      formValues.eventImages.slice(0,3).forEach((image) => {
+        formData.append('images', image);
+      });
       await axios.post(url + "/events", formData, { headers }).then((resp) => {
         console.log("Event Created: " + resp.data);
         localStorage.removeItem('addEvent');
-        alert("Event Successfully Created!");
+        alert("Event Successfully Created! Note that it will only be visible to users once approved by an Administrator.");
         navigate("/");
       }).catch((e) => {
         console.log(e.response);
@@ -312,6 +329,9 @@ const EventListing1 = () => {
                   />
                 ) : (
                   <>
+                    <p className="text-center text-white">
+                      Event Poster
+                    </p>
                     <img
                       className="w-[150px] h-[150px] object-contain"
                       src="/add-image@2x.png"
@@ -349,7 +369,7 @@ const EventListing1 = () => {
                       <input className="form-control" type="text" name="eventLinks" value={formValues.eventLinks} onChange={handleInputChange} placeholder="enter-links" />
                     </div>
                   </div>
-                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[20px] min-w-[308px] max-w-full">
+                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[9px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span className="whitespace-pre-wrap">{`Event Category  `}</span>
@@ -366,7 +386,7 @@ const EventListing1 = () => {
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch flex flex-row items-start justify-start max-w-full">
-                        <div style={{ minWidth: "50%" }} className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full">
+                        <div style={{ minWidth: "50%" }} className="flex-1 flex flex-col items-start justify-start gap-[17px] max-w-full">
                           <div className="self-stretch pr-3 flex flex-col items-start justify-start gap-[4px]">
                             <div className="self-stretch relative leading-[20px] font-medium">
                               <span>{`Event Language `}</span>
@@ -381,7 +401,7 @@ const EventListing1 = () => {
 
                           </div>
                           <div className="self-stretch relative leading-[20px] font-medium">
-                            <span>{`Event Performer Name `}</span>
+                            <span>{`Performer Name `}</span>
                             <span className="text-red">*</span>
                           </div>
                         </div>
@@ -418,7 +438,9 @@ const EventListing1 = () => {
                         <span>{`Host Name `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <input className="form-control" type="text" name="hostName" value={formValues.hostName} onChange={handleInputChange} placeholder="Enter Host Name" />
+                      <input className="form-control" type="text" name="hostName" value={formValues.hostName}
+                        // onChange={handleInputChange}
+                        placeholder="Enter Host Name" disabled />
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
@@ -443,10 +465,22 @@ const EventListing1 = () => {
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
-                        <span>{`Event Price (per person)`} &#8377;</span>
+                        <span>{`Event Price (per person)`} &#8377; </span>
                         <span className="text-red">*</span>
                       </div>
                       <input min={0} className="form-control" type="number" name="eventPrice" value={formValues.eventPrice} onChange={handleInputChange} placeholder="Event Price &#x20b9; (Per Person)" />
+                    </div>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                      <div className="self-stretch relative leading-[20px] font-medium">
+                        <span>{`Event Images (Max 3 Files)`}</span>
+                        {/* <span className="text-red">*</span> */}
+                      </div>
+                      <input className="form-control" type="file" name="eventImages" onChange={(e) => {
+                        const files = e.target.files;
+                        const newImages = Array.from(files);
+                        setFormValues((prevValues) => ({ ...prevValues, eventImages: newImages }));
+                      }}
+                        accept=".jpeg, .jpg, .png, .webp" placeholder="Select Event Images" multiple />
                     </div>
                     {/* <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">
                       <div className="self-stretch relative leading-[20px] font-medium">
@@ -460,7 +494,7 @@ const EventListing1 = () => {
                       </div>
                     </div> */}
                   </div>
-                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[24px] min-w-[308px] max-w-full">
+                  <div style={{ padding: "0 2rem 0 0" }} className="mq750:!px-0 flex-1 flex flex-col items-start justify-start gap-[13px] min-w-[308px] max-w-full">
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`Location (Google Map URL) `}</span>
@@ -484,13 +518,43 @@ const EventListing1 = () => {
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                       <div className="self-stretch relative leading-[20px] font-medium">
+                        <span>{`Country `}</span>
+                        <span className="text-red">*</span>
+                      </div>
+                      <Select
+                        className="w-full"
+                        placeholder="Select Event State"
+                        options={Country.getAllCountries()}
+                        getOptionLabel={(options) => {
+                          return options["name"];
+                        }}
+                        getOptionValue={(options) => {
+                          return options["name"];
+                        }}
+                        value={selectedCountry}
+                        onChange={(item) => {
+                          setSelectedCountry(item);
+                          setFormValues({
+                            ...formValues,
+                            country: item.name,
+                            state: "",
+                            city: "",
+                          });
+                          setSelectedCity(null);
+                          setSelectedState(null);
+                        }}
+                      />
+                      {/* <input className="form-control" type="text" name="state" value={formValues.state} onChange={handleInputChange} placeholder="Enter Event State" /> */}
+                    </div>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                      <div className="self-stretch relative leading-[20px] font-medium">
                         <span>{`State `}</span>
                         <span className="text-red">*</span>
                       </div>
                       <Select
                         className="w-full"
                         placeholder="Select Event State"
-                        options={State?.getStatesOfCountry('IN')}
+                        options={State?.getStatesOfCountry(selectedCountry?.isoCode)}
                         getOptionLabel={(options) => {
                           return options["name"];
                         }}

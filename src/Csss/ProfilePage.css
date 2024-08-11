@@ -9,7 +9,7 @@
   font-size: 7rem;
   font-weight: bold;
   text-align: center;
-  width: 33%;
+  width: 30%;
   aspect-ratio: 1;
   @media (max-width: 769px) {
     width: 100%;
