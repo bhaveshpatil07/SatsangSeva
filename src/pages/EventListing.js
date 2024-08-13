@@ -7,9 +7,21 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import Select from "react-select";
 import { Country, State, City } from "country-state-city";
-
 import { useDropzone } from "react-dropzone";
 import Loader from "../components/Loader";
+
+const categories  = [
+  { value: "Satsang & Dharmic Pravachan", label: "Satsang & Dharmic Pravachan" },
+  { value: "Bhajan & Kirtan", label: "Bhajan & Kirtan" },
+  { value: "Dhram Sabha", label: "Dhram Sabha" },
+  { value: "Yoga & Dhyan", label: "Yoga & Dhyan" },
+  { value: "Utsav & Celebrations", label: "Utsav & Celebrations" },
+  { value: "Adhyatmik Shivir (Spiritual Retreats)", label: "Adhyatmik Shivir (Spiritual Retreats)" },
+  { value: "Puja & Anushthan", label: "Puja & Anushthan" },
+  { value: "Seva & Charity", label: "Seva & Charity" },
+  { value: "Sanskritik Karyakram (Cultural Programs)", label: "Sanskritik Karyakram (Cultural Programs)" },
+  { value: "Vividh (Others)", label: "Vividh (Others)" },
+];
 
 const EventListing1 = () => {
   const url = process.env.REACT_APP_BACKEND;
@@ -187,7 +199,7 @@ const EventListing1 = () => {
       const formData = new FormData();
       formData.append('eventData', JSON.stringify(newData));
       formData.append('images', eventPoster);
-      formValues.eventImages.slice(0,3).forEach((image) => {
+      formValues.eventImages.slice(0, 3).forEach((image) => {
         formData.append('images', image);
       });
       await axios.post(url + "/events", formData, { headers }).then((resp) => {
@@ -375,13 +387,13 @@ const EventListing1 = () => {
                         <span className="whitespace-pre-wrap">{`Event Category  `}</span>
                         <span className="text-red">*</span>
                       </div>
-                      <select className="form-control" name="eventCategory" value={formValues.eventCategory} onChange={handleInputChange}>
+                      <select className="form-control" name="eventCategory" value={formValues.eventCategory} onChange={handleInputChange} >
                         <option value="">Select Category</option>
-                        <option value="Satsang">Satsang</option>
-                        <option value="Bhajan">Bhajan</option>
-                        <option value="Samaroh">Samaroh</option>
-                        <option value="Langar">Langar</option>
-                        <option value="Other">Other</option>
+                        {categories.map((category) => (
+                          <option key={category.value} value={category.value}>
+                            {category.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full">

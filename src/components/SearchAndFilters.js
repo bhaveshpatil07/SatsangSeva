@@ -1,12 +1,5 @@
-import {
-  Select,
-  InputLabel,
-  MenuItem,
-  FormHelperText,
-  FormControl,
-  InputAdornment,
-  Button,
-} from "@mui/material";
+import { Button } from "@mui/material";
+import SearchIcon from '@mui/icons-material/SearchTwoTone';
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -19,7 +12,8 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
   const [formData, setFormData] = useState({
     eventName: "",
     address: "",
-    startTime: ""
+    startTime: "",
+    host: "",
   });
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -27,21 +21,23 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
   };
 
   const handleSearch = async () => {
-    if (formData.address || formData.eventName || formData.startTime) {
+    if (formData.address || formData.eventName || formData.startTime || formData.host) {
       setLoading(true);
-      await axios.get(url + "/event/search?name=" + encodeURIComponent(formData.eventName) + "&add=" + encodeURIComponent(formData.address) + "&date=" + encodeURIComponent(formData.startTime)).then((resp) => {
+      await axios.get(url + "/event/search?name=" + encodeURIComponent(formData.eventName) + "&add=" + encodeURIComponent(formData.address) + "&date=" + encodeURIComponent(formData.startTime) + "&host=" + encodeURIComponent(formData.host)).then((resp) => {
         handleSearchDataChange(resp.data.events);
         const windowHeight = window.innerHeight;
-        const scrollAmount = windowHeight * 0.35; 
+        const scrollAmount = windowHeight * 0.35;
         const currentScrollPosition = window.scrollY;
         const newScrollPosition = currentScrollPosition + scrollAmount;
         window.scrollTo({ top: newScrollPosition, behavior: 'smooth' });
       }).catch((e) => {
         console.log("Error: " + e);
-        if(e.data){
+        if (e.data) {
           alert(e.data.message);
+        }else{
+          alert("No Events found for your search! Try searching with another keywords.");
         }
-        
+
       }).finally(() => {
         setLoading(false);
       });
@@ -70,7 +66,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
   const handleSuggestionClick = (suggestion) => {
     setFormData({ ...formData, eventName: suggestion });
     setShowSuggestions(false);
-    setShouldFetchSuggestions(false); 
+    setShouldFetchSuggestions(false);
   };
 
   const handleBlur = () => {
@@ -118,6 +114,23 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
             <div className="h-[140px] w-[1086px] relative shadow-[0px_10px_50px_rgba(61,_55,_241,_0.25)] rounded-xl bg-darkorange-200 hidden max-w-full" />
             <div className="flex-1 flex flex-col items-start justify-start gap-[11px] min-w-[217px]">
               <div className="relative text-base font-dm-sans text-white text-left inline-block min-w-[97px] z-[1]">
+                Search Host
+              </div>
+              <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                <input
+                  id="host"
+                  className="w-full placeholder-white [border:none] [outline:none] inline-block font-dm-sans text-3xl bg-[transparent] h-[29px] relative font-bold text-white text-left p-0 z-[1] mq450:text-lg"
+                  placeholder="Host Name"
+                  type="text"
+                  onChange={handleChange}
+                  value={formData.host}
+                  autoComplete="off"
+                />
+                <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-sandybrown" />
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col items-start justify-start gap-[11px] min-w-[217px]">
+              <div className="relative text-base font-dm-sans text-white text-left inline-block min-w-[97px] z-[1]">
                 Place
               </div>
               <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
@@ -152,6 +165,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
               </div>
             </div>
             <Button
+              title="Search"
               className="h-[44px] flex-1"
               disableElevation
               variant="outlined"
@@ -159,7 +173,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
                 backgroundColor: "white",
                 textTransform: "none",
                 color: "#d26600",
-                fontSize: "1.3rem",
+                fontSize: "1rem",
                 borderColor: "#d26600",
                 borderRadius: "50px",
                 "&:hover": { borderColor: "#d26600", backgroundColor: "whitesmoke" },
@@ -167,7 +181,8 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
               }}
               onClick={handleSearch}
             >
-              Submit
+              <SearchIcon fontSize="large" /> 
+              {/* Submit */}
             </Button>
           </div>
         </div>

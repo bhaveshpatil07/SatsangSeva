@@ -83,7 +83,7 @@ const GroupComponent2 = ({
 
   return (
     <div
-      className={`h-[334.5px] w-[343px] flex flex-col items-start justify-start min-w-[326px] max-w-full text-center text-xs-4 text-orangered font-dm-sans ${className}`}
+      className={`h-[334.5px] w-[343px] cursor-pointer flex flex-col items-start justify-start min-w-[326px] max-w-full text-center text-xs-4 text-orangered font-dm-sans ${className}`}
       style={groupDivStyle}
       onClick={handleClick}
     >

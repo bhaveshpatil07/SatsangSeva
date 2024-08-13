@@ -78,11 +78,11 @@ const LiveEvent = () => {
       <div className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start gap-[25px] leading-[normal] tracking-[normal]">
         <FrameComponent4 ytLink={yt} imgLinks={(event && event.eventPosters) ? event.eventPosters : ["/rectangle-12-1@2x.png"]} />
         <FrameComponent11 event={event} />
-        <FrameComponent3 event={event}
+        {event && <FrameComponent3 event={event}
           group227="Book Now!"
           listYourEventInJustOneCli="Book your slot in just one click!"
         // onBookNowClick={()=>{navigate('/listing-event')}} 
-        />
+        />}
         <Footer
           group="/group1.svg"
           facebook="/facebook.svg"

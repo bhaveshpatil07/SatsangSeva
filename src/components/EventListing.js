@@ -9,6 +9,18 @@ import axios from "axios";
 import NotFound from '@mui/icons-material/EventBusy';
 import '../Csss/EventListing.css'
 
+const categories = [
+  { value: "Satsang & Dharmic Pravachan", label: "Satsang & Dharmic Pravachan" },
+  { value: "Bhajan & Kirtan", label: "Bhajan & Kirtan" },
+  { value: "Dhram Sabha", label: "Dhram Sabha" },
+  { value: "Yoga & Dhyan", label: "Yoga & Dhyan" },
+  { value: "Utsav & Celebrations", label: "Utsav & Celebrations" },
+  { value: "Adhyatmik Shivir (Spiritual Retreats)", label: "Adhyatmik Shivir (Spiritual Retreats)" },
+  { value: "Puja & Anushthan", label: "Puja & Anushthan" },
+  { value: "Seva & Charity", label: "Seva & Charity" },
+  { value: "Sanskritik Karyakram (Cultural Programs)", label: "Sanskritik Karyakram (Cultural Programs)" },
+  { value: "Vividh (Others)", label: "Vividh (Others)" },
+];
 
 const EventListing = ({ className = "" }) => {
   const url = process.env.REACT_APP_BACKEND;
@@ -176,11 +188,11 @@ const EventListing = ({ className = "" }) => {
                   style={{ padding: '0 1rem', lineHeight: '1.5rem' }}
                 >
                   <option value="">Any Category</option>
-                  <option value="Satsang">Satsang</option>
-                  <option value="Bhajan">Bhajan</option>
-                  <option value="Samaroh">Samaroh</option>
-                  <option value="Langar">Langar</option>
-                  <option value="Other">Other</option>
+                  {categories.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
                 </select>
                 <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   <svg className="w-4 h-4 text-[#ff5f17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

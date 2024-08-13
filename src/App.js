@@ -1,13 +1,7 @@
 import { useEffect } from "react";
-import {
-  Routes,
-  Route,
-  useNavigationType,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, useNavigationType, useLocation, } from "react-router-dom";
 import FinalDesign from "./pages/FinalDesign";
 import LiveEvent from "./pages/LiveEvent";
-import PerticularEventB from "./pages/PerticularEventB";
 import LandingDesign from "./pages/LandingDesign";
 import PerticularEvent from "./pages/PerticularEvent";
 import SpeakersPage from "./pages/SpeakersPage";
@@ -18,13 +12,12 @@ import SearchBar from "./pages/SearchBar";
 import LogIn from "./pages/LogIn";
 import Perticular from "./components/Perticular";
 import FrameComponent from "./components/FrameComponent";
-import Upcard from "./pages/Upcard";
-import WatchLiveWrapper from "./components/WatchLiveWrapper";
-import Footer from "./components/Footer";
 import PublicProfile from "./pages/PublicProfile";
 import About from "./pages/About";
 import ContactUs from "./pages/ContactUs";
 import NearBy from "./pages/NearBy";
+import AddBlog from "./pages/AddBlog";
+import Blogs from "./pages/Blogs";
 
 function App() {
   const action = useNavigationType();
@@ -123,8 +116,10 @@ function App() {
         <Route path="/aboutus" element={<About />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/nearby" element={<NearBy />} />
+        <Route path="/blog" element={<Blogs />} />
         {/* <Route path="/upcard" element={<Upcard />} /> */}
         {/* <Route path="/live" element={<LiveEvent />} /> */}
+        <Route path="/addblog" element={<AddBlog />} />
         <Route path="*" element={<LogIn />} />
       </Routes>
 

@@ -8,12 +8,16 @@ import NotFound from '@mui/icons-material/EventBusy';
 import Select from 'react-select';
 
 const categoryOptions = [
-  // { value: '', label: 'Any Category' },
-  { value: 'Satsang', label: 'Satsang' },
-  { value: 'Bhajan', label: 'Bhajan' },
-  { value: 'Samaroh', label: 'Samaroh' },
-  { value: 'Langar', label: 'Langar' },
-  { value: 'Other', label: 'Other' },
+  { value: "Satsang & Dharmic Pravachan", label: "Satsang & Dharmic Pravachan" },
+  { value: "Bhajan & Kirtan", label: "Bhajan & Kirtan" },
+  { value: "Dhram Sabha", label: "Dhram Sabha" },
+  { value: "Yoga & Dhyan", label: "Yoga & Dhyan" },
+  { value: "Utsav & Celebrations", label: "Utsav & Celebrations" },
+  { value: "Adhyatmik Shivir (Spiritual Retreats)", label: "Adhyatmik Shivir (Spiritual Retreats)" },
+  { value: "Puja & Anushthan", label: "Puja & Anushthan" },
+  { value: "Seva & Charity", label: "Seva & Charity" },
+  { value: "Sanskritik Karyakram (Cultural Programs)", label: "Sanskritik Karyakram (Cultural Programs)" },
+  { value: "Vividh (Others)", label: "Vividh (Others)" },
 ];
 
 const EventList = ({ className = "", data }) => {
@@ -53,8 +57,8 @@ const EventList = ({ className = "", data }) => {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('q');
       if (category) {
-        setCategory([{value: category, label: category}]);
-        filterEvents(lang, [{value: category, label: category}], type);
+        setCategory([{ value: category, label: category }]);
+        filterEvents(lang, [{ value: category, label: category }], type);
       }
     }
   }, [filteredEvents])

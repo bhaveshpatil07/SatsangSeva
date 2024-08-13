@@ -8,20 +8,20 @@ const HostingContent = ({ className = "" }) => {
   const navigate = useNavigate();
 
   const onGroupContainerClick = useCallback((category) => {
-    navigate("/search-bar?q="+category);
+    navigate("/search-bar?q="+encodeURIComponent(category));
   }, [navigate]);
 
   const cardsData = [
-    { src: "/rectangle-13611@2x.png", label: "Satsang" },
-    { src: "/rectangle-1361-1@2x.png", label: "Bhajan" },
-    { src: "/rectangle-1361-2@2x.png", label: "Samaroh" },
-    { src: "/rectangle-1361-3@2x.png", label: "Langar" },
-    
-    { src: "/rectangle-13611@2x.png", label: "Satsang" },
-    { src: "/rectangle-1361-1@2x.png", label: "Bhajan" },
-    { src: "/rectangle-1361-2@2x.png", label: "Samaroh" },
-    { src: "/rectangle-1361-3@2x.png", label: "Langar" },
-    // Add more cards as needed
+    { src: "/rectangle-13611@2x.png", label: "Satsang & Dharmic Pravachan" },
+    { src: "/rectangle-1361-1@2x.png", label: "Bhajan & Kirtan" },
+    { src: "/rectangle-1361-2@2x.png", label: "Dhram Sabha" },
+    { src: "/rectangle-1361-3@2x.png", label: "Yoga & Dhyan" },
+    { src: "/rectangle-13611@2x.png", label: "Utsav & Celebrations" },
+    { src: "/rectangle-1361-1@2x.png", label: "Adhyatmik Shivir (Spiritual Retreats)" },
+    { src: "/rectangle-1361-2@2x.png", label: "Puja & Anushthan" },
+    { src: "/rectangle-1361-3@2x.png", label: "Seva & Charity" },
+    { src: "/rectangle-13611@2x.png", label: "Sanskritik Karyakram (Cultural Programs)" },
+    { src: "/rectangle-1361-1@2x.png", label: "Vividh (Others)" },
   ];
 
   return (
@@ -51,7 +51,7 @@ const HostingContent = ({ className = "" }) => {
               alt=""
               src={card.src}
             />
-            <div className="card-button-container">
+            <div className="card-button-container p-1">
               <Button
                 disableElevation
                 variant="contained"
@@ -63,6 +63,8 @@ const HostingContent = ({ className = "" }) => {
                   borderRadius: "50px",
                   "&:hover": { background: "#ff5f17" },
                   height: 38,
+                  padding: "1.5rem 1rem",
+                  textAlign: "center"
                 }}
               >
                 {card.label}
