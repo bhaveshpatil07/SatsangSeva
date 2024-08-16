@@ -1,0 +1,29 @@
+.admin-layout {
+    display: flex;
+  }
+  
+  .admin-layout .sidenav {
+    flex: 1;
+  }
+  
+  .admin-layout .content {
+    flex: 3;
+    padding: 20px; /* Adjust margin and padding as needed */
+  }
+  
+  /* Media query for responsive layout */
+  @media (max-width: 768px) {
+    .admin-layout {
+      display: block;
+    }
+  
+    .admin-layout .sidenav {
+      width: 10%;
+      /* Adjust height or add additional styles for small screens */
+    }
+  
+    .admin-layout .content {
+      padding: 10px; /* Adjust padding for small screens */
+    }
+  }
+  

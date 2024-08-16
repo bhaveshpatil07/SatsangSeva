@@ -13,6 +13,10 @@ const FrameComponent11 = ({ event = null }) => {
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       throw new Error('Invalid date object');
     }
+  
+    // Convert the date to UTC
+    const utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes());
+  
     const options = {
       weekday: 'short',
       month: 'short',
@@ -20,12 +24,14 @@ const FrameComponent11 = ({ event = null }) => {
       year: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
+      timeZone: 'Asia/Kolkata',
+      hour12: false, // Add this to get 24-hour format
     };
-
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
-    const [weekday, month, day, year, hour, minute] = formattedDate.split(/[\s,/]+/);
-
-    return `${weekday} • ${month} ${day}, ${year} • ${hour}:${minute}`;
+  
+    const formattedDate = new Intl.DateTimeFormat('en-IN', options).format(utcDate);
+    const [weekday, day, month, year, hour] = formattedDate.split(/[\s,/]+/).slice(0, 6);
+  
+    return `${weekday} • ${month} ${day}, ${year} • ${hour}`;
   }
 
   function formatNames(names) {

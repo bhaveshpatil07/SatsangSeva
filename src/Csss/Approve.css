@@ -1,0 +1,6 @@
+/* Approve.css */
+.table-container {
+    max-height: 500px; /* Adjust height as needed */
+    overflow-y: auto;
+  }
+  

@@ -1,0 +1,22 @@
+/* AllProducts.css */
+
+.table-container {
+    width: 100%; /* Adjust the width as needed */
+    max-height: 300px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Add a vertical scrollbar */
+    margin: 0 auto; /* Center the table container */
+  }
+  
+  .table {
+    width: 100%; /* Ensure the table takes the full width of the container */
+  }
+  
+  .table th, .table td {
+    padding: 8px 12px; /* Add padding for readability */
+    text-align: left; /* Align text to the left */
+  }
+  
+  .table th {
+    background-color: #F58021 !important; /* Background color for header */
+  }
+  

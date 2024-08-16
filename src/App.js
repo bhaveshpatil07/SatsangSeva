@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, useNavigationType, useLocation, } from "react-router-dom";
 import FinalDesign from "./pages/FinalDesign";
 import LiveEvent from "./pages/LiveEvent";
@@ -18,11 +18,34 @@ import ContactUs from "./pages/ContactUs";
 import NearBy from "./pages/NearBy";
 import AddBlog from "./pages/AddBlog";
 import Blogs from "./pages/Blogs";
+import AdminPage from "./admin/AdminPage";
+import AllProducts from "./admin/AllProducts";
+import AddProduct from "./admin/AddProduct";
+import Orders from "./admin/Orders";
+import Coupon from "./admin/Coupon";
+import Categories from "./admin/Categories";
+import Brands from "./admin/Brands";
+import OrderDetails from "./admin/OrderDetails";
+import UserEvents from "./admin/UserEvents";
+import Updateform from "./admin/Updateform";
+import Approve from "./admin/Approve";
+import Blog from "./admin/Blog";
+import AdminLayout from "./admin/AdminLayout";
+import AdminLogin from "./admin/AdminLogin";
 
 function App() {
   const action = useNavigationType();
   const location = useLocation();
   const pathname = location.pathname;
+  const [admin, setAdmin] = useState(false);
+
+  const handleAdmin = (id)=>{
+    if(id === process.env.REACT_APP_ADMIN_KEY){
+      setAdmin(true);
+    }else{
+      setAdmin(false);
+    }
+  }
 
   useEffect(() => {
     if (action !== "POP") {
@@ -115,12 +138,40 @@ function App() {
         <Route path="/perticular" element={<Perticular />} />
         <Route path="/aboutus" element={<About />} />
         <Route path="/contactus" element={<ContactUs />} />
-        <Route path="/nearby" element={<NearBy />} />
         <Route path="/blog" element={<Blogs />} />
+        {/* <Route path="/nearby" element={<NearBy />} /> */}
         {/* <Route path="/upcard" element={<Upcard />} /> */}
         {/* <Route path="/live" element={<LiveEvent />} /> */}
-        <Route path="/addblog" element={<AddBlog />} />
         <Route path="*" element={<LogIn />} />
+
+        <Route path="/addblog" element={<AddBlog />} />
+
+        <Route path="/admin" element={<AdminLayout setAdmin={handleAdmin} />}>
+          {!admin ?
+            <>
+              <Route path="" element={<AdminLogin setAdmin={handleAdmin} />} />
+              <Route path="*" element={<AdminLogin setAdmin={handleAdmin} />} />
+            </>
+            :
+            <>
+              <Route path="" element={<AdminPage />} />
+              <Route path="allproduct/:id/:name" element={<AllProducts />} />
+              <Route path="addproduct" element={<AddProduct />} />
+              <Route path="orders" element={<Orders />} />
+              <Route path="coupon" element={<Coupon />} />
+              <Route path="categorie" element={<Categories />} />
+              <Route path="brands" element={<Brands />} />
+              <Route path="orderdetails" element={<OrderDetails />} />
+              <Route path="userevents/:userId" element={<UserEvents />} />
+              <Route path="updateform" element={<Updateform />} />
+              <Route path="approve" element={<Approve />} />
+              <Route path="blog" element={<Blog />} />
+              <Route path="createblog" element={<AddBlog />} />
+            </>
+
+          }
+
+        </Route>
       </Routes>
 
     </>

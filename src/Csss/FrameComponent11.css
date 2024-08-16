@@ -117,4 +117,7 @@
   .event-right {
     width: 100%;
   }
+  .map-container {
+    padding-bottom: 77.25%;
+  }
 }

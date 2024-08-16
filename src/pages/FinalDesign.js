@@ -26,7 +26,7 @@ const FinalDesign = () => {
   };
 
   const handleLoadMore = () => {
-    const newVisibleBlogs = visibleBlogs + 3;
+    const newVisibleBlogs = visibleBlogs + 6;
     setVisibleBlogs(newVisibleBlogs);
     setHasMoreBlogs(blogs.length > newVisibleBlogs);
   };

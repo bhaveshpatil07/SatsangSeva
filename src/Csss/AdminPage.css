@@ -1,0 +1,63 @@
+.admin-page {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
+  gap: 20px; /* Adds spacing between grid items */
+  padding: 2rem;
+  border: 1px solid hsl(0, 0%, 87%); /* Adds a light gray border around the entire admin-page */
+  border-radius: 8px; /* Optional: rounds the corners of the border */
+  transition: all 0.3s ease; /* Smooth transition for the hover effect */
+  width: 100%;
+}
+
+.admin-page:hover {
+  border-color: #D26600; /* Changes the border color on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow on hover */
+}
+
+.section {
+  display: flex;
+  align-items: center; /* Aligns items horizontally within the section */
+  justify-content: center;
+  text-align: left; /* Aligns text to the left */
+  padding: 15px; /* Adds padding inside each section */
+}
+
+.icon {
+  margin-right: 15px; /* Adds space between the icon and the text */
+}
+
+.icon svg {
+  width: 50px; /* Adjust as needed */
+  height: 50px; /* Adjust as needed */
+  color: #D26600;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.text h3, .text p {
+  margin: 5px 0;
+}
+
+.text .value {
+  font-size: 1.5em; /* Adjust font size as needed */
+  font-weight: bold; /* Optional: makes the value bold */
+}
+
+@media(max-width: 769px) {
+  .admin-page {
+    grid-template-columns: repeat(2, 1fr); /* Creates 2 equal-width columns */
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media(max-width: 414px) {
+  .admin-page {
+    grid-template-columns: repeat(1, 1fr); /* Creates 1 equal-width column */
+    justify-content: center;
+    align-items: center;
+  }
+}

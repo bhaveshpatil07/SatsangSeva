@@ -1,0 +1,59 @@
+/* AdminLogin.css */
+
+.admin-login-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.admin-login-form {
+  background: #fff; /* White background for form */
+  padding: 2rem;
+  margin: 1rem;
+  border-radius: 1rem;
+  border: 1px solid #ff6f00;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+  max-width: 400px;
+  width: 100%;
+}
+
+.admin-login-form h2 {
+  margin-bottom: 1rem;
+  color: #333; /* Dark text color */
+}
+
+.admin-login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555; /* Medium text color */
+}
+
+.admin-login-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd; /* Light border color */
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.admin-login-form button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: #ff6f00; /* Button color */
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-login-form button:hover {
+  background-color: #e89b5f; /* Darker button color on hover */
+}

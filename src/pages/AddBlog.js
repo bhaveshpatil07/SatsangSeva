@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import Footer from '../components/Footer'
-import FirstFold1 from '../components/FirstFold1';
 import Loader from '../components/Loader';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
@@ -57,7 +55,7 @@ function AddBlog() {
             setImage(null);
             setImages(null);
             setBlogPoster(null);
-            navigate("/");  //navigate to the /admin/blogs
+            navigate(-1);  //navigate to the /admin/blogs
         }).catch((e) => {
             console.log(e);
             alert("Failed to post blog.");
@@ -67,16 +65,15 @@ function AddBlog() {
     }
 
     return (
-        <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-center justify-center leading-[normal] tracking-[normal] mq750:gap-[25px]">
-            <FirstFold1 />
+        <div className="w-full relative overflow-hidden flex flex-col items-center justify-center leading-[normal] tracking-[normal] mq750:gap-[25px]">
             {loading && <Loader />}
-            <section id="form" className="self-stretchflex flex-row items-start justify-center py-0 pr-5 pl-[21px] box-border max-w-full text-center text-base text-black font-poppins pt-3 mq750:!pt-2">
+            <section id="form" className="self-stretchflex flex-row items-start justify-center py-0 pr-5 pl-[21px] box-border max-w-full text-center text-base text-black font-poppins mq750:!pt-2">
                 <div className="w-[1239px] flex flex-col pt-3 items-end justify-start gap-[34px] max-w-full mq750:gap-[17px]">
                     <div className="self-stretch flex flex-row items-start justify-center pt-0 pr-5 pl-[23px] box-border max-w-full text-21xl">
                         <div className="flex flex-col items-center justify-center max-w-full">
                             <div className="flex flex-row items-start justify-start py-0 px-16 mq450:pl-5 mq450:pr-5 mq450:box-border">
                                 <h1 className="m-0 relative text-inherit leading-[48px] font-bold font-inherit mq450:text-5xl mq450:leading-[29px] mq1050:text-13xl mq1050:leading-[38px]">
-                                    <span>{`Add Your `}</span>
+                                    <span>{`Create `}</span>
                                     <span className="text-tomato">Blog</span>
                                 </h1>
                             </div>
@@ -157,34 +154,14 @@ function AddBlog() {
                             <div onClick={handleSubmit} className="self-stretch flex flex-row items-start justify-start max-w-full cursor-pointer text-white">
                                 <div className="flex-1 rounded-lg bg-tomato flex flex-row items-start justify-center py-3 px-5 box-border whitespace-nowrap max-w-full">
                                     <div className="relative leading-[24px] font-medium inline-block min-w-[70px]">
-                                        List Blog
+                                        Create Blog
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full flex flex-col justify-center items-center">
-                        <div className="self-stretch relative text-32xl text-gray-500">
-                            <div className="top-[0px] left-[0px] box-border w-[1237px] h-px border-t-[1px] border-solid border-gainsboro-400" />
-                            <h1 style={{ maxWidth: "75%" }} className="m-0 top-[17px] left-[39px] text-inherit font-semibold font-inherit inline-block mq750:!max-w-full mq450:text-10xl mq1050:text-32xl">
-                                Sit back and watch your event come to life
-                            </h1>
-                        </div>
-                        <div className="self-stretch flex flex-row items-start justify-end py-0 pr-[39px] pl-[43px] box-border max-w-full text-5xl lg:pl-[21px] lg:box-border">
-                            <div className="flex-1 flex flex-col items-end justify-start min-h-[105px] max-w-full">
-                                <h2 className="m-0 self-stretch h-[105px] relative text-inherit font-normal font-inherit inline-block shrink-0 mq450:text-base">
-                                    Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-                                    vulputate libero et velit interdum, ac aliquet odio mattis.t
-                                </h2>
-                                <div className="w-[1038px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full mt-[-80px] text-left text-xs text-white">
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <Footer />
         </div>
     )
 }

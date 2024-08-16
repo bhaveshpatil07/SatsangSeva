@@ -1,0 +1,38 @@
+/* Blog.css */
+.blog-container {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .blog-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* .blog-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  } */
+
+.blog-table-container {
+  max-height: 400px; 
+  overflow-y: auto; 
+}
+
+.blog-table-container table {
+  width: 100%; 
+}
+
+.blog-table-container thead {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa; 
+  z-index: 1; 
+}

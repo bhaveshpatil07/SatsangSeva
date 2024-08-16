@@ -1,0 +1,67 @@
+/* Orders.css */
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Ensure the modal is above other content */
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-content form div {
+    margin-bottom: 15px;
+  }
+  
+  .modal-content button {
+    margin-right: 10px;
+  }
+  /* Save button styles */
+.btn-save {
+    background-color: #28a745; /* Green color */
+    color: white;
+  }
+  
+  .btn-save:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
+  /* Cancel button styles */
+  .btn-cancel {
+    background-color: #dc3545; /* Red color */
+    color: white;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #c82333; /* Darker red on hover */
+  }
+
+  /* Orders.css */
+.input-field {
+  border: 2px solid #ccc; /* Light gray border */
+  border-radius: 4px;     /* Rounded corners */
+  font-size: 16px;        /* Font size */
+
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+.input-field:focus {
+  border-color: #007bff; /* Change border color on focus (blue) */
+  outline: none;         /* Remove default outline */
+}
+.modal {
+  z-index: 1050 !important; /* Default Bootstrap z-index for modals */
+  margin-top: 50px;
+}
