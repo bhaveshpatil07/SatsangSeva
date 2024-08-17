@@ -65,21 +65,39 @@ const EventListing1 = () => {
     }
   }, [formValues.startDate, formValues.endDate]);
 
-  useEffect(() => {
-    if (formValues.pinCode.length === 6) {
-      fetchGeoCodes();
-    }
-  }, [formValues.pinCode]);
+  // useEffect(() => {
+  //   if (formValues.pinCode.length === 6) {
+  //     fetchGeoCodes();
+  //   }
+  // }, [formValues.pinCode]);
 
-  const fetchGeoCodes = async () => {
-    await axios.get(`https://nominatim.openstreetmap.org/search.php?q=${formValues.pinCode}&countrycodes=In&format=geojson`)
-      .then((resp) => {
-        setGeoCoordinates(resp.data.features[0].geometry.coordinates);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+  // const fetchGeoCodes = async () => {
+  //   await axios.get(`https://nominatim.openstreetmap.org/search.php?q=${formValues.pinCode}&countrycodes=In&format=geojson`)
+  //     .then((resp) => {
+  //       setGeoCoordinates(resp.data.features[0].geometry.coordinates);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }
+
+  const fetchCoordinates = async (address) => {
+    try {
+      const apiKey = process.env.REACT_APP_GMAP_KEY;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`;
+      const resp = await axios.get(url);
+      // console.log(resp);
+
+      if (resp.data.status === 'OK') {
+        const coordinates = resp.data.results[0].geometry.location;
+        setGeoCoordinates([coordinates.lng, coordinates.lat]);
+      }
+    } catch (error) {
+      console.error(error);
+      return 404;
+    }
+    return 200;
+  };
 
 
   const handleInputChange = (e) => {
@@ -116,7 +134,7 @@ const EventListing1 = () => {
       setLoading(false);
       return alert('Start date is equal or after End date');
     }
-    const newData = {
+    let newData = {
       eventName: formValues.eventName,
       eventCategory: formValues.eventCategory,
       eventDesc: formValues.eventDesc,
@@ -135,6 +153,15 @@ const EventListing1 = () => {
     };
     const error = validateEventInputs(newData);
     if (!error) {
+      if (eventData.eventAddress !== newData.eventAddress) {
+        const result = await fetchCoordinates(newData.eventAddress);
+        if (result === 200) {
+          newData.geoCoordinates = geoCoordinates;
+        } else {
+          return alert("Error in Fetching GeoCoordinates. Try Again");
+        }
+      }
+
       const headers = {
         Authorization: `Bearer ${process.env.REACT_APP_SECRET_KEY}`,
         'Content-Type': 'multipart/form-data',
@@ -150,7 +177,7 @@ const EventListing1 = () => {
         });
       }
       await axios.put(url + "/events/" + eventData._id, formData, { headers }).then((resp) => {
-        console.log("Event Updated: " + resp.data);
+        // console.log("Event Updated: " + resp.data);
         alert("Event Successfully Updated!");
         navigate(-1);
       }).catch((e) => {

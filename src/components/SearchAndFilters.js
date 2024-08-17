@@ -149,7 +149,7 @@ const SearchAndFilters = ({ className = "", handleSearchDataChange }) => {
             <div className="h-[140px] w-[1086px] relative shadow-[0px_10px_50px_rgba(61,_55,_241,_0.25)] rounded-xl bg-darkorange-200 hidden max-w-full" />
             <div className="flex-1 flex flex-col items-start justify-start gap-[11px] min-w-[217px]">
               <div className="relative text-base font-dm-sans text-white text-left inline-block min-w-[97px] z-[1]">
-                Time
+                Date
               </div>
               <div className="self-stretch flex flex-col items-start justify-start gap-[4px]">
                 <input

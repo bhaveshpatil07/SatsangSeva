@@ -1,5 +1,5 @@
 .about-us {
-  h2 {
+  h1, h2 {
     background-color: white;
     width: max-content;
     padding: 0.3rem 0.6rem;

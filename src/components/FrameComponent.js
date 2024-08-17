@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HashLink as Link } from 'react-router-hash-link';
 import '../Csss/FrameComponent.css';
-import ProfileIcon from '@mui/icons-material/AccountCircleTwoTone';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
@@ -95,12 +94,12 @@ const FrameComponent = () => {
         <img src="/group1.svg" alt="SatsangSeva" />
         <h1 className='font-semibold font-sacramento'>Satsang Seva</h1>
       </Link>
-      <div className='hamburger-menu' onClick={toggleMenu}>
+      <div className='hamburger-menu pt-2' onClick={toggleMenu}>
         <div></div>
         <div></div>
         <div></div>
       </div>
-      <div className={`right-nav ${isMenuOpen ? 'active' : ''}`}>
+      <div className={`right-nav ${isMenuOpen ? 'active' : ''} pt-2`}>
         <ul>
           <li className='io' onClick={()=>{toggleMenu(); goToTop();}}><Link to="/#home">Home</Link></li>
           <li className='io' onClick={toggleMenu}><Link to="/#upcomingEvents">Upcoming Events</Link></li>

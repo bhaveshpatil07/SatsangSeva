@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, Menu, MenuItem } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // Importing the arrow icon
+import { Button } from "@mui/material";
 import GroupComponent2 from "./GroupComponent2";
-import GroupComponent1 from "./GroupComponent1";
-import GroupComponent from "./GroupComponent";
 import PropTypes from "prop-types";
 import axios from "axios";
 import NotFound from '@mui/icons-material/EventBusy';
 import '../Csss/EventListing.css'
+import Loader from "./Loader";
 
 const categories = [
   { value: "Satsang & Dharmic Pravachan", label: "Satsang & Dharmic Pravachan" },
@@ -34,26 +32,93 @@ const EventListing = ({ className = "" }) => {
   const [category, setCategory] = useState("");
   const [lang, setLang] = useState("");
   const [type, setType] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSearchTopClick = (event) => {
-    setSearchTopAnchorEl(event.currentTarget);
-    setShowDays(!showDays); // Toggle days display
-  };
-
-  const handleSearchTopClose = () => {
-    setSearchTopAnchorEl(null);
-    setShowDays(false); // Close days display
-  };
+  const [position, setPosition] = useState({
+    latitude: null,
+    longitude: null,
+  });
 
   useEffect(() => {
-    fetchEvents();
+    const apiKey = process.env.REACT_APP_GMAP_KEY;
+    const url = `https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`;
+
+    const getPosition = async () => {
+      if (navigator.geolocation) {
+        try {
+          const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              timeout: 10000,
+            });
+          });
+
+          return {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // If browser geolocation API doesn't work or is not supported, fall back to Google Geolocation API
+      const response = await axios.post(url, {
+        considerIp: true, // Use IP address to estimate location
+      });
+
+      return {
+        lat: response.data.location.lat,
+        lng: response.data.location.lng,
+      };
+    };
+
+    getPosition().then((position) => {
+      setPosition({
+        latitude: position.lat,
+        longitude: position.lng,
+      });
+      // console.log(position);
+    }).catch((error) => {
+      console.error(error);
+    });
   }, []);
+
+  useEffect(() => {
+    if (position.latitude && position.longitude) {
+      setLoading(true);
+      setTimeout(() => {
+        fetchNearBy();
+      }, 500);
+    } else {
+      fetchEvents();
+    }
+  }, [position]);
+
+
+  const fetchNearBy = async () => {
+    setLoading(true);
+    await axios.get(url + "/event/nearby?long=" + position.longitude + "&lat=" + position.latitude).then((resp) => {
+      setEvents(resp.data.events);
+      setFilteredEvents(resp.data.events);
+      // console.log(resp.data);
+    }).catch((e) => {
+      console.log(e);
+      alert("No Events Found");
+      setEvents(null);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
+
 
   const fetchEvents = async () => {
     await axios.get(url + "/events").then((resp) => {
       // console.log(resp.data.events);
-      setEvents(resp.data.events);
-      setFilteredEvents(resp.data.events);
+      if ((!position.latitude && !position.longitude) && !loading && !events) {
+        setEvents(resp.data.events);
+        setFilteredEvents(resp.data.events);
+      }
     }).catch((e) => {
       console.log("Error in fetching Events: " + e);
     })
@@ -119,6 +184,7 @@ const EventListing = ({ className = "" }) => {
       id="upcomingEvents"
       className={`w-full flex flex-col items-center py-0 px-5 box-border max-w-full shrink-0 text-left text-21xl text-goldenrod font-montserrat ${className}`}
     >
+      {loading && <Loader />}
       <div
         className="w-full max-w-[1086px] flex flex-col items-center justify-between mq750:!pt-5"
         data-scroll-to="upcomingEventsContainer"

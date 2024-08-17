@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../Csss/AddProduct.css'; // Adjust the path if necessary
+// import '../Csss/AddProduct.css'; 
 import { Form, Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import View from '@mui/icons-material/VisibilityTwoTone';

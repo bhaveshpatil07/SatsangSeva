@@ -32,6 +32,7 @@ import Approve from "./admin/Approve";
 import Blog from "./admin/Blog";
 import AdminLayout from "./admin/AdminLayout";
 import AdminLogin from "./admin/AdminLogin";
+import GoogleTranslate from "./components/GoogleTranslate";
 
 function App() {
   const action = useNavigationType();
@@ -39,10 +40,10 @@ function App() {
   const pathname = location.pathname;
   const [admin, setAdmin] = useState(false);
 
-  const handleAdmin = (id)=>{
-    if(id === process.env.REACT_APP_ADMIN_KEY){
+  const handleAdmin = (id) => {
+    if (id === process.env.REACT_APP_ADMIN_KEY) {
       setAdmin(true);
-    }else{
+    } else {
       setAdmin(false);
     }
   }
@@ -121,6 +122,7 @@ function App() {
   return (
 
     <>
+      <GoogleTranslate />
       <FrameComponent />
       <Routes>
         <Route path="/" element={<FinalDesign />} />

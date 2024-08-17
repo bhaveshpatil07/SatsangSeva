@@ -21,7 +21,7 @@ const SideNavbar = ({setAdmin}) => {
                     <Link to="addproduct" onClick={closeNav}>Total User</Link>
                     <Link to="orders" onClick={closeNav}>Events</Link>
                     <Link to="approve" onClick={closeNav}>Approve</Link>
-                    <Link to="blog" onClick={closeNav}>Blog</Link>
+                    <Link to="blog" onClick={closeNav}>Blogs</Link>
                     <Link to={"/admin"} onClick={logout} >
                         LogOut 
                         <Logout className="ml-2"/>

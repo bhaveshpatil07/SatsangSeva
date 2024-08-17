@@ -46,7 +46,7 @@ const SearchBox = ({ className = "" }) => {
       </div>
       <div className="flex-1 flex flex-col items-start justify-start gap-[14px] min-w-[250px]">
         <div className="relative inline-block min-w-[50px] z-[1] text-xl">
-          Time
+          Date
         </div>
         <div className="self-stretch flex flex-col items-start justify-start gap-[6px] text-4xl">
           <b className="relative inline-block min-w-[120px] z-[1] mq450:text-xl">

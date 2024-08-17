@@ -5,18 +5,19 @@ import Like from '@mui/icons-material/ThumbUpTwoTone';
 import Pin from '@mui/icons-material/LocationOnTwoTone';
 import WhatsApp from '@mui/icons-material/WhatsApp';
 import Start from '@mui/icons-material/AlarmTwoTone';
-import Map from '../img/Map.png';
+import EventMap from './EventMap';
 
 const FrameComponent11 = ({ event = null }) => {
+
   function formatDateTime(dateString) {
     const date = new Date(dateString);
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       throw new Error('Invalid date object');
     }
-  
+
     // Convert the date to UTC
     const utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes());
-  
+
     const options = {
       weekday: 'short',
       month: 'short',
@@ -27,10 +28,10 @@ const FrameComponent11 = ({ event = null }) => {
       timeZone: 'Asia/Kolkata',
       hour12: false, // Add this to get 24-hour format
     };
-  
+
     const formattedDate = new Intl.DateTimeFormat('en-IN', options).format(utcDate);
     const [weekday, day, month, year, hour] = formattedDate.split(/[\s,/]+/).slice(0, 6);
-  
+
     return `${weekday} • ${month} ${day}, ${year} • ${hour}`;
   }
 
@@ -100,7 +101,7 @@ const FrameComponent11 = ({ event = null }) => {
               src="/vector-6.svg"
             />
           </div>
-          <p><Start sx={{ color: "#D26600" }} /><strong> {event && formatDateTime(event?.startDate) } {event && ` • (${getDuration(event.startDate, event.endDate)})`}</strong></p>
+          <p><Start sx={{ color: "#D26600" }} /><strong> {event && formatDateTime(event?.startDate)} {event && ` • (${getDuration(event.startDate, event.endDate)})`}</strong></p>
           <p className='py-2 text-justify'>{event?.eventDesc}</p>
           {/* <p><strong>Ends: </strong>{event && formatDateTime(event.endDate)}</p>
           <p><strong>Category: </strong>{event ? capitalizedStr(event.eventCategory) : "Loading..."}</p> */}
@@ -126,14 +127,22 @@ const FrameComponent11 = ({ event = null }) => {
         </div>
         <div className="event-map text-start" style={{ color: "#D26600" }}>
           <h4 className='text-center mb-0'>Location of the event</h4>
-          <h4>{event ? extractCity(event.eventAddress) : ""}</h4>
+          <span className="flex items-center">
+            <h4>{event ? extractCity(event.eventAddress) : ""}</h4>
+            <a className='pl-3' href={event?.location} target="_blank" rel="noopener noreferrer">[Get Direction]</a>
+          </span>
           <p><Pin sx={{ color: "#D26600" }} /> <strong>{event?.eventAddress}</strong></p>
           <div className="map-container">
-            <a target='blank' href={event?.location}>
+            {/* <a target='blank' href={event?.location}>
               <img width={450} src={Map} alt="Location Map" />
-            </a>
+            </a> */}
+            {event ?
+              <EventMap center={{ lat: event.geoCoordinates.coordinates[1], lng: event.geoCoordinates.coordinates[0] }} />
+              :
+              <h1>Loading...</h1>
+            }
             {/* <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15283671.192382284!2d72.09916297514248!3d20.7359935153674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1722344493258!5m2!1sen!2sin"
+              src={event?.location}
               width="600"
               height="450"
               style={{ border: "0" }}

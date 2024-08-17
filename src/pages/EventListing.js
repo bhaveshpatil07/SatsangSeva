@@ -10,7 +10,7 @@ import { Country, State, City } from "country-state-city";
 import { useDropzone } from "react-dropzone";
 import Loader from "../components/Loader";
 
-const categories  = [
+const categories = [
   { value: "Satsang & Dharmic Pravachan", label: "Satsang & Dharmic Pravachan" },
   { value: "Bhajan & Kirtan", label: "Bhajan & Kirtan" },
   { value: "Dhram Sabha", label: "Dhram Sabha" },
@@ -87,21 +87,33 @@ const EventListing1 = () => {
     }
   }, [formValues.startDate, formValues.endDate]);
 
-  useEffect(() => {
-    if (formValues.pinCode.length === 6) {
-      fetchGeoCodes();
-    }
-  }, [formValues.pinCode]);
+  // const fetchGeoCodes = async () => {
+  //   await axios.get(`https://nominatim.openstreetmap.org/search.php?q=${formValues.pinCode}&countrycodes=In&format=geojson`)
+  //     .then((resp) => {
+  //       setGeoCoordinates(resp.data.features[0].geometry.coordinates);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }
 
-  const fetchGeoCodes = async () => {
-    await axios.get(`https://nominatim.openstreetmap.org/search.php?q=${formValues.pinCode}&countrycodes=In&format=geojson`)
-      .then((resp) => {
-        setGeoCoordinates(resp.data.features[0].geometry.coordinates);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+  const fetchCoordinates = async (address) => {
+    try {
+      const apiKey = process.env.REACT_APP_GMAP_KEY;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`;
+      const resp = await axios.get(url);
+      // console.log(resp);
+
+      if (resp.data.status === 'OK') {
+        const coordinates = resp.data.results[0].geometry.location;
+        setGeoCoordinates([coordinates.lng, coordinates.lat]);
+      }
+    } catch (error) {
+      console.error(error);
+      return 404;
+    }
+    return 200;
+  };
 
 
   const handleInputChange = (e) => {
@@ -164,7 +176,7 @@ const EventListing1 = () => {
       setLoading(false);
       return alert("Please select City!");
     }
-    const newData = {
+    let newData = {
       eventName: formValues.eventName,
       eventCategory: formValues.eventCategory,
       eventDesc: formValues.eventDesc,
@@ -185,13 +197,18 @@ const EventListing1 = () => {
         formValues.country ? formValues.country : '',
         formValues.pinCode ? `PIN: ${formValues.pinCode}` : ''
       ].filter(Boolean).join(', '),
-      geoCoordinates: geoCoordinates,
       startDate: formValues.startDate,
       endDate: formValues.endDate
     };
     const error = validateEventInputs(newData);
     localStorage.setItem('addEvent', JSON.stringify(formValues));
     if (!error) {
+      const result = await fetchCoordinates(newData.eventAddress);
+      if (result === 200) {
+        newData.geoCoordinates = geoCoordinates;
+      } else {
+        return alert("Error in Fetching GeoCoordinates. Try Again");
+      }
       const headers = {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',

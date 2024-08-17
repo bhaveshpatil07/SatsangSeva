@@ -18,7 +18,7 @@ const BlogList = ({ className = "", id, poster, title, content, date }) => {
 
   return (
     <div onClick={handleClick} className={`flex flex-col cursor-pointer items-start justify-start gap-[20px] max-w-full text-left text-xl text-darkorange-200 font-dm-sans transform transition-transform duration-300 hover:scale-105 ${className}`}>
-      <div className="self-stretch rounded-xl bg-orange flex flex-row items-start justify-start max-w-full">
+      <div className="self-stretch w-[343px] rounded-xl bg-orange flex flex-row items-start justify-start max-w-full">
         <div className="self-stretch w-[343px] relative rounded-xl bg-orange hidden max-w-full" />
         <img
           className="self-stretch h-[210px] flex-1 relative rounded-mini max-w-full overflow-hidden object-cover z-[1]"

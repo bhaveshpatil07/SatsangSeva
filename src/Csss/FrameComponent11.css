@@ -85,8 +85,8 @@
 .map-container {
   position: relative;
   width: 100%;
-  padding-bottom: 46.25%; /* 16:9 aspect ratio */
-  height: 0;
+  /* padding-bottom: 46.25%; /* 16:9 aspect ratio */
+  /* height: 0; */
   overflow: hidden;
 }
 
@@ -117,7 +117,7 @@
   .event-right {
     width: 100%;
   }
-  .map-container {
+  /* .map-container {
     padding-bottom: 77.25%;
-  }
+  } */
 }

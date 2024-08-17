@@ -11,6 +11,7 @@ import Loader from '../components/Loader';
 import Verify from '@mui/icons-material/AssignmentIndOutlined';
 import Select from "react-select";
 import { Country, State, City } from "country-state-city";
+import { HashLink } from "react-router-hash-link";
 
 const ProfilePage = () => {
   const url = process.env.REACT_APP_BACKEND;
@@ -662,7 +663,7 @@ const ProfilePage = () => {
                         className="rounded-[20px] shadow-lg hover:scale-95 transition-transform"
                       />
                     ))}
-                    <div onClick={() => { navigate("/event-listing") }} style={{ cursor: "pointer" }} className="w-[343px] shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
+                    <HashLink to="/event-listing#form" style={{ cursor: "pointer" }} className="w-[343px] no-underline shadow-[0px_19px_47.38px_rgba(119,_115,_170,_0.1)] rounded-t-[18.95px] rounded-b-[18.95px] flex bg-gainsboro-200 flex-col items-center justify-center pt-[87px] px-[104px] pb-[118.5px] box-border relative gap-[14px] max-w-full text-base text-black mq450:pl-5 mq450:pr-5 mq450:box-border">
                       <div className="flex flex-row items-start justify-start py-0 px-3">
                         <img
                           className="h-24 w-24 relative overflow-hidden shrink-0 z-[1]"
@@ -674,7 +675,7 @@ const ProfilePage = () => {
                       <b className="relative leading-[19px] inline-block min-w-[120px] z-[1]">
                         Add Your Event!
                       </b>
-                    </div>
+                    </HashLink>
                   </div>
                 </div>
               </>}
