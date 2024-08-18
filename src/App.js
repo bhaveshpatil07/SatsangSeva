@@ -160,10 +160,10 @@ function App() {
               <Route path="allproduct/:id/:name" element={<AllProducts />} />
               <Route path="addproduct" element={<AddProduct />} />
               <Route path="orders" element={<Orders />} />
-              <Route path="coupon" element={<Coupon />} />
-              <Route path="categorie" element={<Categories />} />
-              <Route path="brands" element={<Brands />} />
-              <Route path="orderdetails" element={<OrderDetails />} />
+              {/* <Route path="coupon" element={<Coupon />} /> */}
+              {/* <Route path="categorie" element={<Categories />} /> */}
+              {/* <Route path="brands" element={<Brands />} /> */}
+              {/* <Route path="orderdetails" element={<OrderDetails />} /> */}
               <Route path="userevents/:userId" element={<UserEvents />} />
               <Route path="updateform" element={<Updateform />} />
               <Route path="approve" element={<Approve />} />

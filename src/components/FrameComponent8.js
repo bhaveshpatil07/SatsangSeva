@@ -6,6 +6,7 @@ import axios from "axios";
 import Loader from "./Loader";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { Modal, Button as Btn } from "react-bootstrap";
 
 const FrameComponent8 = ({ className = "" }) => {
   const url = process.env.REACT_APP_BACKEND;
@@ -21,6 +22,8 @@ const FrameComponent8 = ({ className = "" }) => {
   });
 
   const [error, setError] = useState("");
+  const [inputOtp, setInputOtp] = useState(false);
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
@@ -37,8 +40,35 @@ const FrameComponent8 = ({ className = "" }) => {
     });
   };
 
-  const onFormSubmit = async (e) => {
+  const handleClose = ()=>{
+    setOtp("");
+    setInputOtp(false);
+  };
+
+  const handleCheckOtp = async ()=>{
+    setLoading(true);
+    if(otp.length!==6 || formData.phoneNumber.length!==10){
+      alert("OTP is of 6-Digits");
+      return setLoading(false);
+    }
+    await axios.get(url+"/admin/verifycheck?contact="+formData.phoneNumber+"&otp="+otp)
+      .then((resp)=>{
+        // console.log(resp);
+        alert("Phone Number Verified Successfully!");
+        handleClose();
+        onFormSubmit();
+      }).catch((e)=>{
+        alert("Invalid OTP! Try again");
+      }).finally(()=>{
+        setLoading(false);
+      })
+  };
+
+  const handleVerify = async (e) => {
     e.preventDefault();
+    if(disabled){
+      return onFormSubmit();
+    }
     setLoading(true);
     setError("");
     if (formData.password !== formData.confirmPassword || formData.password.trim() === "") {
@@ -53,10 +83,23 @@ const FrameComponent8 = ({ className = "" }) => {
       alert("Enter 10 Digit Phone Number.");
       return setLoading(false);
     }
-    if (!disabled) {
-      alert("You have to sign in with Google.");
-      return setLoading(false);
-    }
+    await axios.post(url + "/admin/verifysend/" + formData.phoneNumber).then((rep) => {
+      // console.log(rep);
+      setInputOtp(true);
+    }).catch((e) => {
+      console.log(e);
+      setLoading(false);
+      return alert("Error in Sending OTP! Try Again.");
+    });
+    setLoading(false);
+  }
+
+  const onFormSubmit = async () => {
+    // if (!disabled) {
+    //   alert("You have to sign in with Google.");
+    //   return setLoading(false);
+    // }
+    setLoading(true);
     try {
       const response = await axios.post(url + "/user/signup", formData).then((resp) => {
         alert("Account Created Successfully! Please Login.");
@@ -122,7 +165,28 @@ const FrameComponent8 = ({ className = "" }) => {
               }} />
           </div>
         </div>
-        <form onSubmit={onFormSubmit} className="w-[429.7px] flex flex-row items-start justify-start py-0 px-[7px] box-border max-w-full">
+        <Modal show={inputOtp} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Verify OTP</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>OTP sent successfully to <span style={{ fontWeight: 'bold' }}>+91-{formData.phoneNumber}</span></p>
+            <form>
+              <div className="form-group">
+                <input value={otp} onChange={(e)=>{setOtp(e.target.value);}} type="number" className="form-control" id="otp" placeholder="Enter 6 digit OTP" maxLength="6" />
+              </div>
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Btn variant="secondary" onClick={handleClose}>
+              Cancel
+            </Btn>
+            <Btn variant="outline-primary" onClick={handleCheckOtp}>
+              Verify
+            </Btn>
+          </Modal.Footer>
+        </Modal>
+        <form onSubmit={handleVerify} className="w-[429.7px] flex flex-row items-start justify-start py-0 px-[7px] box-border max-w-full">
           <div className="flex-1 flex flex-col items-start justify-start gap-[25px] max-w-full">
             <div className="flex w-full justify-between">
               {/* <label htmlFor="userType">User Type: </label> */}
@@ -164,6 +228,7 @@ const FrameComponent8 = ({ className = "" }) => {
               variant="outlined"
               size="small"
               placeholder="Contact"
+              disabled={inputOtp}
             />
             <TextField
               label="Enter your password"

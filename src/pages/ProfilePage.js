@@ -268,25 +268,27 @@ const ProfilePage = () => {
                   <div id="editForm" className="edit-form" style={{ display: 'none' }}>
                     <h2 className="text-center">Edit Your Profile</h2>
                     <div>
-                      <label htmlFor="name">Edit Name:</label>
+                      <label htmlFor="name">Your Name:</label>
                       <input
                         className="form-control"
                         type="text"
                         id="name"
                         name="name"
                         value={formData.name}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         placeholder="Enter Name"
+                        disabled
                       />
-                      <label htmlFor="mobile">Edit Mobile:</label>
+                      <label htmlFor="mobile">Your Mobile:</label>
                       <input
                         className="form-control"
                         type="text"
                         id="mobile"
                         name="mobile"
                         value={formData.mobile}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         placeholder="Enter Mobile Number"
+                        disabled
                       />
                       <label htmlFor="description">Edit Description:</label>
                       <textarea

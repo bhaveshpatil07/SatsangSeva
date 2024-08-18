@@ -116,7 +116,7 @@ const FrameComponent11 = ({ event = null }) => {
           <p><strong>Language : </strong> {event ? capitalizedStr(event.eventLang) : "Loading..."}</p>
         </div>
       </div>
-      <div className="event-right pb-0">
+      <div className="event-right pb-0 mq750:!p-0">
         <div className="event-meta flex flex-col items-end gap-[10px] mq750:items-center">
           <div className="interest">
             <Like fontSize='large' className='like-icon' sx={{ color: "#D26600" }} /><span> {event ? getTotalAttendees(event.bookings) : "0"} Already Interested</span>

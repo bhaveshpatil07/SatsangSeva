@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FirstFold1 from '../components/FirstFold1';
 import Footer from '../components/Footer';
+import axios from 'axios';
+import Loader from '../components/Loader';
 
 function ContactUs() {
+    const url = process.env.REACT_APP_BACKEND;
     const location = useLocation();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -64,18 +69,35 @@ function ContactUs() {
         return errorAt;
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
         const error = validateForm(formData);
         if (error.length > 1) {
             return alert("Invalid Inputs : " + error);
         }
+        setLoading(true);
         //Axios call to backend Nodemailer send mail to info@satsangseva.com
-
+        const newData = {
+            name: formData.firstName +" " + formData.lastName,
+            email: formData.email,
+            phoneNumber: formData.phone,
+            message: formData.msg
+        };
+        await axios.post(url+"/admin/contactus", newData).then((resp)=>{
+            console.log(resp);
+            alert("Thank You For contacting us.");
+            navigate("/");
+        }).catch((e)=>{
+            console.log(e);
+            alert("Error in sending Mail! Try Again");
+        }).finally(()=>{
+            setLoading(false);
+        });
     };
     
     return (
         <div style={{ marginTop: "-5rem" }} className="w-full relative bg-white overflow-hidden flex flex-col items-end justify-start py-0 px-px box-border leading-[normal] tracking-[normal]">
             <FirstFold1 />
+            {loading && <Loader />}
             <section className="py-5 self-stretch flex flex-col items-center justify-center box-border max-w-full">
                 <div className="md:container p-5 md:mx-auto mq750:!p-5 mq750:!py-[40px]" style={{ border: "1px solid #333", borderRadius: "2rem" }}>
                     <h1 className='pb-4'>Contact <span style={{ color: '#D26600' }}>US</span></h1>
@@ -104,7 +126,7 @@ function ContactUs() {
                         </div>
                         <div className="mb-5">
                             <label htmlFor="msg">Message</label>
-                            <textarea placeholder='Write your message...' className="form-control" id="msg" name="message" rows="5" value={formData.msg} maxLength={500} onChange={handleChange}></textarea>
+                            <textarea placeholder='Write your message...' className="form-control" id="msg" name="message" rows="5" value={formData.msg} maxLength={1000} onChange={handleChange}></textarea>
                         </div>
                         <button type='submit' onClick={handleSubmit} className="btn px-4 btn-lg" style={{ backgroundColor: "#FFCBA4" }}>Send</button>
                     </div>

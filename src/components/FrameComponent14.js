@@ -89,7 +89,7 @@ const FrameComponent14 = ({ className = "", item }) => {
                 {/* <span className="font-medium">(within 2km)</span> */}
               </div>
             </div>
-            <div className="relative text-base font-medium whitespace-nowrap pl-0">
+            <div className="relative text-base font-medium pl-0">
               {item.startDate ? formatDate(item.startDate) : "NA"} • {item.startDate && item.endDate ? getDuration(item.startDate, item.endDate) : "NA"}
             </div>
             {/* <div className="rounded-3xs overflow-x-auto flex flex-row items-end justify-start text-3xs text-chocolate border-[1px] border-solid border-chocolate">
