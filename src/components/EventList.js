@@ -196,6 +196,13 @@ const EventList = ({ className = "", data }) => {
                       borderRadius: "1rem",
                       boxShadow: state.isFocused ? "none" : "none",
                       outline: "none",
+                      overflowY: "scroll",
+                      scrollbarWidth: "none",
+                      msOverflowStyle: "none",
+                      "&::-webkit-scrollbar": {
+                        width: 0,
+                        height: 0,
+                      },
                     }),
                     placeholder: (base) => ({
                       ...base,
@@ -203,8 +210,6 @@ const EventList = ({ className = "", data }) => {
                     }),
                     menu: (base) => ({
                       ...base,
-                      minWidth: 'initial',
-                      maxWidth: '300px',
                       left: 0,
                       right: "auto",
                     }),

@@ -122,6 +122,42 @@ const ProfilePage = () => {
       }
     }
 
+    const socialLinks = {
+      facebook: formData.facebook,
+      instagram: formData.instagram,
+      twitter: formData.twitter,
+    };
+
+    const isValidSocialLink = (link, platform) => {
+      switch (platform) {
+        case 'facebook':
+          return /^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9\.]+$/i.test(link);
+        case 'instagram':
+          return /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9\.]+$/i.test(link);
+        case 'twitter':
+          return /^https?:\/\/(www\.)?x\.com\/[a-zA-Z0-9\.]+$/i.test(link);
+        default:
+          return false;
+      }
+    };
+
+    const validateSocialLinks = async () => {
+      const errors = [];
+      Object.keys(socialLinks).forEach((platform) => {
+        const link = socialLinks[platform];
+        if (link && !isValidSocialLink(link, platform)) {
+          errors.push(`Invalid ${platform} link: ${link}`);
+        }
+      });
+      return errors;
+    };
+
+    const socialLinkErrors = await validateSocialLinks();
+    if (socialLinkErrors.length > 0) {
+      alert(socialLinkErrors.join('\n'));
+      return;
+    }
+
     try {
       setLoading(true);
       const headers = {
@@ -552,7 +588,7 @@ const ProfilePage = () => {
                           />
                         </a>
                       </div>
-                      <a href={userData && userData.social[0] ? userData.social[0].link : "#"} target="_blank" rel="noopener noreferrer">
+                      <a href={userData && userData.social[0] ? userData.social[0].link : null} target="_blank" rel="noopener noreferrer">
                         <img
                           className="w-7 h-7 relative overflow-hidden shrink-0"
                           loading="lazy"
@@ -570,7 +606,7 @@ const ProfilePage = () => {
                           src="/mail.svg"
                         />
                       </a>
-                      <a href={userData && userData.social[2] ? userData.social[2].link : "#"} target="_blank" rel="noopener noreferrer">
+                      <a href={userData && userData.social[2] ? userData.social[2].link : null} target="_blank" rel="noopener noreferrer">
                         <img
                           className="w-7 h-7 relative overflow-hidden shrink-0"
                           loading="lazy"
@@ -586,7 +622,7 @@ const ProfilePage = () => {
                         alt=""
                         src="/iconsmappin-1.svg"
                       />
-                      <a href={userData && userData.social[1] ? userData.social[1].link : "#"} target="_blank" rel="noopener noreferrer">
+                      <a href={userData && userData.social[1] ? userData.social[1].link : null} target="_blank" rel="noopener noreferrer">
                         <img
                           className="w-7 h-7 relative overflow-hidden shrink-0"
                           loading="lazy"

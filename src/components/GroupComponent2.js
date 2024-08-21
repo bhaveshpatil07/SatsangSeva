@@ -1,9 +1,12 @@
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import Car from '@mui/icons-material/DriveEtaTwoTone';
+// import Time from '@mui/icons-material/TimerTwoTone';
 
 const GroupComponent2 = ({
   className = "",
+  map = false,
   eventCardImage,
   event,
   title,
@@ -32,7 +35,7 @@ const GroupComponent2 = ({
   //   history(`/live-event`, { state: { event: event } });
   // };
   const handleClick = () => {
-    history('/live-event?q='+event._id);
+    history('/live-event?q=' + event._id);
   };
 
   const getDuration = (startDate, endDate) => {
@@ -63,7 +66,7 @@ const GroupComponent2 = ({
   function getDay(dateTimeString) {
     const date = new Date(dateTimeString);
     const day = date.getDate();
-    if(day<10){
+    if (day < 10) {
       return `0${day}`;
     }
     return `${day}`;
@@ -83,45 +86,58 @@ const GroupComponent2 = ({
 
   return (
     <div
-      className={`h-[334.5px] w-[343px] cursor-pointer flex flex-col items-start justify-start min-w-[326px] max-w-full text-center text-xs-4 text-orangered font-dm-sans ${className}`}
+      className={`h-[334.5px] w-[343px] relative cursor-pointer flex flex-col items-start justify-start min-w-[326px] max-w-full text-center text-xs-4 text-orangered font-dm-sans ${className}`}
       style={groupDivStyle}
       onClick={handleClick}
     >
       <img
-        className="self-stretch bg-orange flex-1 relative rounded-t-[18.95px] rounded-b-none max-w-full overflow-hidden max-h-full object-cover"
+        className="self-stretch bg-orange flex-1 relative rounded-t-[18.95px] rounded-b-none max-w-full overflow-hidden max-h-full 
+        "
+        // object-cover"
         loading="lazy"
         alt=""
         src={eventCardImage}
       />
-      <div className="self-stretch flex flex-row items-start justify-start px-[22px] py-3 relative gap-[22.7px]">
+      <div className="self-stretch relative flex flex-col items-end justify-start relative">
+        {map &&
+          <span style={{ zIndex: "1", color: "#D26600" }} className="absolute text-sm fw-bold pr-2">
+              <Car sx={{ color: "#D26600" }} />
+              {event.dist}
+              {/* , {event.time} */}
+              {/* <Time sx={{ color: "#D26600" }} /> */}
+          </span>
+        }
         {/* <div className="h-full w-full absolute !m-[0] top-[137.4px] right-[-343px] bottom-[-137.4px] left-[343px] rounded-t-[18.95px] rounded-b-none bg-white [transform:_rotate(180deg)] [transform-origin:0_0]" /> */}
-        <div className="w-[26.6px] flex flex-col items-start justify-start pt-[1.9px] px-0 pb-0 box-border">
-          <div className="self-stretch flex flex-col items-start justify-start">
-            <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 pl-px">
-              <b style={{ fontSize: "1rem" }} className="flex-1 relative inline-block min-w-[25.6px] shrink-0 z-[1]">
-                {date ? getMonth(date) : "Jul"}
-              </b>
-            </div>
-            <div className="h-[33.2px] flex flex-row items-start justify-start pt-0 px-0 pb-0 box-border text-left text-9xl-4 text-black">
-              <b className="mt-[-3.8px] relative inline-block min-w-[26.3px] shrink-0 z-[1] mq450:text-4xl">
-                {date ? getDay(date) : "07"}
-              </b>
-            </div>
-          </div>
-        </div>
-        <div className="w-[241.6px] flex flex-col items-start justify-start gap-[9px] text-left text-base text-black">
-          <b className="self-stretch relative leading-[150%] z-[1]">
-            {title ? title : "Sadhguru World Tour San Francisco"}
-          </b>
-          <div className="flex flex-col items-start justify-start gap-[3px] text-2xs font-poppins">
-            <div className="relative font-medium z-[1]">
-              {address ? address : "NSP, New Delhi"}
-            </div>
-            <div className="relative text-xs font-medium whitespace-nowrap z-[1]">
-              {endDate ? getDuration(event.startDate, event.endDate) : "(2Hrs, 25Mins)"}
+        <span className="self-stretch relative flex flex-row items-start justify-between px-[22px] py-3 relative">
+          <div className="w-[26.6px] flex flex-col items-start justify-start pt-[1.9px] px-0 pb-0 box-border">
+            <div className="self-stretch flex flex-col items-start justify-start">
+              <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 pl-px">
+                <b style={{ fontSize: "1rem" }} className="flex-1 relative inline-block min-w-[25.6px] shrink-0 z-[1]">
+                  {date ? getMonth(date) : "Jul"}
+                </b>
+              </div>
+              <div className="h-[33.2px] flex flex-row items-start justify-start pt-0 px-0 pb-0 box-border text-left text-9xl-4 text-black">
+                <b className="mt-[-3.8px] relative inline-block min-w-[26.3px] shrink-0 z-[1] mq450:text-4xl">
+                  {date ? getDay(date) : "07"}
+                </b>
+              </div>
             </div>
           </div>
-        </div>
+          <div className="w-[241.6px] flex flex-col items-start justify-start gap-[9px] text-left text-base text-black">
+            <b className="self-stretch relative leading-[150%] z-[1]">
+              {title ? title : "Sadhguru World Tour San Francisco"}
+            </b>
+            <div className="flex flex-col items-start justify-start gap-[3px] text-2xs font-poppins">
+              <div className="relative font-medium z-[1]">
+                {address ? address : "NSP, New Delhi"}
+              </div>
+              <div className="relative text-xs font-medium whitespace-nowrap z-[1]">
+                {endDate ? getDuration(event.startDate, event.endDate) : "(2Hrs, 25Mins)"}
+              </div>
+            </div>
+          </div>
+        </span>
+        
       </div>
     </div>
   );

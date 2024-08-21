@@ -37,7 +37,7 @@
   .cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 2rem;
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
@@ -45,15 +45,15 @@
   }
   
   .card {
-    height: 368px;
+    height: 368px !important;
     width: 269px;
-    position: relative;
+    position: relative !important;
     cursor: pointer;
-    border: none;
+    border: none !important;
     transform: scale(1);
     transition: transform 0.35s ease-in-out;
     &:hover{
-      transform: scale(1.1);
+      transform: scale(1.05);
       img{
         filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
       }

@@ -95,14 +95,18 @@
 .edit-form textarea {
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 6px; /* Reduced padding for a more compact input field */
+  padding: 10px; /* Reduced padding for a more compact input field */
   font-size: 14px; /* Adjust font size if needed */
   margin-bottom: 10px; /* Reduced margin for a more compact form */
 }
 
 .edit-form textarea {
   resize: vertical;
-  min-height: 80px; /* Adjust min-height if needed */
+  overflow: hidden;
+  height: max-content;
+  &:focus{
+    outline: none;
+  }
 }
 
 .edit-form button {

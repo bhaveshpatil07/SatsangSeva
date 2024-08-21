@@ -28,6 +28,7 @@
   .event-image {
     width: 100%;
     height: auto !important;
+    aspect-ratio: 5/3;
   }
   
   .event-details {

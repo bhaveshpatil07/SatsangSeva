@@ -90,9 +90,10 @@ const EventListing = ({ className = "" }) => {
       setTimeout(() => {
         fetchNearBy();
       }, 500);
-    } else {
-      fetchEvents();
-    }
+    } 
+    // else {
+    //   fetchEvents();
+    // }
   }, [position]);
 
 
@@ -112,17 +113,17 @@ const EventListing = ({ className = "" }) => {
   }
 
 
-  const fetchEvents = async () => {
-    await axios.get(url + "/events").then((resp) => {
-      // console.log(resp.data.events);
-      if ((!position.latitude && !position.longitude) && !loading && !events) {
-        setEvents(resp.data.events);
-        setFilteredEvents(resp.data.events);
-      }
-    }).catch((e) => {
-      console.log("Error in fetching Events: " + e);
-    })
-  };
+  // const fetchEvents = async () => {
+  //   await axios.get(url + "/events").then((resp) => {
+  //     // console.log(resp.data.events);
+  //     if ((!position.latitude && !position.longitude) && !loading && !events) {
+  //       setEvents(resp.data.events);
+  //       setFilteredEvents(resp.data.events);
+  //     }
+  //   }).catch((e) => {
+  //     console.log("Error in fetching Events: " + e);
+  //   })
+  // };
 
   const handleTypeChange = (event) => {
     const selectedfee = event.target.value;
@@ -278,6 +279,7 @@ const EventListing = ({ className = "" }) => {
               <div className="flex pb-5 flex-wrap w-full gap-[28.5px] justify-center">
                 {events.slice(0, visibleEvents).map((e) => (
                   <GroupComponent2 key={e._id}
+                    map={true}
                     eventCardImage={e.eventPosters ? `${e.eventPosters[0]}` : "/rectangle-12-1@2x.png"}
                     event={e}
                     title={e.eventName}

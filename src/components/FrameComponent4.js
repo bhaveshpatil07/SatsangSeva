@@ -1,9 +1,20 @@
+import { Carousel } from "bootstrap";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const FrameComponent4 = ({ className = "", ytLink, imgLinks }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [len, setLen] = useState(0);
+  const carouselRef = React.createRef();
+
+  useEffect(() => {
+    const carousel = new Carousel(carouselRef.current, {
+      interval: 7000,
+    });
+    return () => {
+      carousel.dispose();
+    };
+  }, [carouselRef]);
 
   useEffect(() => {
     if (ytLink === '404') {
@@ -20,6 +31,7 @@ const FrameComponent4 = ({ className = "", ytLink, imgLinks }) => {
   const handlePrev = () => {
     setCurrentIndex((currentIndex - 1 + (len)) % (len));
   };
+  
   return (
     <section
       className={`self-stretch flex flex-row items-start justify-center pt-0 pb-0 pr-5 pl-[21px] box-border max-w-full mq750:box-border`}
@@ -29,12 +41,14 @@ const FrameComponent4 = ({ className = "", ytLink, imgLinks }) => {
 
         </div>
         <div className="self-stretch rounded-xl bg-orange flex flex-row items-start justify-start relative max-w-full">
-          <div className="carousel w-full h-[460px] relative">
+          <div className="carousel slide w-full h-[460px] relative" ref={carouselRef} id="carouselExampleControls" data-bs-ride="carousel" data-bs-interval="7000">
             <div className="carousel-inner relative w-full overflow-hidden">
               {(ytLink && ytLink !=="404") && (
                 <div className={`carousel-item ${currentIndex === len-1 ? "active" : ""} w-full h-[460px] relative`}>
                   <iframe
-                    className="h-[460px] w-full relative rounded-xl max-w-full overflow-hidden object-cover"
+                    className="h-[460px] w-full relative rounded-xl max-w-full overflow-hidden 
+                    "
+                    // object-cover"
                     src={`https://www.youtube.com/embed/${ytLink}`}
                     title="Live Satsang Event"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -45,7 +59,10 @@ const FrameComponent4 = ({ className = "", ytLink, imgLinks }) => {
               )}
               {imgLinks.map((imgLink, index) => (
                 <div key={index} className={`carousel-item ${currentIndex === index ? "active" : ""} w-full h-[460px] relative`}>
-                  <img src={imgLink} alt="EventPoster" className="h-[460px] w-full relative rounded-xl max-w-full overflow-hidden object-cover" />
+                  <img src={imgLink} alt="EventPoster" className="h-[460px] w-full relative rounded-xl max-w-full overflow-hidden 
+                  " 
+                  // object-cover" 
+                  />
                 </div>
               ))}
             </div>

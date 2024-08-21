@@ -26,7 +26,7 @@ const categories = [
 const EventListing1 = () => {
   const url = process.env.REACT_APP_BACKEND;
   const navigate = useNavigate();
-  const [geoCoordinates, setGeoCoordinates] = useState([]);
+  // const [geoCoordinates, setGeoCoordinates] = useState([]);
   const [duration, setDuration] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(Country.getCountryByCode('IN'));
   const [selectedState, setSelectedState] = useState(null);
@@ -100,19 +100,23 @@ const EventListing1 = () => {
   const fetchCoordinates = async (address) => {
     try {
       const apiKey = process.env.REACT_APP_GMAP_KEY;
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
       const resp = await axios.get(url);
       // console.log(resp);
 
       if (resp.data.status === 'OK') {
         const coordinates = resp.data.results[0].geometry.location;
-        setGeoCoordinates([coordinates.lng, coordinates.lat]);
+        if (coordinates) {
+          return [coordinates.lng, coordinates.lat];
+        }else{
+          alert("Try Adding more detail Address.");
+          return [];
+        }
       }
     } catch (error) {
       console.error(error);
-      return 404;
+      return [];
     }
-    return 200;
   };
 
 
@@ -204,8 +208,8 @@ const EventListing1 = () => {
     localStorage.setItem('addEvent', JSON.stringify(formValues));
     if (!error) {
       const result = await fetchCoordinates(newData.eventAddress);
-      if (result === 200) {
-        newData.geoCoordinates = geoCoordinates;
+      if (result.length===2) {
+        newData.geoCoordinates = result;
       } else {
         return alert("Error in Fetching GeoCoordinates. Try Again");
       }
@@ -444,7 +448,7 @@ const EventListing1 = () => {
                               <option value="">No Of Attendees</option>
                               <option value="50-250">50 to 250</option>
                               <option value="500-1000">500 to 1000</option>
-                              <option value="1000+">1000+</option>
+                              <option value="1000">1000+</option>
                             </select>
                           </div>
                         </div>
