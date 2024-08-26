@@ -131,11 +131,11 @@ const ProfilePage = () => {
     const isValidSocialLink = (link, platform) => {
       switch (platform) {
         case 'facebook':
-          return /^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9\.]+$/i.test(link);
+          return /^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9\.]+\/?$/i.test(link);
         case 'instagram':
-          return /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9\.]+$/i.test(link);
+          return /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9\.]+\/?$/i.test(link);
         case 'twitter':
-          return /^https?:\/\/(www\.)?x\.com\/[a-zA-Z0-9\.]+$/i.test(link);
+          return /^https?:\/\/(www\.)?(twitter\.com|x\.com)\/[a-zA-Z0-9\.]+\/?$/i.test(link);
         default:
           return false;
       }

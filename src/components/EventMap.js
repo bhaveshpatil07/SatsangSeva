@@ -32,13 +32,22 @@ function EventMap({ center }) {
     }, [])
 
     useEffect(() => {
+        const coordinates = localStorage.getItem("loc");
+        if (coordinates.split(',').length === 2) {
+            const userLocation = {
+                lat: parseFloat(coordinates.split(',')[0]),
+                lng: parseFloat(coordinates.split(',')[1])
+            }
+            
+            return setUserLocation(userLocation);
+        }
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 const userLocation = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 }
-                setUserLocation(userLocation)
+                setUserLocation(userLocation);
             })
         }
     }, [])

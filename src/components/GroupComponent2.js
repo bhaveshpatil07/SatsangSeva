@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import Car from '@mui/icons-material/DriveEtaTwoTone';
-// import Time from '@mui/icons-material/TimerTwoTone';
 
 const GroupComponent2 = ({
   className = "",
@@ -101,14 +99,12 @@ const GroupComponent2 = ({
       <div className="self-stretch relative flex flex-col items-end justify-start relative">
         {map &&
           <span style={{ zIndex: "1", color: "#D26600" }} className="absolute text-sm fw-bold pr-2">
-              <Car sx={{ color: "#D26600" }} />
-              {event.dist}
-              {/* , {event.time} */}
-              {/* <Time sx={{ color: "#D26600" }} /> */}
+            {event.dist} away
+            {/* , {event.time} */}
           </span>
         }
         {/* <div className="h-full w-full absolute !m-[0] top-[137.4px] right-[-343px] bottom-[-137.4px] left-[343px] rounded-t-[18.95px] rounded-b-none bg-white [transform:_rotate(180deg)] [transform-origin:0_0]" /> */}
-        <span className="self-stretch relative flex flex-row items-start justify-between px-[22px] py-3 relative">
+        <span className="self-stretch relative flex flex-row px-[22px] py-3 pr-0 gap-4 relative">
           <div className="w-[26.6px] flex flex-col items-start justify-start pt-[1.9px] px-0 pb-0 box-border">
             <div className="self-stretch flex flex-col items-start justify-start">
               <div className="self-stretch flex flex-row items-start justify-start py-0 pr-0 pl-px">
@@ -128,8 +124,8 @@ const GroupComponent2 = ({
               {title ? title : "Sadhguru World Tour San Francisco"}
             </b>
             <div className="flex flex-col items-start justify-start gap-[3px] text-2xs font-poppins">
-              <div className="relative font-medium z-[1]">
-                {address ? address : "NSP, New Delhi"}
+              <div className="relative font-medium pr-1 z-[1]">
+                {address ? (address.length > 77 ? `${address.substring(0, 72)}...` : address) : "NSP, New Delhi"}
               </div>
               <div className="relative text-xs font-medium whitespace-nowrap z-[1]">
                 {endDate ? getDuration(event.startDate, event.endDate) : "(2Hrs, 25Mins)"}
@@ -137,7 +133,7 @@ const GroupComponent2 = ({
             </div>
           </div>
         </span>
-        
+
       </div>
     </div>
   );

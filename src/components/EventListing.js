@@ -74,6 +74,7 @@ const EventListing = ({ className = "" }) => {
     };
 
     getPosition().then((position) => {
+      localStorage.setItem("loc", [position.lat, position.lng]);
       setPosition({
         latitude: position.lat,
         longitude: position.lng,
@@ -90,7 +91,7 @@ const EventListing = ({ className = "" }) => {
       setTimeout(() => {
         fetchNearBy();
       }, 500);
-    } 
+    }
     // else {
     //   fetchEvents();
     // }
