@@ -10,7 +10,7 @@
   position: sticky;
   top: 0;
   z-index: 1111;
-  @media (max-width: 769px) {
+  @media (max-width: 1024px) {
     padding: 0 1rem !important;
   }
 }
